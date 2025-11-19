@@ -398,10 +398,14 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadSampleData();
 
-            document.getElementById('annotator-name').addEventListener('change', (e) => {
+            // Update annotator name on input (real-time) and change (blur)
+            const nameInput = document.getElementById('annotator-name');
+            const updateName = (e) => {
                 annotatorName = e.target.value;
                 localStorage.setItem('annotatorName', annotatorName);
-            });
+            };
+            nameInput.addEventListener('input', updateName);
+            nameInput.addEventListener('change', updateName);
 
             // Restore annotator name if saved
             const savedName = localStorage.getItem('annotatorName');
