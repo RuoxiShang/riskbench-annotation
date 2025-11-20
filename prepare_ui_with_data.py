@@ -121,39 +121,62 @@ def main():
     print("\nGenerating C2 vs C4 comparison batches...")
     c2_vs_c4 = find_c2_vs_c4_samples(c2_data, c4_data, n_samples)
     
-    # Format and save Biggest Diff
-    diff_samples = [format_sample_for_human(pair, 'c2_vs_c4', i) 
-                   for i, pair in enumerate(c2_vs_c4['biggest_differences'])]
+    # Combine Diff and Similar into one list for "Pipeline Comparison" task
+    # We shuffle them so the annotator doesn't know which is which type
+    import random
+    pipeline_samples = []
     
-    diff_filename = f"c2_vs_c4_diff_n{n_samples}_{selected_exp.name}"
-    save_samples(diff_samples, output_dir, diff_filename)
-    print(f"  -> Generated {diff_filename}.json")
+    # Add Biggest Diff samples
+    for i, pair in enumerate(c2_vs_c4['biggest_differences']):
+        s = format_sample_for_human(pair, 'c2_vs_c4', i)
+        s['sub_task'] = 'difference' # Add metadata
+        pipeline_samples.append(s)
+        
+    # Add Calibration samples
+    # Offset IDs to avoid collision
+    offset = len(pipeline_samples)
+    for i, pair in enumerate(c2_vs_c4['most_similar']):
+        s = format_sample_for_human(pair, 'c2_vs_c4', i + offset)
+        s['sub_task'] = 'calibration'
+        pipeline_samples.append(s)
     
-    # Format and save Similar (Calibration)
-    sim_samples = [format_sample_for_human(pair, 'c2_vs_c4', i) 
-                  for i, pair in enumerate(c2_vs_c4['most_similar'])]
+    random.shuffle(pipeline_samples)
     
-    sim_filename = f"c2_vs_c4_similar_n{n_samples}_{selected_exp.name}"
-    save_samples(sim_samples, output_dir, sim_filename)
-    print(f"  -> Generated {sim_filename}.json")
+    # Re-index after shuffle
+    for i, s in enumerate(pipeline_samples):
+        s['sample_id'] = i
+        
+    pipeline_filename = "pipeline_comparison.json"
+    # Note: save_samples adds .json extension
+    save_samples(pipeline_samples, output_dir, "pipeline_comparison") 
+    print(f"  -> Generated {pipeline_filename} (Combined Diff + Similar, n={len(pipeline_samples)})")
+
     
     # --- Before vs After ---
     print("\nGenerating Before/After batches...")
+    improvement_samples = []
+    
     for data, name in [(c2_data, 'C2'), (c4_data, 'C4')]:
         results = find_before_after_samples(data, name, n_samples)
         
         # Improvements
-        imp_samples = [format_sample_for_human({'condition': name, 'sample': s}, 'before_after', i) 
-                      for i, s in enumerate(results['biggest_improvements'])]
+        # Offset IDs
+        offset = len(improvement_samples)
+        for i, s in enumerate(results['biggest_improvements']):
+            formatted = format_sample_for_human({'condition': name, 'sample': s}, 'before_after', i + offset)
+            improvement_samples.append(formatted)
+            
+    # Re-index
+    for i, s in enumerate(improvement_samples):
+        s['sample_id'] = i
         
-        imp_filename = f"{name.lower()}_improvement_n{n_samples}_{selected_exp.name}"
-        save_samples(imp_samples, output_dir, imp_filename)
-        print(f"  -> Generated {imp_filename}.json")
+    improvement_filename = "improvement_comparison.json"
+    save_samples(improvement_samples, output_dir, "improvement_comparison")
+    print(f"  -> Generated {improvement_filename} (Combined C2+C4 Improvements, n={len(improvement_samples)})")
     
     print("\n" + "="*60)
-    print("Done! You can now use these files in the annotation tool.")
-    print("Example URL:")
-    print(f"  .../index.html?data={diff_filename}.json")
+    print("Done! Data files updated in scripts/annotation/data/")
+    print("The UI will now auto-load these files.")
     print("="*60)
 
 if __name__ == '__main__':

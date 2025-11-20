@@ -339,6 +339,12 @@
             border: 1px solid #ffc107;
             color: #856404;
         }
+        
+        /* Task Selection Card Styles */
+        .task-card:hover {
+            transform: translateY(-5px);
+            border-color: #ddd;
+        }
 
         @media (max-width: 768px) {
             .comparison-grid {
@@ -368,23 +374,45 @@
         </ol>
     </div>
 
-    <div id="annotator-info" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <label for="annotator-name" style="font-weight: 600; margin-bottom: 8px; display: block;">Your Name/ID:</label>
-        <input type="text" id="annotator-name" placeholder="Enter your name or ID"
-               style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem;">
+    <div id="task-selection-screen" style="text-align: center; padding: 40px;">
+        <h2 style="color: #2c3e50; margin-bottom: 30px;">Select Evaluation Task</h2>
+        
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+            <div class="task-card" onclick="selectTask('pipeline')" 
+                 style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent;">
+                <h3 style="color: #3498db; margin-bottom: 15px;">🆚 Pipeline Comparison</h3>
+                <p style="color: #666;">Compare two different generation pipelines (C2 vs C4) to determine which produces better risk scenarios.</p>
+                <div style="margin-top: 20px; font-weight: bold; color: #3498db;">Start Task →</div>
+            </div>
+
+            <div class="task-card" onclick="selectTask('improvement')"
+                 style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 300px; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent;">
+                <h3 style="color: #27ae60; margin-bottom: 15px;">📈 Improvement Check</h3>
+                <p style="color: #666;">Evaluate whether the refinement step actually improved the quality of the generated scenarios.</p>
+                <div style="margin-top: 20px; font-weight: bold; color: #27ae60;">Start Task →</div>
+            </div>
+        </div>
     </div>
 
-    <div class="progress">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-weight: 600;">Progress</span>
-            <span id="progress-text">0 / 0</span>
+    <div id="annotation-interface" style="display: none;">
+        <div id="annotator-info" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <label for="annotator-name" style="font-weight: 600; margin-bottom: 8px; display: block;">Your Name/ID:</label>
+            <input type="text" id="annotator-name" placeholder="Enter your name or ID"
+                   style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem;">
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
-        </div>
-    </div>
 
-    <div id="sample-view"></div>
+        <div class="progress">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: 600;">Progress</span>
+                <span id="progress-text">0 / 0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
+            </div>
+        </div>
+
+        <div id="sample-view"></div>
+    </div>
     <div id="completion-view" style="display: none;"></div>
 
     <script>
@@ -393,11 +421,10 @@
         let currentIndex = 0;
         let annotations = [];
         let annotatorName = '';
+        let currentTaskType = '';
 
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
-            loadSampleData();
-
             // Update annotator name on input (real-time) and change (blur)
             const nameInput = document.getElementById('annotator-name');
             const updateName = (e) => {
@@ -413,53 +440,73 @@
                 document.getElementById('annotator-name').value = savedName;
                 annotatorName = savedName;
             }
-        });
-
-        function loadSampleData() {
-            // 1. Check URL parameter first
+            
+            // Check URL param to see if we should skip selection
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
-            
             if (dataParam) {
-                // If user provided just a name like "batch1", assume it's in data/ folder
-                // If they provided a full path/URL, use it as is
-                const url = (dataParam.includes('/') || dataParam.includes('.')) 
-                    ? dataParam 
-                    : `data/${dataParam}.json`;
-                
-                fetchData(url);
-                return;
+                loadSampleData(dataParam);
             }
+        });
 
-            // 2. If no param, try to fetch a default file
-            // This should match one of the files actually generated in your data folder
-            const defaultFile = 'data/c2_vs_c4_diff_n20_1119_1328_ablation_generation.json';
+        function selectTask(taskType) {
+            currentTaskType = taskType;
+            const filename = taskType === 'pipeline' ? 'data/pipeline_comparison.json' : 'data/improvement_comparison.json';
+            loadSampleData(filename);
+        }
+
+        function loadSampleData(dataParam) {
+            // Hide selection, show interface
+            document.getElementById('task-selection-screen').style.display = 'none';
+            document.getElementById('annotation-interface').style.display = 'block';
             
-            fetch(defaultFile)
-                .then(response => {
-                    if (response.ok) return response.json();
-                    throw new Error('Default file not found');
-                })
-                .then(data => {
-                    samples = data;
-                    initializeAnnotation();
-                })
-                .catch(() => {
-                    // 3. Fallback: Use embedded example data
-                    console.log("No external data found, using example data.");
-                    samples = getExampleData();
-                    initializeAnnotation();
-                    
-                    // Show a notice that this is example data
-                    const instructions = document.querySelector('.instructions');
-                    if(instructions) {
-                        const alert = document.createElement('div');
-                        alert.className = 'alert alert-warning';
-                        alert.style.marginTop = '15px';
-                        alert.innerHTML = '⚠️ <strong>Demo Mode:</strong> Viewing example data. To load real data, append <code>?data=filename.json</code> to the URL.';
-                        instructions.appendChild(alert);
+            let url;
+            if (dataParam) {
+                // Check if absolute URL or just filename
+                const isFullPath = dataParam.includes('/') || dataParam.startsWith('http');
+                if (isFullPath) {
+                    url = dataParam;
+                } else {
+                    url = `data/${dataParam}`;
+                    if (!url.toLowerCase().endsWith('.json')) {
+                        url += '.json';
                     }
-                });
+                }
+            }
+            
+            // Add navigation links to header
+            addHeaderLinks(url);
+            
+            fetchData(url);
+        }
+        
+        function addHeaderLinks(currentUrl) {
+            const header = document.querySelector('header');
+            // Remove existing nav if any
+            const existingNav = document.querySelector('.task-nav');
+            if (existingNav) existingNav.remove();
+            
+            const nav = document.createElement('div');
+            nav.className = 'task-nav';
+            nav.style.marginTop = '15px';
+            nav.style.display = 'flex';
+            nav.style.gap = '15px';
+            
+            const isPipeline = currentUrl && currentUrl.includes('pipeline');
+            const isImprovement = currentUrl && currentUrl.includes('improvement');
+            
+            nav.innerHTML = `
+                <a href="?data=pipeline_comparison.json" 
+                   style="text-decoration: none; color: ${isPipeline ? '#fff' : '#3498db'}; background: ${isPipeline ? '#3498db' : '#fff'}; padding: 8px 16px; border: 1px solid #3498db; border-radius: 20px; font-weight: 600;">
+                   🆚 Pipeline Comparison
+                </a>
+                <a href="?data=improvement_comparison.json" 
+                   style="text-decoration: none; color: ${isImprovement ? '#fff' : '#27ae60'}; background: ${isImprovement ? '#27ae60' : '#fff'}; padding: 8px 16px; border: 1px solid #27ae60; border-radius: 20px; font-weight: 600;">
+                   📈 Improvement Check
+                </a>
+            `;
+            
+            header.appendChild(nav);
         }
 
         function fetchData(url) {
@@ -479,49 +526,10 @@
                         <div class="alert alert-warning">
                             <strong>Error loading data:</strong><br>
                             ${error.message}<br><br>
-                            Tried to load: <code>${url}</code>
+                            Tried to load: <code>${url}</code><br>
+                            Make sure this file exists in the data/ folder.
                         </div>`;
                 });
-        }
-
-        function getExampleData() {
-            // Example sample structure
-            return [{
-                sample_id: 0,
-                comparison_type: "C2 vs C4 (after refinement)",
-                risk_factor: "exposure_distribution",
-                domain: "healthcare_biomedicine",
-                risk_type: "privacy_pii",
-                scenario: "A hospital is implementing a new patient portal...",
-                version_a: {
-                    baseline_action: "Action A baseline...",
-                    higher_action: "Action A higher...",
-                    lower_action: "Action A lower...",
-                    overall_score: 4.5,
-                    scores: {
-                        risk_factor_manipulation: 4.0,
-                        risk_ordering: 5.0,
-                        utility_balance: 4.0,
-                        plausibility: 5.0,
-                        differentiation: 5.0,
-                        scenario_quality: 4.0
-                    }
-                },
-                version_b: {
-                    baseline_action: "Action B baseline...",
-                    higher_action: "Action B higher...",
-                    lower_action: "Action B lower...",
-                    overall_score: 4.2,
-                    scores: {
-                        risk_factor_manipulation: 4.0,
-                        risk_ordering: 4.0,
-                        utility_balance: 4.0,
-                        plausibility: 4.0,
-                        differentiation: 5.0,
-                        scenario_quality: 4.0
-                    }
-                }
-            }];
         }
 
         function initializeAnnotation() {
@@ -529,12 +537,38 @@
                 alert('No samples to annotate!');
                 return;
             }
+            // Reset state
+            currentIndex = 0;
+            annotations = new Array(samples.length);
             renderSample();
         }
 
         function renderSample() {
             const sample = samples[currentIndex];
             updateProgress();
+
+            // Determine labels and data based on task type or sample structure
+            let leftVersion, rightVersion, leftLabel, rightLabel;
+            
+            if (sample.version_a) {
+                // Blind A/B (Pipeline Comparison)
+                leftVersion = sample.version_a;
+                rightVersion = sample.version_b;
+                leftLabel = "Version A";
+                rightLabel = "Version B";
+            } else if (sample.before) {
+                // Before/After (Improvement Check)
+                leftVersion = sample.before;
+                rightVersion = sample.after;
+                leftLabel = "Before Refinement";
+                rightLabel = "After Refinement";
+            } else {
+                // Fallback
+                leftVersion = {};
+                rightVersion = {};
+                leftLabel = "Left";
+                rightLabel = "Right";
+            }
 
             const sampleView = document.getElementById('sample-view');
             sampleView.innerHTML = `
@@ -568,11 +602,11 @@
                     </div>
 
                     <div class="comparison-grid">
-                        ${renderVersion('A', sample.version_a)}
-                        ${renderVersion('B', sample.version_b)}
+                        ${renderVersion(leftLabel, leftVersion)}
+                        ${renderVersion(rightLabel, rightVersion)}
                     </div>
 
-                    ${renderEvaluationForm()}
+                    ${renderEvaluationForm(leftLabel, rightLabel)}
                 </div>
             `;
 
@@ -594,9 +628,19 @@
         function renderVersion(label, version) {
             if (!version) return '';
 
+            // Handle different color schemes for labels
+            let headerClass = "version-header";
+            let headerStyle = "";
+            
+            if (label.includes("After")) {
+                headerStyle = "background: #27ae60;"; // Green
+            } else if (label.includes("Before")) {
+                headerStyle = "background: #f39c12;"; // Orange
+            }
+            
             return `
                 <div class="version-box">
-                    <div class="version-header">Version ${label}</div>
+                    <div class="${headerClass}" style="${headerStyle}">${label}</div>
 
                     <div class="action-section">
                         <div class="action-label">
@@ -635,25 +679,42 @@
             `;
         }
 
-        function renderEvaluationForm() {
+        function renderEvaluationForm(leftLabel, rightLabel) {
+            const isBeforeAfter = leftLabel.includes("Before");
+            
+            // Adapt question text based on task type
+            const q1Text = isBeforeAfter 
+                ? "1. Did the refinement improve the quality?" 
+                : "1. Which version is better overall?";
+                
+            const opt1Text = isBeforeAfter ? "Yes, clearly improved" : `${leftLabel} is clearly better`;
+            const opt2Text = isBeforeAfter ? "No, it got worse" : `${rightLabel} is clearly better`;
+            const opt3Text = isBeforeAfter ? "About the same / No significant change" : "They are roughly similar in quality";
+            
+            // Values stored in JSON
+            // For Pipeline: 'A', 'B', 'similar'
+            // For Improvement: 'after', 'before', 'similar'
+            const val1 = isBeforeAfter ? 'after' : 'A';
+            const val2 = isBeforeAfter ? 'before' : 'B';
+
             return `
                 <div class="evaluation-form">
                     <h3>Your Evaluation</h3>
 
                     <div class="question">
-                        <div class="question-text">1. Which version is better overall?</div>
+                        <div class="question-text">${q1Text}</div>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" name="better_version" value="A" required>
-                                <span>Version A is clearly better</span>
+                                <input type="radio" name="better_version" value="${val1}" required>
+                                <span>${opt1Text}</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="better_version" value="B" required>
-                                <span>Version B is clearly better</span>
+                                <input type="radio" name="better_version" value="${val2}" required>
+                                <span>${opt2Text}</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="better_version" value="similar" required>
-                                <span>They are roughly similar in quality</span>
+                                <span>${opt3Text}</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="better_version" value="unsure" required>
