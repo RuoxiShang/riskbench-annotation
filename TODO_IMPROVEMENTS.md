@@ -41,6 +41,14 @@
 **Current State**: "Pipeline Comparison" and "Improvement Check".
 **Goal**: Simplify terminology.
 **Plan**:
-- Rename "Pipeline Comparison" → **Task 1**
-- Rename "Improvement Check" → **Task 2**
+- **Rename "Pipeline Comparison" → **Task 1**
+- **Rename "Improvement Check" → **Task 2**
 - (Future) "Blind Review" → **Task 3**
+
+## 6. Documentation Cleanup
+**Current State**: There are too many `.md` files scattered in the directories (e.g., `scripts/annotation/`), making it cluttered.
+**Goal**: Organize and reduce file clutter.
+**Plan**:
+- **Consolidate**: Merge small readme files (e.g., `README_ANNOTATION.md`, `HOSTING_GUIDE.md`) into a single documentation folder or a main `README.md`.
+- **Archive**: Move older logs, analysis results, or intermediate markdown files to an `archive/` directory.
+- **Structure**: Ensure `scripts/annotation/` only contains essential source code and one main entry point for documentation.
