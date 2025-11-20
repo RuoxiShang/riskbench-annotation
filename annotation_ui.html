@@ -779,46 +779,27 @@
 
         // Send data to Google Sheets in the background
         function syncToCloud(data) {
-            // APPROACH 3: The "Hidden Form" Technique
-            // This bypasses CORS completely by treating it as a standard form submission
-            // into a hidden iframe.
+            // APPROACH 4: The "CURL Mimic" Technique
+            // We behave exactly like curl -L -d '...'
+            // We send a stringified JSON as the body, but claim it's text/plain
+            // This prevents CORS preflight.
             
-            const iframeId = 'hidden-sender';
-            let iframe = document.getElementById(iframeId);
+            // NOTE: Google Script needs to parse e.postData.contents
             
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = iframeId;
-                iframe.name = iframeId;
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-            }
-
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = GOOGLE_SCRIPT_URL;
-            form.target = iframeId; // Send result to iframe so page doesn't reload
-            form.style.display = 'none';
-
-            // Flatten object to form fields
-            // Note: Google Script needs to handle this flat structure (my V2 script does)
-            for (const [key, value] of Object.entries(data)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = typeof value === 'object' ? JSON.stringify(value) : value;
-                form.appendChild(input);
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Clean up after a moment
-            setTimeout(() => {
-                document.body.removeChild(form);
-            }, 1000);
-            
-            console.log("Sync sent via Form");
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Don't wait for response, don't check CORS headers
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log("Sync sent (no-cors)");
+                // Since mode is no-cors, we can't read the response
+                // But we assume it worked if no network error occurred
+            })
+            .catch(err => console.error("Background sync failed", err));
         }
 
         function nextSample() {
