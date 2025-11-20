@@ -1,77 +1,38 @@
 # RiskBench Human Evaluation
 
-Interactive web interface for evaluating AI-generated risk assessment scenarios.
+A simple, local web tool to evaluate AI-generated risk scenarios.
 
-## 📝 Annotation Tasks
+## 🚀 Quick Start
 
-### Main Task: C2 vs C4 Comparison (20 samples)
-**URL**: https://ruoxishang.github.io/riskbench-annotation/
+1. **Start the tool**
+   Inside this directory (`scripts/annotation/`), run:
+   ```bash
+   python3 -m http.server 8000
+   ```
 
-Compare two versions of risk scenarios (blind A/B test) to evaluate:
-- Which version has better quality
-- Whether LLM judge scores are accurate
-- Time estimate: ~15-20 minutes
+2. **Open in Browser**
+   Go to: [http://localhost:8000](http://localhost:8000)
 
-### Calibration Task: Similar Scores (20 samples)
-**URL**: https://ruoxishang.github.io/riskbench-annotation/calibration.html
+3. **Annotate**
+   - **Login**: Select your name from the list.
+   - **Task 1 (Pipeline Comparison)**: Choose which AI model is better (A vs B).
+   - **Task 2 (Improvement Check)**: Judge if the refinement actually improved the output.
 
-Evaluate pairs where the LLM judge found similar quality scores.
-- Validates LLM agreement
-- Time estimate: ~15-20 minutes
-
-## 🚀 How to Participate
-
-1. Click one of the URLs above
-2. Enter your name/ID at the top
-3. Read each scenario carefully
-4. Compare Version A and Version B
-5. Answer the evaluation questions:
-   - Which version is better?
-   - Do you agree with LLM judge?
-   - Optional comments
-6. Click "Next" to proceed through all samples
-7. **Important**: Download your annotations (JSON file) at the end
-8. Send the JSON file to Anna
-
-## 💾 Saving Your Work
-
-- Progress is automatically saved in your browser
-- You can close and return later (same browser)
-- **Must download JSON when complete** to submit your annotations
-
-## ⏰ Timeline
-
-- **Deadline**: [To be announced]
-- **Time commitment**: 15-20 minutes per task
-- **Tasks**: You may be asked to complete one or both tasks
-
-## 📊 What We're Evaluating
-
-Each sample contains:
-- **Scenario**: A risk assessment situation
-- **Version A & B**: Two different generated action sets
-  - Baseline action (medium risk)
-  - Higher risk action
-  - Lower risk action
-- **LLM Scores**: Reference scores from automated judge
-
-Your feedback helps us:
-- Validate automated evaluation quality
-- Compare different generation approaches
-- Improve AI risk assessment systems
-
-## ❓ Questions?
-
-Contact: Anna Shang (annashang@[domain])
-
-## 🛠️ Technical Details
-
-- **Single-page application**: No installation needed
-- **Works offline**: All data embedded
-- **Browser compatibility**: Chrome, Firefox, Safari, Edge
-- **Mobile-friendly**: Responsive design
-- **Privacy**: No data collected until you download and send the JSON file
+4. **Submit**
+   - When finished, click **"Download Annotations"**.
+   - Send the downloaded JSON file to the project lead.
 
 ---
 
-Built with ❤️ for RiskBench ablation study
+## 🛠️ For Developers
+
+### Generating New Data
+To generate fresh samples from the latest experiments:
+```bash
+# Run the interactive data processor
+python3 prepare_ui_with_data.py
+```
+This will scan the `experiments/` folder and update the JSON files in `data/`.
+
+### Adding Annotators
+Edit `data/annotators.json` to add or remove names from the login dropdown.
