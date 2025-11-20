@@ -395,7 +395,7 @@
         let annotatorName = '';
         
         // CONFIGURATION - PASTE YOUR GOOGLE SCRIPT URL HERE
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-Iax2kk-NqSJJAa8AUfZ9d9At-PlBg_zI3nAp1Mdy7GeXKUlcqt5l6E709WNmsmH/exec'; 
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcREDdE3NSAn6IxDgz7DWAKXQgUWninT1rIu5tPOeu1IL8TxUyrFKo_pvRbgPTjPNurQ/exec'; 
         
         // Session ID to track this specific browser session
         const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -779,16 +779,20 @@
 
         // Send data to Google Sheets in the background
         function syncToCloud(data) {
-            // We use no-cors mode because Google Scripts don't support CORS preflight well for simple posting
-            // This means we won't know if it succeeded or failed (opaque response), but it works.
+            // APPROACH: specific format that Google Scripts likes better
+            // We send as 'text/plain' to avoid CORS preflight (OPTIONS request)
+            // The Google Script needs to parse this accordingly.
+            
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', 
+                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(data)
-            }).catch(err => console.error("Background sync failed", err));
+            })
+            .then(() => console.log("Sync sent"))
+            .catch(err => console.error("Background sync failed", err));
         }
 
         function nextSample() {
