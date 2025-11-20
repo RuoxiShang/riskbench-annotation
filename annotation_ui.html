@@ -395,7 +395,7 @@
         let annotatorName = '';
         
         // CONFIGURATION - PASTE YOUR GOOGLE SCRIPT URL HERE
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcREDdE3NSAn6IxDgz7DWAKXQgUWninT1rIu5tPOeu1IL8TxUyrFKo_pvRbgPTjPNurQ/exec'; 
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDJobJcRZexUaYoijEOov1G5AZdkdc-J0EyEWUAssRqSWWGgVKTyzC_Ml-aA_GZva-Zw/exec'; 
         
         // Session ID to track this specific browser session
         const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -779,27 +779,26 @@
 
         // Send data to Google Sheets in the background
         function syncToCloud(data) {
-            // APPROACH 5: Form URL Encoded (The "Native" Web Way)
-            // This mimics exactly what a standard HTML <form> does.
-            // It is treated as a "Simple Request" by browsers, bypassing CORS preflight.
+            // APPROACH 6: The "Image Beacon" (GET Request)
+            // We encode data into the URL and load it as an image.
+            // This bypasses ALL CORS checks because images can be loaded from anywhere.
+            // Requires the Google Script to handle doGet().
             
-            // Convert object to URL-encoded string
             const params = new URLSearchParams();
             for (const key in data) {
                 const value = data[key];
-                params.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
+                // Handle objects/arrays
+                const strValue = typeof value === 'object' ? JSON.stringify(value) : value;
+                params.append(key, strValue);
             }
             
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: params.toString()
-            })
-            .then(() => console.log("Sync sent (form-encoded)"))
-            .catch(err => console.error("Background sync failed", err));
+            // Create the full URL
+            const fullUrl = GOOGLE_SCRIPT_URL + '?' + params.toString();
+            
+            // Fire and forget
+            new Image().src = fullUrl;
+            
+            console.log("Sync sent via Image Beacon");
         }
 
         function nextSample() {

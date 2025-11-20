@@ -1,9 +1,17 @@
 // -----------------------------------------------------------------------
 // RiskBench Dynamic Data Collector (Google Apps Script)
-// VERSION 2.0 - Robust CORS Handling
+// VERSION 3.0 - The "Pixel" Method (GET & POST)
 // -----------------------------------------------------------------------
 
 function doPost(e) {
+  return handleRequest(e);
+}
+
+function doGet(e) {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(30000); 
@@ -15,26 +23,26 @@ function doPost(e) {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = doc.getActiveSheet();
     
-    // PARSE DATA: Handle different ways data might arrive
+    // PARSE DATA
     var data = {};
-    try {
-      // 1. Try parsing raw body (works for fetch body: JSON.stringify(data))
-      if (e.postData && e.postData.contents) {
+    
+    // 1. Try GET parameters (e.parameter is populated for both GET and POST url-encoded)
+    if (e.parameter && Object.keys(e.parameter).length > 0) {
+      data = e.parameter;
+    }
+    // 2. Try POST body (JSON)
+    else if (e.postData && e.postData.contents) {
+      try {
         data = JSON.parse(e.postData.contents);
-      } 
-      // 2. Fallback: check if it came as a parameter (sometimes happens with forms)
-      else if (e.parameter && Object.keys(e.parameter).length > 0) {
-        data = e.parameter;
+      } catch (err) {
+        data = {"error": "Failed to parse JSON", "raw": e.postData.contents};
       }
-    } catch (parseError) {
-      // If JSON parse fails, maybe it's a key=value string?
-      data = {"error": "Failed to parse JSON", "raw": e.postData.contents};
     }
     
     // Add timestamps
     data.server_timestamp = new Date();
 
-    // HEADER LOGIC (Dynamic Columns)
+    // HEADER LOGIC
     var lastCol = sheet.getLastColumn();
     var headers = [];
     if (lastCol > 0) {
@@ -69,19 +77,14 @@ function doPost(e) {
 
     sheet.appendRow(newRow);
 
-    // RETURN SUCCESS
-    // Important: Return JSON but with text/plain mime type to satisfy CORS in some browsers
+    // Return a simple JSON response
     return ContentService.createTextOutput(JSON.stringify({"result": "success", "row": sheet.getLastRow()}))
-      .setMimeType(ContentService.MimeType.TEXT);
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch (e) {
     return ContentService.createTextOutput(JSON.stringify({"result": "error", "error": e.toString()}))
-      .setMimeType(ContentService.MimeType.TEXT);
+      .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
   }
-}
-
-function doGet(e) {
-  return ContentService.createTextOutput("RiskBench Collector is Online.");
 }
