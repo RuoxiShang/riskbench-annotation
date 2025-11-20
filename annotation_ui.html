@@ -779,26 +779,26 @@
 
         // Send data to Google Sheets in the background
         function syncToCloud(data) {
-            // APPROACH 4: The "CURL Mimic" Technique
-            // We behave exactly like curl -L -d '...'
-            // We send a stringified JSON as the body, but claim it's text/plain
-            // This prevents CORS preflight.
+            // APPROACH 5: Form URL Encoded (The "Native" Web Way)
+            // This mimics exactly what a standard HTML <form> does.
+            // It is treated as a "Simple Request" by browsers, bypassing CORS preflight.
             
-            // NOTE: Google Script needs to parse e.postData.contents
+            // Convert object to URL-encoded string
+            const params = new URLSearchParams();
+            for (const key in data) {
+                const value = data[key];
+                params.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
+            }
             
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Don't wait for response, don't check CORS headers
+                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'text/plain',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify(data)
+                body: params.toString()
             })
-            .then(() => {
-                console.log("Sync sent (no-cors)");
-                // Since mode is no-cors, we can't read the response
-                // But we assume it worked if no network error occurred
-            })
+            .then(() => console.log("Sync sent (form-encoded)"))
             .catch(err => console.error("Background sync failed", err));
         }
 
