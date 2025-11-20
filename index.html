@@ -981,9 +981,9 @@
 
         // --- Cloud Sync ---
         function syncToCloud(data) {
-            // APPROACH 6: The "Image Beacon" (GET Request)
-            // We encode data into the URL and load it as an image.
-            // This bypasses ALL CORS checks because images can be loaded from anywhere.
+            // APPROACH 5: Form URL Encoded (The "Native" Web Way)
+            // This mimics exactly what a standard HTML <form> does.
+            // It worked previously, so let's stick with it.
             
             const params = new URLSearchParams();
             for (const key in data) {
@@ -993,13 +993,16 @@
                 params.append(key, strValue);
             }
             
-            // Create the full URL
-            const fullUrl = GOOGLE_SCRIPT_URL + '?' + params.toString();
-            
-            // Fire and forget
-            new Image().src = fullUrl;
-            
-            console.log("Sync sent via Image Beacon");
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
+            })
+            .then(() => console.log("Sync sent (form-encoded)"))
+            .catch(err => console.error("Background sync failed", err));
         }
 
         function prevSample() {
