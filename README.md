@@ -1,38 +1,30 @@
 # RiskBench Human Evaluation
 
-A simple, local web tool to evaluate AI-generated risk scenarios.
+A simple web tool to evaluate AI-generated risk scenarios.
 
-## 🚀 Quick Start
+## 🚀 How to Use
 
-1. **Start the tool**
-   Inside this directory (`scripts/annotation/`), run:
-   ```bash
-   python3 -m http.server 8000
-   ```
+1. **Open the App**
+   [https://ruoxishang.github.io/riskbench-annotation/](https://ruoxishang.github.io/riskbench-annotation/)
 
-2. **Open in Browser**
-   Go to: [http://localhost:8000](http://localhost:8000)
+2. **Start Session**
+   - Select your name to log in.
+   - Choose a task (**Pipeline Comparison** or **Improvement Check**).
 
 3. **Annotate**
-   - **Login**: Select your name from the list.
-   - **Task 1 (Pipeline Comparison)**: Choose which AI model is better (A vs B).
-   - **Task 2 (Improvement Check)**: Judge if the refinement actually improved the output.
+   - Read the scenario.
+   - Vote on which version is better.
+   - Check if you agree with the AI judge.
 
 4. **Submit**
    - When finished, click **"Download Annotations"**.
-   - Send the downloaded JSON file to the project lead.
+   - Send the downloaded `.json` file to Anna.
 
 ---
 
-## 🛠️ For Developers
+## 🔧 For Admin (Data Update)
 
-### Generating New Data
-To generate fresh samples from the latest experiments:
-```bash
-# Run the interactive data processor
-python3 prepare_ui_with_data.py
-```
-This will scan the `experiments/` folder and update the JSON files in `data/`.
-
-### Adding Annotators
-Edit `data/annotators.json` to add or remove names from the login dropdown.
+To update the data displayed on the site:
+1. Run `python3 prepare_ui_with_data.py` locally to generate new batches.
+2. Commit and push the updated `data/*.json` files to GitHub.
+3. GitHub Pages will automatically serve the new data.
