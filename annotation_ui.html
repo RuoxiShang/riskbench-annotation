@@ -779,20 +779,46 @@
 
         // Send data to Google Sheets in the background
         function syncToCloud(data) {
-            // APPROACH: specific format that Google Scripts likes better
-            // We send as 'text/plain' to avoid CORS preflight (OPTIONS request)
-            // The Google Script needs to parse this accordingly.
+            // APPROACH 3: The "Hidden Form" Technique
+            // This bypasses CORS completely by treating it as a standard form submission
+            // into a hidden iframe.
             
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(() => console.log("Sync sent"))
-            .catch(err => console.error("Background sync failed", err));
+            const iframeId = 'hidden-sender';
+            let iframe = document.getElementById(iframeId);
+            
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = iframeId;
+                iframe.name = iframeId;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = GOOGLE_SCRIPT_URL;
+            form.target = iframeId; // Send result to iframe so page doesn't reload
+            form.style.display = 'none';
+
+            // Flatten object to form fields
+            // Note: Google Script needs to handle this flat structure (my V2 script does)
+            for (const [key, value] of Object.entries(data)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = typeof value === 'object' ? JSON.stringify(value) : value;
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            
+            // Clean up after a moment
+            setTimeout(() => {
+                document.body.removeChild(form);
+            }, 1000);
+            
+            console.log("Sync sent via Form");
         }
 
         function nextSample() {
