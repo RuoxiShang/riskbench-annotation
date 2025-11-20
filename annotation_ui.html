@@ -393,6 +393,12 @@
         let currentIndex = 0;
         let annotations = [];
         let annotatorName = '';
+        
+        // CONFIGURATION - PASTE YOUR GOOGLE SCRIPT URL HERE
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-Iax2kk-NqSJJAa8AUfZ9d9At-PlBg_zI3nAp1Mdy7GeXKUlcqt5l6E709WNmsmH/exec'; 
+        
+        // Session ID to track this specific browser session
+        const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
 
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
@@ -704,24 +710,85 @@
         }
 
         function collectAnnotation() {
-            const betterVersion = document.querySelector('input[name="better_version"]:checked')?.value;
-            const llmAgreement = document.querySelector('input[name="llm_agreement"]:checked')?.value;
-            const comments = document.getElementById('comments')?.value || '';
+            // 1. Robust Data Collection: Scrape all inputs in the form
+            // This allows you to add new questions in HTML without changing JS code
+            const formData = {
+                // Metadata
+                timestamp: new Date().toISOString(),
+                session_id: SESSION_ID,
+                annotator: annotatorName,
+                
+                // Sample Context
+                sample_id: samples[currentIndex].sample_id,
+                comparison_type: samples[currentIndex].comparison_type,
+                
+                // UI Version (helpful for debugging if you change questions later)
+                ui_version: "1.0"
+            };
 
-            if (!betterVersion || !llmAgreement) {
+            // Select the form container
+            const formContainer = document.querySelector('.evaluation-form');
+            if (!formContainer) return null;
+
+            // A. Handle Radio Buttons (Single Choice)
+            // Get all unique radio names first
+            const radioNames = new Set();
+            formContainer.querySelectorAll('input[type="radio"]').forEach(r => radioNames.add(r.name));
+            
+            let missingRequired = false;
+            
+            radioNames.forEach(name => {
+                const selected = formContainer.querySelector(`input[name="${name}"]:checked`);
+                if (selected) {
+                    formData[name] = selected.value;
+                } else {
+                    // Check if this group was required (using the 'required' attribute on any of the inputs)
+                    const isRequired = formContainer.querySelector(`input[name="${name}"][required]`);
+                    if (isRequired) missingRequired = true;
+                }
+            });
+
+            // B. Handle Text Inputs, Textareas, Numbers, Ranges
+            const inputs = formContainer.querySelectorAll('textarea, input[type="text"], input[type="number"], input[type="range"]');
+            inputs.forEach(input => {
+                // Skip valid inputs that are empty but required
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    missingRequired = true;
+                }
+                
+                // Use name attribute as key, fallback to id
+                const key = input.name || input.id;
+                if (key) {
+                    formData[key] = input.value;
+                }
+            });
+
+            // Validation Check
+            if (missingRequired) {
                 alert('Please answer all required questions before proceeding.');
                 return null;
             }
 
-            return {
-                annotator: annotatorName,
-                sample_id: samples[currentIndex].sample_id,
-                comparison_type: samples[currentIndex].comparison_type,
-                timestamp: new Date().toISOString(),
-                better_version: betterVersion,
-                llm_agreement: llmAgreement,
-                comments: comments
-            };
+            // 2. Auto-save to Google Sheets (Fire and Forget)
+            if (GOOGLE_SCRIPT_URL) {
+                syncToCloud(formData);
+            }
+
+            return formData;
+        }
+
+        // Send data to Google Sheets in the background
+        function syncToCloud(data) {
+            // We use no-cors mode because Google Scripts don't support CORS preflight well for simple posting
+            // This means we won't know if it succeeded or failed (opaque response), but it works.
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).catch(err => console.error("Background sync failed", err));
         }
 
         function nextSample() {
