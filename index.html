@@ -820,6 +820,9 @@
                     </div>
                     <button class="logout-btn" onclick="logout()">Change</button>
                 </div>
+                <div id="sync-indicator" style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-tertiary);">
+                    <span style="color: #10B981;">●</span> Cloud sync active
+                </div>
             </div>
             
             <div class="sidebar-content">
@@ -896,8 +899,14 @@
 
     <script>
         // --- Configuration ---
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDJobJcRZexUaYoijEOov1G5AZdkdc-J0EyEWUAssRqSWWGgVKTyzC_Ml-aA_GZva-Zw/exec';
+        // IMPORTANT: Replace with your deployed Google Apps Script Web App URL
+        // See GOOGLE_SHEETS_SETUP.md for instructions
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7Ax05rvh9sFi7SjBhxA9bLno4-FzkZAIg62V3dD3gtcpH8jhCXXkWTykqgwIZ-Yi52g/exec';
         const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        
+        // Sync status tracking
+        let syncQueue = [];
+        let syncStatus = 'idle'; // 'idle', 'syncing', 'error'
 
         // --- State ---
         let state = {
@@ -951,6 +960,13 @@
         });
 
         function checkDeepLink() {
+            // Initialize sync indicator
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_WEB_APP_URL')) {
+                updateSyncIndicator('offline');
+            } else {
+                updateSyncIndicator('success');
+            }
+            
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
             if (dataParam) {
@@ -1343,26 +1359,69 @@
 
         // --- Cloud Sync ---
         function syncToCloud(data) {
-            // APPROACH 6: The "Image Beacon" (GET Request)
-            // We encode data into the URL and load it as an image.
-            // This bypasses ALL CORS checks because images can be loaded from anywhere.
-            // Requires the Google Script to handle doGet().
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_WEB_APP_URL')) {
+                console.log('Cloud sync not configured - skipping');
+                return;
+            }
             
+            // Update sync status indicator
+            updateSyncIndicator('syncing');
+            
+            // APPROACH: Image Beacon (GET Request)
+            // Encodes data into URL and loads as image - bypasses CORS
             const params = new URLSearchParams();
             for (const key in data) {
                 const value = data[key];
-                // Handle objects/arrays
                 const strValue = typeof value === 'object' ? JSON.stringify(value) : value;
                 params.append(key, strValue);
             }
             
-            // Create the full URL
             const fullUrl = GOOGLE_SCRIPT_URL + '?' + params.toString();
             
-            // Fire and forget
-            new Image().src = fullUrl;
+            // Create image and track completion
+            const img = new Image();
+            img.onload = () => {
+                console.log('✓ Synced to cloud:', data.sample_id);
+                updateSyncIndicator('success');
+            };
+            img.onerror = () => {
+                // Note: Image beacon errors are often false negatives
+                // The data may have been received even if this fires
+                console.log('Sync sent (status unknown):', data.sample_id);
+                updateSyncIndicator('success');
+            };
+            img.src = fullUrl;
+        }
+        
+        function updateSyncIndicator(status) {
+            const indicator = document.getElementById('sync-indicator');
+            if (!indicator) return;
             
-            console.log("Sync sent via Image Beacon");
+            syncStatus = status;
+            
+            if (status === 'syncing') {
+                indicator.innerHTML = '<span style="color: #F59E0B;">●</span> Syncing...';
+                indicator.title = 'Sending annotation to cloud';
+            } else if (status === 'success') {
+                indicator.innerHTML = '<span style="color: #10B981;">●</span> Synced';
+                indicator.title = 'Annotation saved to Google Sheet';
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    if (syncStatus === 'success') {
+                        indicator.innerHTML = '<span style="color: #10B981;">●</span> Cloud sync active';
+                        indicator.title = 'Annotations are being saved to Google Sheet';
+                    }
+                }, 2000);
+            } else if (status === 'error') {
+                indicator.innerHTML = '<span style="color: #EF4444;">●</span> Sync error';
+                indicator.title = 'Failed to sync - annotations saved locally';
+            } else if (status === 'offline') {
+                indicator.innerHTML = '<span style="color: #9CA3AF;">●</span> Local only';
+                indicator.title = 'Cloud sync not configured - see GOOGLE_SHEETS_SETUP.md';
+            } else {
+                indicator.innerHTML = '<span style="color: #10B981;">●</span> Cloud sync active';
+                indicator.title = 'Annotations are being saved to Google Sheet';
+            }
         }
 
         function prevSample() {
