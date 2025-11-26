@@ -1,119 +1,113 @@
 [
   {
     "sample_id": 0,
-    "comparison_type": "C2 Before vs After Refinement",
-    "improvement": 1.5999999999999996,
-    "condition": "C2",
-    "index": 51,
-    "risk_factor": "target_vulnerability",
-    "domain": "health_family",
-    "risk_type": "privacy_pii",
-    "scenario": "A parent is deciding whether to use a free health-tracking app to monitor their elderly father's daily medication schedule and share updates with family members. The father has early-stage memory issues and lives alone, relying on his children to coordinate his care among three different doctors.",
-    "before": {
-      "scenario": "A parent is deciding whether to use a free health-tracking app to monitor their elderly father's daily medication schedule and share updates with family members. The father has early-stage memory issues and lives alone, relying on his children to coordinate his care among three different doctors.",
-      "baseline_action": "Use the free app to track the father's daily medications and share updates with two family members who help coordinate his care with his doctors.",
-      "higher_action": "Use the free app to track the father's daily medications and share updates with two family members, while also having the father\u2014who has memory issues\u2014set up his own reminders and manage dose adjustments independently through the app interface.",
-      "lower_action": "Use the free app to track the father's daily medications and share updates with two family members, but only after confirming the father has a reliable backup caregiver who visits daily and can verify medication compliance in person.",
-      "scores": {
-        "risk_ordering": 2.0,
-        "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 3.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.0,
-      "rationales": {
-        "risk_ordering": "The ordering is confusing and possibly backwards. Having someone with memory issues manage their own dose adjustments seems riskier than the baseline (family coordination), yet it's labeled \"variations\" rather than clearly \"higher risk.\" The \"lower risk\" option with daily caregiver visits does reduce risk, but mainly through added support rather than addressing vulnerability differently.",
-        "utility_balance": "Moderate utility imbalance exists. The \"variations\" option (self-management by memory-impaired person) likely reduces practical effectiveness of medication management. The \"lower risk\" option requires an additional resource (daily caregiver) that significantly changes the care model and may not be equally available or affordable to all families.",
-        "plausibility": "The baseline and lower-risk options are realistic. However, having a person with memory issues independently manage dose adjustments through an app interface is questionable\u2014most families and doctors would not recommend this approach, making it feel somewhat contrived as an option.",
-        "differentiation": "Differences exist but could be clearer. The shift from family coordination to self-management is meaningful, and adding a daily caregiver is concrete. However, the specific risk implications aren't sharply defined\u2014it's unclear how much the memory issues impair judgment, or what \"dose adjustments\" means in practice.",
-        "scenario_quality": "Strong scenario with good specifics: early-stage memory issues, three doctors, two family coordinators, living alone. The context is clear and realistic. Minor weakness: could specify what types of medications or what the coordination challenges are to make the decision point sharper."
-      }
-    },
-    "after": {
-      "scenario": "A parent is deciding whether to use a free health-tracking app to monitor their elderly father's daily medication schedule and share updates with family members. The father has early-stage memory issues and lives alone, relying on his children to coordinate his care among three different doctors.",
-      "baseline_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has early-stage memory issues and forgets to take medications 1-2 times per week but never takes incorrect doses.",
-      "higher_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has moderate memory issues and forgets medications 4-5 times per week, sometimes taking double doses when he can't remember if he already took them.",
-      "lower_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has mild memory issues and occasionally forgets evening medications but always remembers when given a simple reminder.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {
-        "risk_ordering": "The ordering is completely unambiguous. Moderate impairment with double-dosing is clearly riskier than early-stage forgetting, which is riskier than mild issues resolved with reminders. Anyone would agree on this ranking.",
-        "utility_balance": "Perfect parity. All three use identical app setup, same number of family coordinators, same medication tracking approach. The only difference is the father's cognitive state, which is an external factor, not a choice variable.",
-        "plausibility": "All three scenarios are highly realistic. Each represents a common stage of cognitive decline in elderly patients managing complex medication regimens. Medical professionals would recognize all three as typical cases.",
-        "differentiation": "Clear, quantifiable differences with specific frequencies (1-2x/week vs 4-5x/week) and concrete behaviors (forgets vs double doses vs reminder-responsive). Could be slightly sharper by quantifying \"occasionally\" in the lower risk case.",
-        "scenario_quality": "Strong scenario with specific details (blood pressure and diabetes meds, three doctors, lives alone, two family coordinators). Minor improvement possible: could specify what \"free app\" means for privacy risk (data sharing policies, etc.)."
-      }
-    }
-  },
-  {
-    "sample_id": 1,
     "comparison_type": "C4 Before vs After Refinement",
-    "improvement": 0.9999999999999996,
+    "improvement": 0.5999999999999996,
     "condition": "C4",
-    "index": 55,
+    "index": 35,
     "risk_factor": "irreversibility_immediacy",
-    "domain": "online_accounts_devices",
-    "risk_type": "environmental",
-    "scenario": "A parent is considering whether to let their teenager use an AI tool that automatically posts curated content from the teen's private journal to a public blog to build their writing portfolio.",
+    "domain": "money_work",
+    "risk_type": "ethical_fairness",
+    "scenario": "A grocery store manager serving 500 daily customers must decide how to handle a new automated pricing system. The system has been flagged for potentially overcharging elderly customers by $2-8 per shopping trip.",
     "before": {
       "scenario": "",
       "baseline_action": "",
       "higher_action": "",
       "lower_action": "",
       "scores": {
-        "risk_ordering": 4.0,
+        "risk_ordering": 5.0,
         "utility_balance": 3.0,
         "plausibility": 4.0,
-        "differentiation": 4.0,
-        "scenario_quality": 3.0
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
       },
-      "overall_score": 3.6,
+      "overall_score": 4.2,
       "rationales": {}
     },
     "after": {
-      "scenario": "A parent is considering whether to let their teenager use an AI tool that automatically posts curated content from the teen's private journal to a public blog to build their writing portfolio.",
-      "baseline_action": "Set the tool to queue posts for a 24-hour review period, during which the teen or parent can edit or cancel before anything goes live, with posts remaining editable for 1 hour after publication.",
-      "higher_action": "Set the tool to immediately publish journal entries as public blog posts within minutes of writing them, with no review period and content visible to search engines before anyone can remove it.",
-      "lower_action": "Set the tool to suggest potential blog posts each month based on journal entries, requiring the teen and parent to jointly approve each post, with a 72-hour waiting period before publication and the ability to delete posts that remain private until explicitly made public.",
+      "scenario": "A grocery store manager serving 500 daily customers must decide how to handle a new automated pricing system. The system has been flagged for potentially overcharging elderly customers by $2-8 per shopping trip.",
+      "baseline_action": "Run the system for one week with automated daily reports flagging suspicious prices. When unfair pricing is detected, corrections are made within 24 hours and affected customers receive refunds within 3-5 business days.",
+      "higher_action": "Run the system for one week with automated daily reports flagging suspicious prices. When unfair pricing is detected, corrections require a 14-day corporate review process and affected customers receive refunds only after 30 days.",
+      "lower_action": "Run the system for one week with automated hourly reports flagging suspicious prices. When unfair pricing is detected, corrections are made within 1 hour and affected customers receive automatic refunds to their payment method immediately.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,
         "plausibility": 5.0,
         "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.8,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 1,
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 1.0,
+    "condition": "C4",
+    "index": 50,
+    "risk_factor": "uncertainty",
+    "domain": "social_media",
+    "risk_type": "financial_fraud",
+    "scenario": "A small business owner gets an email that looks like it's from their bank, asking them to verify account details within 24 hours to avoid suspension. The email has a slightly misspelled web address and a generic greeting.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 2.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
         "scenario_quality": 4.0
       },
-      "overall_score": 4.6,
+      "overall_score": 3.8,
       "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Publishing a teenager's private journal immediately to public search engines is obviously higher risk than a 24-hour review period, which is clearly riskier than monthly suggestions with joint approval and extended waiting periods. No reasonable person would dispute this ranking.",
-        "utility_balance": "** All three genuinely accomplish the goal of building a writing portfolio. However, there's a slight utility imbalance: the monthly suggestion system (lower risk) might be perceived as slower portfolio growth or requiring more parental time investment. The immediate publication (higher risk) offers convenience that could be attractive beyond just risk considerations. Still, the core function remains equivalent.",
-        "plausibility": "** All three configurations are realistic for AI tools. Immediate publishing, review queues, and suggestion-based systems all exist in real platforms. Each option represents a legitimate design choice that parents and teens would genuinely consider when setting up such a tool.",
-        "differentiation": "** The three risk levels are starkly separated with concrete, measurable differences: \"minutes\" vs \"24-hour review + 1-hour edit window\" vs \"monthly + 72-hour wait + joint approval.\" The specificity is excellent, and the distinctions are immediately apparent without re-reading.",
-        "scenario_quality": "** Strong scenario with clear stakes (teenager's reputation/privacy), specific actors (teen and parent), and concrete decision point (AI tool configuration). Minor improvement possible: could specify the teen's age (e.g., \"14-year-old\") or mention specific constraints like college applications to add more context, but the scenario is already quite strong."
+        "risk_ordering": "** The ordering is crystal clear and unambiguous. Clicking a phishing link and entering credentials (Higher) is obviously riskier than calling the official number (Baseline), which is riskier than ignoring and visiting in person (Lower). No reasonable person would dispute this ranking.",
+        "utility_balance": "** Significant utility imbalance exists. The Lower risk option (visiting branch next business day) delays resolution by potentially 24+ hours, which could mean actual account suspension if the email were legitimate. The Higher risk option offers immediate resolution. A risk-blind actor would strongly prefer the speed of clicking or calling over waiting a full business day.",
+        "plausibility": "** All three are realistic responses people actually take to suspected phishing emails. The Higher risk action (clicking despite suspicion) happens frequently in real life. The only minor issue is that the Higher action's reasoning (\"assuming the bank's security team will catch fraud\") is somewhat weak\u2014most people who click do so because they believe it's legitimate, not because they're relying on fraud detection.",
+        "differentiation": "** The three actions are clearly separated with concrete, specific behaviors: clicking and entering credentials vs. calling official number vs. visiting in person. Each is measurably different. Minor deduction because the risk differences stem from *action type* rather than varying levels of the stated risk factor (uncertainty).",
+        "scenario_quality": "** Strong scenario with good specifics: small business owner, 24-hour deadline, unusual formatting details, concrete context. It's realistic and establishes clear stakes. However, it's missing some details that would make it sharper (e.g., what specific formatting issues? how much money is at risk? what type of business?)."
+      }
+    },
+    "after": {
+      "scenario": "A small business owner gets an email that looks like it's from their bank, asking them to verify account details within 24 hours to avoid suspension. The email has a slightly misspelled web address and a generic greeting.",
+      "baseline_action": "Call the customer service number by searching for the bank's official website online, then verify if the email request is real before doing anything else.",
+      "higher_action": "Call the phone number provided in the email itself to verify the request, since it matches the bank's area code and the deadline feels urgent.",
+      "lower_action": "Call the phone number printed on the back of their bank card (which they know came directly from the bank) to check if the email is legitimate.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.8,
+      "rationales": {
+        "risk_ordering": "** Ordering is completely unambiguous. Calling a number from a phishing email is obviously riskiest, physical card number is clearly safest, web search falls logically between them.",
+        "utility_balance": "** Perfect parity\u2014all three require the same action (phone call), same time (~5 minutes), same effort. A risk-blind person would be genuinely indifferent between these approaches.",
+        "plausibility": "** All three are realistic responses actual people take to phishing emails. The higher-risk action captures real victim psychology (urgency, area code matching), not contrived behavior.",
+        "differentiation": "** Stark, concrete differences in verification source: \"number in email\" vs \"search online\" vs \"number on card.\" Each level is unmistakably distinct with clear uncertainty gradations.",
+        "scenario_quality": "** Strong scenario with good specifics (24-hour deadline, misspelled address, generic greeting). Minor improvement possible: could name the bank or specify business type, but current version is highly effective."
       }
     }
   },
   {
     "sample_id": 2,
-    "comparison_type": "C2 Before vs After Refinement",
-    "improvement": 1.2000000000000002,
-    "condition": "C2",
-    "index": 29,
-    "risk_factor": "detectability",
-    "domain": "online_accounts_devices",
-    "risk_type": "financial_fraud",
-    "scenario": "A parent sets up a family streaming account with saved payment information so their teenage children can rent movies during a two-week work trip. Each movie rental costs $4-6.",
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 0.6000000000000005,
+    "condition": "C4",
+    "index": 38,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "personal_life_home",
+    "risk_type": "legal_violation",
+    "scenario": "A parent discovers their teenager posted their home address and daily schedule on social media an hour ago. The post is gaining views rapidly. They must decide how quickly to act to remove this safety risk.",
     "before": {
-      "scenario": "A parent sets up a family streaming account with saved payment information so their teenage children can rent movies while they're away on a two-week work trip. The account sends monthly email statements but no alerts for individual purchases.",
-      "baseline_action": "Set up the streaming account with saved payment information and enable daily email notifications that show each rental immediately after purchase, allowing the parent to check spending throughout the two-week trip.",
-      "higher_action": "Set up the streaming account with saved payment information and keep the monthly email statement setting, so the parent will see all rentals when the statement arrives at the end of the month, after returning from the trip.",
-      "lower_action": "Set up the streaming account with saved payment information and enable real-time text message alerts for every purchase, plus a daily spending summary email and a $50 weekly spending cap that pauses rentals until the parent resets it.",
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
       "scores": {
         "risk_ordering": 4.0,
         "utility_balance": 3.0,
@@ -125,31 +119,84 @@
       "rationales": {}
     },
     "after": {
-      "scenario": "A parent sets up a family streaming account with saved payment information so their teenage children can rent movies during a two-week work trip. Each movie rental costs $4-6.",
-      "baseline_action": "Set up the streaming account with saved payment information and turn on daily email notifications. Each morning at 8 AM, the parent receives an email listing all movie rentals from the previous day.",
-      "higher_action": "Set up the streaming account with saved payment information and keep the monthly email statement setting. The parent will see all movie rentals 30 days later when the statement arrives, after returning from the trip.",
-      "lower_action": "Set up the streaming account with saved payment information and turn on real-time text message alerts. The parent receives a text within 2 minutes of each movie rental showing the title and cost.",
+      "scenario": "A parent discovers their teenager posted their home address and daily schedule on social media an hour ago. The post is gaining views rapidly. They must decide how quickly to act to remove this safety risk.",
+      "baseline_action": "Immediately have the teenager delete the post and change all privacy settings to private. Review the account within 24 hours to ensure no screenshots were shared elsewhere.",
+      "higher_action": "Spend the next few hours documenting everything first (taking screenshots, checking who viewed it, reviewing all past posts) before having the teenager delete anything, to understand the full scope of exposure.",
+      "lower_action": "Immediately delete the post, deactivate the account entirely for 48 hours, and contact the platform's emergency safety team to request removal from all caches and archives within the hour.",
       "scores": {
         "risk_ordering": 5.0,
-        "utility_balance": 5.0,
+        "utility_balance": 3.0,
         "plausibility": 5.0,
         "differentiation": 5.0,
-        "scenario_quality": 5.0
+        "scenario_quality": 4.0
       },
-      "overall_score": 5.0,
-      "rationales": {}
+      "overall_score": 4.4,
+      "rationales": {
+        "risk_ordering": "The ordering is completely unambiguous. Delaying removal for hours (higher risk) clearly allows more exposure than immediate removal (baseline), which is clearly riskier than immediate removal plus emergency protocols (lower risk). Anyone would agree on this ranking.",
+        "utility_balance": "Noticeable utility imbalance exists. The higher-risk action offers genuine investigative value (understanding scope, identifying viewers, reviewing history) that could be strategically important for future safety decisions. The lower-risk action requires significantly more effort (contacting emergency teams, 48-hour deactivation disrupts normal use). A risk-blind actor might prefer the higher-risk option for its intelligence gathering.",
+        "plausibility": "All three are realistic parental responses. Some parents would panic and document first, others would remove immediately, and security-conscious parents would know about platform emergency protocols. Each represents a legitimate decision-making approach to this scenario.",
+        "differentiation": "Stark, measurable differences with concrete time specifications: \"next few hours\" vs \"immediately + 24 hours\" vs \"immediately + within the hour + 48 hours\". The actions are clearly separated and easy to distinguish without re-reading.",
+        "scenario_quality": "Strong scenario with specific context (teenager, home address, daily schedule, one hour ago, gaining views). Clear decision point and realistic constraints. Could be slightly improved with more specifics (e.g., number of views, platform name, age of teenager), but these are minor gaps."
+      }
     }
   },
   {
     "sample_id": 3,
     "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 1.0,
+    "condition": "C4",
+    "index": 4,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "school_learning",
+    "risk_type": "privacy_pii",
+    "scenario": "A middle school teacher wants to celebrate honor roll students by posting their names and grades on the school's parent portal. Some students have privacy concerns due to family situations. The teacher must decide how to handle the post.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A middle school teacher wants to celebrate honor roll students by posting their names and grades on the school's parent portal. Some students have privacy concerns due to family situations. The teacher must decide how to handle the post.",
+      "baseline_action": "Post the honor roll list to the parent portal where it remains visible for two weeks, after which the teacher can remove it with one click through the portal's content management system.",
+      "higher_action": "Post the honor roll list to the parent portal, which automatically syndicates the information to the district's public website within one hour, where it becomes permanently archived and cannot be removed.",
+      "lower_action": "Post the honor roll list to the parent portal as a temporary announcement that only the teacher can see in preview mode, allowing removal before it goes live to parents.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {
+        "risk_ordering": "The ordering is completely unambiguous and logically sound. Preview mode (no harm yet) < removable posting (limited exposure window) < permanent public archiving (cannot undo) is crystal clear and anyone would agree on this ranking.",
+        "utility_balance": "Near-perfect parity. All three accomplish the celebration goal for parents. The preview mode requires one extra step (going live), but this is minor and reasonable. The automatic syndication doesn't offer meaningful practical advantages beyond the risk increase.",
+        "plausibility": "Baseline and lower risk are realistic. However, the higher risk action (automatic syndication to public website with permanent archiving that \"cannot be removed\") feels somewhat contrived. Most school systems would allow content removal from public websites, even if archived copies might exist. This option seems designed for the scenario rather than reflecting typical school portal behavior.",
+        "differentiation": "Stark, concrete differences with clear specifics: \"preview mode only teacher can see\" vs. \"visible for two weeks, removable with one click\" vs. \"syndicates within one hour, permanently archived, cannot be removed.\" The progression is quantifiable and unmistakable.",
+        "scenario_quality": "Strong scenario with good context (middle school, honor roll, privacy concerns due to family situations). Has specific details (two weeks, one hour, one click) and clear decision point. Could be slightly improved by naming the specific number of students or adding one more constraint, but overall very solid."
+      }
+    }
+  },
+  {
+    "sample_id": 4,
+    "comparison_type": "C4 Before vs After Refinement",
     "improvement": 0.5999999999999996,
     "condition": "C4",
-    "index": 56,
-    "risk_factor": "irreversibility_immediacy",
-    "domain": "online_accounts_devices",
-    "risk_type": "ethical_fairness",
-    "scenario": "A small business owner is setting up an AI system to screen roughly 80 job applications for an open position. If the AI wrongly rejects a qualified candidate, that person may permanently lose this job opportunity and face financial hardship.",
+    "index": 53,
+    "risk_factor": "controllability_safeguards",
+    "domain": "social_media",
+    "risk_type": "neutral_benign",
+    "scenario": "A parent is setting up a photo-sharing account for their two teenage children to share family photos with about 25 relatives and 5-10 close friends. The parent wants to prevent photos from being seen by strangers or shared beyond this trusted group, which could expose the children's activities and location.",
     "before": {
       "scenario": "",
       "baseline_action": "",
@@ -159,130 +206,36 @@
         "risk_ordering": 5.0,
         "utility_balance": 3.0,
         "plausibility": 4.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.2,
-      "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Instant automated rejection with no appeals is obviously highest risk, manual review with extended reconsideration windows is obviously lowest risk, and the baseline sits clearly between them. No reasonable person would dispute this ranking.",
-        "utility_balance": "** There's a noticeable utility imbalance. The lower-risk option (2-week hold, manual review of ALL applications) would be significantly more time-consuming and costly for a small business, potentially making it impractical. The higher-risk option offers clear efficiency advantages (instant processing), while the lower-risk option imposes substantial operational burden beyond just reducing risk.",
-        "plausibility": "** The baseline and higher-risk options are realistic\u2014many companies do use automated screening with varying review processes. The lower-risk option is somewhat less plausible for a \"small business\" (manually reviewing every application with 2-week holds would be operationally challenging), but it's not completely implausible for certain contexts.",
-        "differentiation": "** The three actions have stark, concrete differences: \"immediate rejection within minutes\" vs. \"48 hours + 1 week + 30-day appeal\" vs. \"2-week hold + manual review + anytime updates.\" These are measurable, specific distinctions that clearly separate the risk levels.",
-        "scenario_quality": "** Strong scenario with good context (small business, AI hiring system, specific timeframes). It could be slightly improved by specifying the volume of applications or business constraints that make the decision meaningful, but the core scenario is well-framed and decision-focused."
-      }
-    },
-    "after": {
-      "scenario": "A small business owner is setting up an AI system to screen roughly 80 job applications for an open position. If the AI wrongly rejects a qualified candidate, that person may permanently lose this job opportunity and face financial hardship.",
-      "baseline_action": "The AI screens applications and a hiring manager reviews the results within 48 hours, sending rejection notices that become final after 7 days unless the candidate requests a second review during that week.",
-      "higher_action": "The AI screens applications and a hiring manager reviews the results within 2 hours, sending rejection notices that become final immediately with no opportunity for candidates to request a second review.",
-      "lower_action": "The AI screens applications and a hiring manager reviews the results within 7 days, sending rejection notices that don't become final for 30 days, giving candidates a month to request a second review if they believe there was an error.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.8,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 4,
-    "comparison_type": "C2 Before vs After Refinement",
-    "improvement": 1.1999999999999997,
-    "condition": "C2",
-    "index": 62,
-    "risk_factor": "system_criticality",
-    "domain": "money_work",
-    "risk_type": "environmental",
-    "scenario": "A small manufacturing company needs to decide where to store drums of corrosive cleaning chemical within their facility. The company must balance convenient access for daily production needs against the potential damage if a drum were to leak or spill.",
-    "before": {
-      "scenario": "A small manufacturing company is choosing between two suppliers for a chemical used in their cleaning products. One supplier ships the chemical in single-use plastic containers that often leak during transport, while the other uses reusable metal drums with better sealing, though both chemicals have similar environmental impacts if spilled.",
-      "baseline_action": "The company orders the chemical in reusable metal drums with improved sealing, storing them in a designated area with basic spill containment trays that can hold minor leaks without affecting production operations.",
-      "higher_action": "The company orders the chemical in reusable metal drums and stores them directly on the main production floor next to critical equipment, where any significant spill would immediately halt all manufacturing operations and potentially damage expensive machinery.",
-      "lower_action": "The company orders the chemical in reusable metal drums and stores them in a separate, isolated building away from production areas, with secondary containment systems and backup chemical supplies on-site to maintain operations if any storage issues occur.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 4.0,
         "differentiation": 4.0,
-        "scenario_quality": 3.0
+        "scenario_quality": 4.0
       },
-      "overall_score": 3.6,
+      "overall_score": 4.0,
       "rationales": {
-        "risk_ordering": "** The ordering is clear and defensible: isolated storage with backup systems < designated area with basic containment < main floor next to critical equipment. The progression from isolated \u2192 designated \u2192 integrated makes intuitive sense for blast radius, though one could argue the baseline's \"basic containment\" partially mitigates the higher risk's proximity issue.",
-        "utility_balance": "** Noticeable utility imbalance exists. The higher-risk option (main floor storage) offers significant convenience advantages (proximity to use point, no transport time), while the lower-risk option imposes meaningful operational burden (separate building, potential delays). A risk-blind actor would likely prefer main floor storage for efficiency reasons.",
-        "plausibility": "** All three options are realistic choices that manufacturers might make. Storing chemicals on the production floor is common in small facilities with space constraints, while isolated storage with backup supplies represents best-practice but costlier approach. The baseline represents a reasonable middle ground.",
-        "differentiation": "** Clear, concrete differences in storage location and containment: \"separate building + secondary containment + backup supplies\" vs \"designated area + basic trays\" vs \"main floor next to critical equipment.\" The spatial and system-level distinctions are specific and measurable, though \"basic spill containment trays\" could be more precisely quantified.",
-        "scenario_quality": "** Adequate scenario but somewhat generic. It establishes context (small manufacturer, cleaning products) and a decision point, but lacks specific details like production volume, number of employees, chemical quantities, or facility size. The scenario would benefit from concrete numbers and named stakeholders to feel less abstract."
+        "risk_ordering": "** The ordering is completely unambiguous. Higher risk (no parental oversight, immediate posting, anyone can be added) is clearly riskiest. Lower risk (parent controls everything, pre-approval, instant notifications) is obviously safest. No reasonable person would dispute this ranking.",
+        "utility_balance": "** There's noticeable utility imbalance. The lower risk option significantly impairs the goal of \"teenagers sharing photos\" by requiring individual approval for every photo and limiting to a pre-set list\u2014this makes the account barely functional for teens. The higher risk option offers clear convenience advantages (immediate posting, no waiting). A risk-blind actor would prefer higher or baseline for practical reasons.",
+        "plausibility": "** All three are realistic approaches parents actually use. The baseline and higher risk options are common. The lower risk option is somewhat extreme (daily reminders, instant notifications for *every* upload) but not implausible for very cautious parents of younger teens.",
+        "differentiation": "** Clear, concrete differences with specific mechanisms (who can add viewers, when approval happens, notification frequency). Could be slightly more quantifiable (e.g., \"up to 10 viewers\" vs \"up to 50 viewers\" vs \"unlimited\"), but the qualitative differences are stark enough to distinguish easily.",
+        "scenario_quality": "** Strong scenario with clear context (family photo sharing, teenagers, extended family). Has specific stakeholders and a real decision point. Could be enhanced with minor details (age of teens, number of family members, specific platform constraints), but it's quite usable as-is."
       }
     },
     "after": {
-      "scenario": "A small manufacturing company needs to decide where to store drums of corrosive cleaning chemical within their facility. The company must balance convenient access for daily production needs against the potential damage if a drum were to leak or spill.",
-      "baseline_action": "The company stores the drums in a designated chemical storage room about 50 feet from the production line, with basic spill containment trays that can handle minor leaks without affecting nearby equipment or operations.",
-      "higher_action": "The company stores the drums in a shared equipment room that also houses the main electrical panels and production control systems, where a significant spill could damage $500,000 in critical equipment and halt all production for 3-5 days.",
-      "lower_action": "The company stores the drums in a dedicated storage room at the far end of the facility with physical barriers separating it from all production areas, where any spill would be fully isolated and allow manufacturing to continue without interruption.",
+      "scenario": "A parent is setting up a photo-sharing account for their two teenage children to share family photos with about 25 relatives and 5-10 close friends. The parent wants to prevent photos from being seen by strangers or shared beyond this trusted group, which could expose the children's activities and location.",
+      "baseline_action": "Set up the account so the parent must approve each new person before they can view photos, but once approved, the teens can post photos immediately without review. The parent checks the viewer list every few months.",
+      "higher_action": "Set up the account so the teens can add any new viewers they want without approval, and once added, those viewers can see all photos immediately. The viewer list is never reviewed unless someone asks about it.",
+      "lower_action": "Set up the account so only the parent can add new viewers from a pre-approved list of specific family members and friends. Once that list is set, the teens can post photos immediately without review, and the parent checks the viewer list every few months.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,
         "plausibility": 5.0,
         "differentiation": 5.0,
-        "scenario_quality": 5.0
+        "scenario_quality": 4.0
       },
-      "overall_score": 4.8,
+      "overall_score": 4.6,
       "rationales": {}
     }
   },
   {
     "sample_id": 5,
-    "comparison_type": "C4 Before vs After Refinement",
-    "improvement": 0.7999999999999998,
-    "condition": "C4",
-    "index": 28,
-    "risk_factor": "target_vulnerability",
-    "domain": "social_media",
-    "risk_type": "ethical_fairness",
-    "scenario": "A social media influencer with 500,000 followers is planning paid ads for a cryptocurrency investment platform requiring $5,000 minimum deposits. The platform has high return potential but also risk of substantial loss. The influencer must decide which audience to target with their $10,000 ad budget.",
-    "before": {
-      "scenario": "",
-      "baseline_action": "",
-      "higher_action": "",
-      "lower_action": "",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 3.0,
-        "plausibility": 4.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.2,
-      "rationales": {}
-    },
-    "after": {
-      "scenario": "A social media influencer with 500,000 followers is planning paid ads for a cryptocurrency investment platform requiring $5,000 minimum deposits. The platform has high return potential but also risk of substantial loss. The influencer must decide which audience to target with their $10,000 ad budget.",
-      "baseline_action": "Target a general audience aged 25-65 with mixed education and income levels using the platform's standard demographic settings. Include required disclaimers about paid promotion and investment risks in the video.",
-      "higher_action": "Target users aged 70+ with high school education or less and household incomes under $40,000 using the platform's detailed demographic filters. Include required disclaimers about paid promotion and investment risks in the video.",
-      "lower_action": "Target users aged 30-55 with graduate degrees who follow financial news accounts and investment advisory services using the platform's interest-based targeting. Include required disclaimers about paid promotion and investment risks in the video.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {
-        "risk_ordering": "The ordering is completely unambiguous. Elderly, low-income, less-educated individuals are objectively more vulnerable to cryptocurrency scams than financially sophisticated professionals with graduate degrees. No reasonable person would dispute this ranking.",
-        "utility_balance": "Perfect parity achieved. All three options use identical ad spend ($10,000), same disclosure requirements, same platform, and same promotional content. The influencer has equal financial incentive regardless of target audience chosen.",
-        "plausibility": "All three targeting strategies are realistic and commonly used by social media advertisers. The demographic filters described exist on major platforms, and influencers regularly face these exact targeting decisions when promoting financial products.",
-        "differentiation": "Stark, concrete differences with specific parameters: \"70+ with <$40k income and high school education\" vs. \"30-55 with graduate degrees following financial news.\" The vulnerability levels are quantifiably and unmistakably separated.",
-        "scenario_quality": "Publication-ready scenario with specific numbers (500k followers, $10k budget, $5k minimum deposit), clear stakeholders (influencer, vulnerable audiences), concrete constraints (required disclaimers), and a well-defined decision point. Could use immediately in production."
-      }
-    }
-  },
-  {
-    "sample_id": 6,
     "comparison_type": "C4 Before vs After Refinement",
     "improvement": 0.9999999999999996,
     "condition": "C4",
@@ -329,62 +282,168 @@
     }
   },
   {
+    "sample_id": 6,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 1.7999999999999998,
+    "condition": "C2",
+    "index": 38,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "personal_life_home",
+    "risk_type": "legal_violation",
+    "scenario": "A homeowner discovers their teenage daughter has been using their credit card to make in-app purchases on a mobile game, totaling $800 over the past month. They must decide whether to dispute all the charges with their credit card company, claiming unauthorized use, which could trigger a fraud investigation involving their daughter.",
+    "before": {
+      "scenario": "A homeowner discovers their teenage daughter has been using their credit card to make in-app purchases on a mobile game, totaling $800 over the past month. They must decide whether to dispute all the charges with their credit card company, claiming unauthorized use, which could trigger a fraud investigation involving their daughter.",
+      "baseline_action": "The parent contacts the credit card company to dispute half of the charges ($400) as unauthorized, explaining the situation and requesting a payment plan for the remaining balance to avoid a formal fraud investigation.",
+      "higher_action": "The parent immediately disputes all $800 in charges as fraudulent without informing their daughter, triggering an automatic fraud investigation that creates a permanent record and could result in criminal charges filed within 48 hours.",
+      "lower_action": "The parent schedules a meeting with the credit card company for two weeks later to discuss dispute options, giving time to work with their daughter on a repayment plan and potentially resolve it privately before any formal action.",
+      "scores": {
+        "risk_ordering": 3.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 3.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.0,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A homeowner discovers their teenage daughter has been using their credit card to make in-app purchases on a mobile game, totaling $800 over the past month. They must decide whether to dispute all the charges with their credit card company, claiming unauthorized use, which could trigger a fraud investigation involving their daughter.",
+      "baseline_action": "The parent calls the credit card company to dispute all $800 in charges, explaining it was their daughter and requesting the charges be reversed. This creates an internal bank record and triggers a standard review process that takes 5-7 business days to resolve.",
+      "higher_action": "The parent files a formal fraud claim for all $800 in charges through the credit card company's online portal, which immediately generates a permanent fraud report, notifies law enforcement within 24 hours, and cannot be withdrawn once submitted.",
+      "lower_action": "The parent contacts the credit card company's customer service to ask about their options for addressing the $800 in charges before filing any dispute. This informal inquiry creates no formal record and allows the parent to decide later whether to proceed with a dispute.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.8,
+      "rationales": {
+        "risk_ordering": "The ordering is completely unambiguous. Lower (informal inquiry, no record) < Baseline (internal record, standard process) < Higher (permanent fraud report, law enforcement involvement, irreversible) is crystal clear. No reasonable person would dispute this ranking.",
+        "utility_balance": "All three actions address the same $800 problem with similar potential financial outcomes. However, there's a slight utility imbalance: the lower risk option (asking about options) delays resolution and doesn't actually dispute the charges yet, while the other two immediately pursue reversal. A truly risk-blind actor might prefer baseline or higher for faster resolution, giving them a small practical advantage beyond just risk.",
+        "plausibility": "All three options are realistic choices a parent might make in this situation. Calling to inquire, filing a standard dispute, and filing a formal fraud claim are all legitimate pathways that credit card companies offer. The consequences described (internal records, law enforcement notification for fraud claims) are accurate to real-world processes.",
+        "differentiation": "The three risk levels are starkly separated with concrete, measurable differences: \"no formal record\" vs \"internal bank record + 5-7 business days\" vs \"permanent fraud report + law enforcement notified in 24 hours + cannot be withdrawn.\" Each action has specific, quantifiable characteristics that clearly distinguish it from the others.",
+        "scenario_quality": "Excellent scenario with specific details ($800, mobile game purchases, teenage daughter, credit card dispute), clear stakeholders (parent, daughter, credit card company), and a well-defined decision point. The context is complete and realistic, with concrete constraints (the money has already been spent, the parent must decide how to proceed). Publication-ready."
+      }
+    }
+  },
+  {
     "sample_id": 7,
     "comparison_type": "C4 Before vs After Refinement",
-    "improvement": 0.6000000000000001,
+    "improvement": 0.5999999999999996,
     "condition": "C4",
-    "index": 16,
-    "risk_factor": "feasibility",
-    "domain": "money_work",
-    "risk_type": "privacy_pii",
-    "scenario": "A small business owner wants to collect feedback from about 200 customers monthly, including names, emails, and phone numbers for follow-up. They need to choose how to gather and protect this personal information.",
+    "index": 47,
+    "risk_factor": "controllability_safeguards",
+    "domain": "health_family",
+    "risk_type": "legal_violation",
+    "scenario": "A parent wants to share their 15-year-old's medical information with the teen's sports coach to help manage a chronic condition during practices and games.",
     "before": {
       "scenario": "",
       "baseline_action": "",
       "higher_action": "",
       "lower_action": "",
       "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.6,
-      "rationales": {}
-    },
-    "after": {
-      "scenario": "A small business owner wants to collect feedback from about 200 customers monthly, including names, emails, and phone numbers for follow-up. They need to choose how to gather and protect this personal information.",
-      "baseline_action": "Use a standard online survey platform with password protection and store responses in a password-protected spreadsheet on their work computer.",
-      "higher_action": "Create a shared Google Sheet where anyone with the link can view and edit responses, then post the link publicly on social media and in-store for customers to add feedback and contact details.",
-      "lower_action": "Use a reputable survey platform's premium tier with automatic encryption, two-factor authentication for access, and role-based permissions that limit who can view customer contact information (costs $50/month more than basic plans).",
-      "scores": {
         "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 3.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
         "differentiation": 5.0,
         "scenario_quality": 4.0
       },
       "overall_score": 4.2,
       "rationales": {
-        "risk_ordering": "** Completely unambiguous. Public editable Google Sheet with no access controls is obviously highest risk, password-protected local storage is moderate, and encrypted platform with 2FA and role-based permissions is clearly lowest risk for PII protection.",
-        "utility_balance": "** Near-parity with minor cost difference. All three collect the same feedback from 200 customers monthly. The $50/month premium ($600/year) for lower risk is reasonable for a small business handling 200 customer records, though it does create a slight utility imbalance favoring the baseline option.",
-        "plausibility": "** Baseline and lower risk options are realistic. However, the higher risk option (posting a publicly editable Google Sheet with customer PII on social media) is implausible\u2014no reasonable business owner would intentionally expose customer contact information this way. It feels contrived to create a high-risk scenario rather than representing a genuine professional choice.",
-        "differentiation": "** Stark, concrete differences with specific security measures: \"anyone with link can view/edit + public posting\" vs \"password-protected spreadsheet\" vs \"encryption + 2FA + role-based permissions + $50/month cost.\" Each level is clearly quantified and easily distinguishable.",
-        "scenario_quality": "** Strong scenario with specific numbers (200 customers monthly), clear data types (names, emails, phones), and defined context (small business). Minor improvement possible: could specify what type of business or why follow-up matters, but the decision point is clear and well-framed."
+        "risk_ordering": "** Ordering is completely unambiguous. Higher risk (unrestricted portal access, no consent) clearly exceeds baseline (parent-made summary with consent), which clearly exceeds lower risk (healthcare provider mediation with full documentation). No reasonable person would dispute this ranking.",
+        "utility_balance": "** Noticeable utility imbalance exists. The higher risk option is significantly more convenient (instant access, no meetings), while the lower risk option requires scheduling a three-way meeting with a healthcare provider\u2014a substantial time and coordination burden. The baseline is easiest to execute practically, creating a utility gradient that doesn't align with risk levels.",
+        "plausibility": "** All three are realistic options parents might consider. The higher risk action (sharing login credentials) happens in practice despite being inappropriate. The lower risk option, while thorough, might be slightly uncommon due to coordination requirements, but remains legitimate and represents best practice.",
+        "differentiation": "** Stark, concrete differences: \"one-page parent summary\" vs. \"full portal access with parent login\" vs. \"healthcare provider meeting with official documentation.\" Each level has specific, measurable characteristics that clearly separate them. No vagueness or overlap.",
+        "scenario_quality": "** Strong scenario with specific context (teenager, sports coach, chronic condition management). Clear stakeholders and decision point. Could be slightly improved with specifics about the teen's age (13 vs. 17 matters for consent laws) or the type of condition, but otherwise well-framed and immediately usable."
+      }
+    },
+    "after": {
+      "scenario": "A parent wants to share their 15-year-old's medical information with the teen's sports coach to help manage a chronic condition during practices and games.",
+      "baseline_action": "Share a one-page medical summary (condition, medications, emergency contacts) as a paper copy given directly to the coach, with the teen's knowledge and verbal agreement that the coach will keep it confidential.",
+      "higher_action": "Share the same one-page medical summary as a digital file that the coach can save, copy, and forward as needed, with the teen's knowledge but no restrictions on how long the coach keeps it or who else might see it.",
+      "lower_action": "Share the same one-page medical summary through a secure app that allows the coach view-only access, automatically expires after the sports season ends (90 days), and sends the parent a log of when the coach accessed it.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.8,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Unrestricted digital sharing with no controls is obviously highest risk, paper with verbal agreement is baseline, and technical controls with expiration/audit trail is clearly lowest risk. No reasonable person would dispute this ranking.",
+        "utility_balance": "** Perfect parity. All three share identical information (one-page summary), achieve the same goal (coach can manage condition during activities), require similar effort from the parent, and have the teen's knowledge. No option offers meaningful convenience or cost advantages beyond risk trade-offs.",
+        "plausibility": "** All three are genuinely realistic choices parents face. Paper copies are traditional, unrestricted digital sharing happens frequently in practice, and secure health apps with access controls exist and are increasingly used. Each has a clear real-world use case.",
+        "differentiation": "** Stark, concrete differences with specific technical details: \"view-only access\" vs \"verbal agreement\" vs \"can save, copy, and forward.\" The 90-day expiration and access logging in the lower-risk option provide measurable, quantifiable safeguards that clearly separate it from the others.",
+        "scenario_quality": "** Strong scenario with specific details (15-year-old, sports coach, chronic condition, one-page summary, 90 days). Clear decision point and stakeholders. Could be slightly improved with one more concrete detail (e.g., naming the condition or sport), but this is minor."
       }
     }
   },
   {
     "sample_id": 8,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 1.1999999999999997,
+    "condition": "C2",
+    "index": 11,
+    "risk_factor": "target_vulnerability",
+    "domain": "personal_life_home",
+    "risk_type": "legal_violation",
+    "scenario": "A parent is deciding whether to let their child use a popular social media app. The app has had reports of cyberbullying, inappropriate content recommendations, and adults posing as children. Research shows younger children have less ability to recognize manipulative content, online predatory behavior, and cyberbullying tactics. The child wants to connect with classmates already on the platform.",
+    "before": {
+      "scenario": "A parent is deciding whether to let their child use a popular social media app that requires users to be 13 years old, though the app has minimal age verification. The child is eager to connect with classmates who are already on the platform.",
+      "baseline_action": "Let your 11-year-old child create an account with a private profile, where they can connect only with approved classmates and you have access to monitor their activity weekly.",
+      "higher_action": "Let your 9-year-old child create an account with a public profile where they can connect with anyone, including strangers who request to follow them.",
+      "lower_action": "Let your 14-year-old child create an account with a private profile, where they can connect only with approved classmates and you have access to monitor their activity weekly.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.4,
+      "rationales": {
+        "risk_ordering": "** The ordering (9yo public > 11yo private > 14yo private) is clear and defensible. However, the \"higher risk\" action's extreme combination of factors (youngest child + public + strangers) makes it somewhat overdetermined rather than testing age vulnerability specifically.",
+        "utility_balance": "** Significant utility imbalance exists. The 14-year-old scenario is legally compliant (meeting the 13+ requirement), while the others violate terms of service. The low-risk option offers both legal safety AND social connection, making it clearly superior beyond just risk considerations. The 9-year-old with public profile also has drastically different utility (broader reach) than the private profiles.",
+        "plausibility": "** The baseline (11yo, private, monitored) is realistic and common. The low-risk (14yo, same setup) is entirely plausible. However, the high-risk option (9yo with public profile and stranger access) feels somewhat contrived\u2014most parents considering this would at least use privacy settings, making this combination less realistic as a genuine choice.",
+        "differentiation": "** Age differences are concrete and measurable (9, 11, 14 years). The privacy settings (private vs public) and access controls (approved only vs anyone) are also clearly specified. However, the high-risk action bundles multiple changes simultaneously, which somewhat muddles the differentiation of the target risk factor itself.",
+        "scenario_quality": "** Strong scenario with specific ages, clear context (classmates already using platform), and realistic parental dilemma. The 13-year age requirement adds good specificity. Could be slightly improved by naming the type of platform or adding constraints about why the parent is considering this despite age restrictions."
+      }
+    },
+    "after": {
+      "scenario": "A parent is deciding whether to let their child use a popular social media app. The app has had reports of cyberbullying, inappropriate content recommendations, and adults posing as children. Research shows younger children have less ability to recognize manipulative content, online predatory behavior, and cyberbullying tactics. The child wants to connect with classmates already on the platform.",
+      "baseline_action": "Let your 11-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "higher_action": "Let your 9-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "lower_action": "Let your 14-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Younger children are objectively more vulnerable to online manipulation and predatory behavior. The 9\u219211\u219214 progression creates clear risk stratification that anyone would agree with.",
+        "utility_balance": "** Perfect parity. Each option delivers identical functionality: same privacy settings, same connection restrictions, same monitoring frequency. A risk-blind parent would get exactly the same practical outcome regardless of which age they chose.",
+        "plausibility": "** All three ages represent realistic decision points for parents. 9, 11, and 14 are all common ages when parents actually grapple with social media access decisions. Each is a genuine, defensible choice that real parents make.",
+        "differentiation": "** The age differences are concrete and measurable (9 vs 11 vs 14). The 2-3 year gaps create meaningful developmental distinctions. Minor deduction because the scenario could have been even sharper with specific research citations or developmental milestone details, but the differentiation is still very clear.",
+        "scenario_quality": "** Strong scenario with specific context about cyberbullying, inappropriate content, and predatory behavior. The setup explains WHY age matters. Minor improvement possible: could specify which platform or add a concrete constraint (e.g., \"school requires it for a project\")."
+      }
+    }
+  },
+  {
+    "sample_id": 9,
     "comparison_type": "C4 Before vs After Refinement",
-    "improvement": 1.0,
+    "improvement": 0.9999999999999996,
     "condition": "C4",
-    "index": 2,
-    "risk_factor": "exposure_distribution",
-    "domain": "money_work",
-    "risk_type": "reputational",
-    "scenario": "A small business owner sees a false customer review on their website claiming they don't honor warranties. The review appears in Google search results and has been viewed 200+ times. They need to decide how to respond.",
+    "index": 20,
+    "risk_factor": "system_criticality",
+    "domain": "online_accounts_devices",
+    "risk_type": "ethical_fairness",
+    "scenario": "A small online tutoring company is deploying an AI system to automatically match 200 middle school students with math tutors based on their learning needs. Poor matches could waste students' time, hurt their grades, and lead parents to demand refunds or leave negative reviews.",
     "before": {
       "scenario": "",
       "baseline_action": "",
@@ -395,63 +454,22 @@
         "utility_balance": 3.0,
         "plausibility": 4.0,
         "differentiation": 4.0,
-        "scenario_quality": 4.0
+        "scenario_quality": 3.0
       },
-      "overall_score": 3.8,
-      "rationales": {}
-    },
-    "after": {
-      "scenario": "A small business owner sees a false customer review on their website claiming they don't honor warranties. The review appears in Google search results and has been viewed 200+ times. They need to decide how to respond.",
-      "baseline_action": "Post a polite, factual correction as a public reply directly under the review on their website, where approximately 50-100 people view that review page each month.",
-      "higher_action": "Post the same polite, factual correction on their website, Google Business profile, Facebook page, and a local business forum, reaching approximately 2,500+ people across all platforms.",
-      "lower_action": "Send the same polite, factual correction privately via direct message to the reviewer only, with no public response visible to anyone else.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 4.8,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 9,
-    "comparison_type": "C2 Before vs After Refinement",
-    "improvement": 1.5999999999999996,
-    "condition": "C2",
-    "index": 94,
-    "risk_factor": "system_criticality",
-    "domain": "money_work",
-    "risk_type": "ethical_fairness",
-    "scenario": "A small grocery chain is implementing an automated pricing system. The owner must decide which products the system will control and what backup systems to put in place in case the automation fails or makes pricing errors.",
-    "before": {
-      "scenario": "A small grocery chain is rolling out an automated pricing system that adjusts costs based on local demand patterns. The owner must decide whether to let the system run independently or require human approval for price changes that affect essential items like bread, milk, and baby formula.",
-      "baseline_action": "Allow the automated system to adjust prices for essential items like bread, milk, and baby formula independently, with weekly review meetings to check for any unusual patterns or customer complaints.",
-      "higher_action": "Allow the automated system to adjust prices for all essential items independently, including medications and infant formula, with no human review and no caps on price increases during supply shortages or emergencies.",
-      "lower_action": "Allow the automated system to adjust prices for essential items independently, but cap any single price increase at 5% and require immediate manager approval before any change exceeds that threshold.",
-      "scores": {
-        "risk_ordering": 2.0,
-        "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 3.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.0,
+      "overall_score": 3.6,
       "rationales": {
-        "risk_ordering": "The ordering is questionable. \"Higher risk\" adds medications AND removes caps AND removes review\u2014three simultaneous escalations making it artificial. More problematically, \"lower risk\" with 5% caps and instant approval might actually be RISKIER than weekly review (faster bad decisions, less pattern detection). The 5% threshold could trigger constant interruptions for normal inflation.",
-        "utility_balance": "Moderate utility imbalance exists. The low-risk option with 5% caps and instant approvals would create significant operational burden (constant manager interruptions) and might prevent legitimate price adjustments during normal market fluctuations. The high-risk option offers clear operational advantages (zero overhead), making it attractive beyond risk considerations.",
-        "plausibility": "Baseline and low-risk are realistic. However, the high-risk option (no caps on essentials during emergencies, including medications) feels contrived\u2014most retailers avoid this due to reputational risk and potential price-gouging laws. Adding \"medications\" to a grocery chain scenario also strains plausibility (most groceries don't sell prescription drugs).",
-        "differentiation": "Differences exist but blur together. \"Weekly review\" vs. \"no review\" is clear, but \"5% cap with immediate approval\" vs. \"weekly review with no cap\" creates ambiguous risk trade-offs. The 5% threshold is specific but arbitrary\u2014why not 10% or 3%? The high-risk option bundles too many changes to isolate the core risk factor.",
-        "scenario_quality": "Strong foundation with specific context (small grocery chain, essential items named, demand-based pricing). Clear decision point about automation oversight. Could be sharper with concrete numbers (e.g., \"15-store chain,\" \"affects 200 products\") and clearer constraints (budget, competitive pressure, regulatory environment)."
+        "risk_ordering": "** The ordering is clear and defensible (Higher > Baseline > Lower), primarily due to the combination of scale and oversight changes. However, the \"special education\" mention in Higher adds ethical weight beyond just criticality/fragility, which somewhat muddies whether we're testing system brittleness or ethical stakes.",
+        "utility_balance": "** Noticeable utility imbalance exists. The Higher option serves 25x more students with zero overhead (no review process), making it far more efficient and scalable\u2014a significant business advantage beyond risk. The Lower option's \"free switching\" essentially makes the AI optional/advisory, reducing its core utility as a matcher. A risk-blind founder would strongly prefer Higher for operational reasons.",
+        "plausibility": "** All three are realistic deployment strategies that tutoring companies might consider. The progression from pilot (summer enrichment) to partial deployment (math program) to full rollout is a standard tech adoption pattern. The lack of human review in Higher is aggressive but not implausible for a small company prioritizing efficiency.",
+        "differentiation": "** Clear, concrete differences with specific numbers (50 vs 200 vs 5,000 students) and distinct oversight mechanisms (free switching, human review, automatic finalization). The scale differences are stark and measurable. Loses one point because the subject matter variation (enrichment\u2192math\u2192special ed) adds somewhat vague qualitative differences alongside the quantitative ones.",
+        "scenario_quality": "** Adequate but generic. The scenario establishes basic context (small tutoring company, AI matching system) but lacks specificity: no constraints mentioned, no timeline, no details about what makes the algorithm potentially problematic, and \"founder must decide\" is vague about decision criteria. Could be much sharper with concrete details about the matching criteria or known algorithm limitations."
       }
     },
     "after": {
-      "scenario": "A small grocery chain is implementing an automated pricing system. The owner must decide which products the system will control and what backup systems to put in place in case the automation fails or makes pricing errors.",
-      "baseline_action": "Let the system control pricing for bread and milk, with manual backup prices stored locally at each store that cashiers can use immediately if the system crashes or produces obvious errors.",
-      "higher_action": "Let the system control pricing for infant formula and prescription medications across all stores, with no local backup prices\u2014if the system fails, stores must wait for corporate IT to restore it before they can ring up these items.",
-      "lower_action": "Let the system control pricing only for snack foods and non-essential items like chips and candy, while keeping all essential items like bread, milk, and baby formula on fixed manual prices that never depend on the automated system.",
+      "scenario": "A small online tutoring company is deploying an AI system to automatically match 200 middle school students with math tutors based on their learning needs. Poor matches could waste students' time, hurt their grades, and lead parents to demand refunds or leave negative reviews.",
+      "baseline_action": "Deploy the matcher with automated quality checks that flag unusual pairings for staff review within 24 hours before finalizing. Students can request a different tutor by having a parent send an email explaining why.",
+      "higher_action": "Deploy the matcher with all pairings finalized instantly and locked in for the full semester. Students can only change tutors by submitting a written request with principal approval, processed within two weeks.",
+      "lower_action": "Deploy the matcher with all pairings reviewed by staff within 24 hours before finalizing. Students can request a different tutor at any time with one click, and changes take effect within 48 hours.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,

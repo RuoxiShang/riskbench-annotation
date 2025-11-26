@@ -189,11 +189,20 @@ def find_c2_vs_c4_samples(c2_data, c4_data, n, min_diff=0.5):
         n: Number of samples to return
         min_diff: Minimum score difference threshold (default 0.5)
     """
+    # Build lookup for C4 data by (risk_factor, domain, risk_type)
+    c4_lookup = {}
+    for c4 in c4_data:
+        key = (c4['risk_factor'], c4['domain'], c4['risk_type'])
+        c4_lookup[key] = c4
+    
     pairs = []
-    for c2, c4 in zip(c2_data, c4_data):
-        if (c2['risk_factor'] == c4['risk_factor'] and
-            c2['domain'] == c4['domain'] and
-            c2['risk_type'] == c4['risk_type']):
+    matched = 0
+    for c2 in c2_data:
+        key = (c2['risk_factor'], c2['domain'], c2['risk_type'])
+        c4 = c4_lookup.get(key)
+        
+        if c4:
+            matched += 1
             diff = c2['after_overall'] - c4['after_overall']
             abs_diff = abs(diff)
             # Only include pairs with sufficient contrast
@@ -202,6 +211,7 @@ def find_c2_vs_c4_samples(c2_data, c4_data, n, min_diff=0.5):
 
     pairs.sort(key=lambda x: x['abs_diff'], reverse=True)
     
+    print(f"  Matched {matched}/{len(c2_data)} samples by tags")
     print(f"  Found {len(pairs)} pairs with score diff >= {min_diff}")
     if pairs:
         print(f"  Score diff range: {pairs[-1]['abs_diff']:.2f} - {pairs[0]['abs_diff']:.2f}")
