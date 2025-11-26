@@ -21,7 +21,11 @@ function handleRequest(e) {
 
   try {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = doc.getActiveSheet();
+    // Always use "All" sheet (create if doesn't exist)
+    var sheet = doc.getSheetByName("All");
+    if (!sheet) {
+      sheet = doc.insertSheet("All");
+    }
     
     // PARSE DATA
     var data = {};
