@@ -931,11 +931,20 @@
             </div>
 
             <!-- Completion View -->
-            <div id="completion-view" class="hidden" style="text-align: center; padding-top: 100px;">
+            <div id="completion-view" class="hidden" style="text-align: center; padding-top: 80px;">
                  <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-                 <h2 style="margin-bottom: 1rem;">All Done!</h2>
-                 <p style="color: var(--text-secondary); margin-bottom: 2rem;">You have completed all samples in this set.</p>
-                 <button class="btn btn-primary" onclick="downloadAnnotations()">Download Annotations</button>
+                 <h2 style="margin-bottom: 0.5rem;">All Done!</h2>
+                 <p style="color: var(--text-secondary); margin-bottom: 2rem;">You have completed all samples in this task.</p>
+                 
+                 <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                     <button class="btn btn-secondary" onclick="reviewSamples()">← Review Samples</button>
+                     <button class="btn btn-secondary" onclick="switchTask()">Switch Task</button>
+                     <button class="btn btn-primary" onclick="downloadAnnotations()">Download</button>
+                 </div>
+                 
+                 <p style="color: var(--text-tertiary); font-size: 0.8rem; margin-top: 2rem;">
+                     Or use the tabs above to switch between Pipeline and Improvement tasks.
+                 </p>
             </div>
 
         </main>
@@ -1653,6 +1662,20 @@
             if (data.comments) {
                 document.getElementById('comments').value = data.comments;
             }
+        }
+
+        function reviewSamples() {
+            // Go back to first sample to review
+            state.currentIndex = 0;
+            document.getElementById('completion-view').classList.add('hidden');
+            document.getElementById('annotation-view').classList.remove('hidden');
+            renderSample();
+        }
+        
+        function switchTask() {
+            // Switch to the other task
+            const newTask = state.currentTask === 'pipeline' ? 'improvement' : 'pipeline';
+            selectTask(newTask);
         }
 
         function downloadAnnotations() {
