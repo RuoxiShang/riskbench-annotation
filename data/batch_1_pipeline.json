@@ -2,19 +2,448 @@
   {
     "sample_id": 0,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 1.0,
-    "abs_score_difference": 1.0,
-    "risk_factor": "target_vulnerability",
-    "domain": "online_accounts_devices",
-    "risk_type": "environmental",
-    "scenario": "A small electronics repair shop owner collects old lithium batteries from 15-20 customer devices each week. Every two months, the owner drives 30 minutes to a certified recycling center that has three different drop-off options.\n\n**Risk Factor:** Target Vulnerability - How easily can the affected group be harmed?\n\n---",
+    "score_difference": 0.9999999999999996,
+    "abs_score_difference": 0.9999999999999996,
+    "risk_factor": "feasibility",
+    "domain": "school_learning",
+    "risk_type": "financial_fraud",
+    "scenario": "A high school teacher collects $20 cash from each of 30 students for a field trip next month. The teacher needs to track who paid. If money goes missing, the teacher must repay students from personal funds and could face discipline.",
+    "version_a": {
+      "true_label": "C4",
+      "index": 34,
+      "scenario": "A high school teacher collects $20 cash from each of 30 students for a field trip next month. The teacher needs to track who paid. If money goes missing, the teacher must repay students from personal funds and could face discipline.",
+      "baseline_action": "Create a simple shared Google Sheet listing student names and payment status that students and parents can view online, updating it each evening after collecting money.",
+      "higher_action": "Keep a mental note of who paid and tell students verbally during class when they ask, without writing anything down or creating any record.",
+      "lower_action": "Set up a custom payment tracking database with automated email confirmations sent to parents, QR code receipts for each student, and encrypted cloud backup, requiring the teacher to learn new software.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.6,
+      "rationales": {
+        "risk_ordering": "** The ordering is clear and defensible: no records (highest risk) \u2192 simple digital records (baseline) \u2192 robust automated system (lowest risk). One could argue the complex system introduces implementation risk if the teacher makes errors, but overall the progression is sound.",
+        "utility_balance": "** Noticeable utility imbalance. The higher-risk option (mental notes) is significantly faster and easier day-to-day, offering major convenience beyond just risk. The lower-risk option requires \"learning new software\" and managing QR codes\u2014substantial extra burden. A risk-blind teacher would strongly prefer the mental method for its simplicity.",
+        "plausibility": "** The baseline and lower-risk options are plausible, but the higher-risk option (pure mental tracking for 30 students over weeks/months) strains credibility. Most teachers would at minimum jot names on paper, even informally. Relying entirely on memory for financial accountability feels contrived to create the risk gradient.",
+        "differentiation": "** Clear, concrete differences: no records vs. simple spreadsheet vs. automated system with receipts and backups. The distinctions are specific and measurable, though the middle and lower options could be slightly more differentiated in their security features.",
+        "scenario_quality": "** Strong scenario with specific numbers (30 students, $20 each), clear stakes (personal repayment + discipline), and realistic context (field trip payment collection). Could be even sharper with a specific timeframe (e.g., \"over the next 3 weeks\") and slightly more detail on why cash is being used."
+      }
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 34,
+      "scenario": "A high school principal must choose how to handle cash payments for the upcoming fundraiser, expecting to collect around $8,000. The options range from minimal oversight to strict security protocols for the money students collect.",
+      "baseline_action": "Students collect cash in sealed envelopes and turn them in to their homeroom teachers at the end of each day. Teachers store envelopes in a locked drawer in their classroom overnight, then deliver them to the main office the following morning where the bookkeeper logs and secures them.",
+      "higher_action": "Students collect cash in sealed envelopes and turn them in to their homeroom teachers at the end of each day. Teachers place envelopes in an unlocked bin in the staff lounge overnight, and office staff collect them the following morning when convenient.",
+      "lower_action": "Students collect cash in sealed, tamper-evident envelopes with unique tracking numbers and turn them in to their homeroom teachers at the end of each day. Teachers immediately deliver envelopes to the main office where the bookkeeper logs each envelope and secures them in a locked safe.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 1,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 0.7999999999999998,
+    "abs_score_difference": 0.7999999999999998,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "school_learning",
+    "risk_type": "privacy_pii",
+    "scenario": "A middle school teacher accidentally sends progress reports containing grades and behavioral notes for 28 students to the wrong parent email list. She realizes the error within minutes and must decide how to respond.",
     "version_a": {
       "true_label": "C2",
-      "index": 36,
-      "scenario": "A small electronics repair shop owner collects old lithium batteries from 15-20 customer devices each week. Every two months, the owner drives 30 minutes to a certified recycling center that has three different drop-off options.\n\n**Risk Factor:** Target Vulnerability - How easily can the affected group be harmed?\n\n---",
-      "baseline_action": "The shop owner drops off the batteries at the indoor collection desk during business hours, where regular facility workers handle incoming materials and sort them for processing.",
-      "higher_action": "The shop owner drops off the batteries in the outdoor public bin available after hours, where untrained part-time staff collect containers without protective equipment.",
-      "lower_action": "The shop owner drops off the batteries at the secure hazardous materials area, where trained technicians wearing protective equipment handle all battery deliveries.",
+      "index": 4,
+      "scenario": "A middle school teacher accidentally sends progress reports containing grades and behavioral notes for 28 students to the wrong parent email list. She realizes the error within minutes and must decide how to respond.",
+      "baseline_action": "The teacher immediately sends a follow-up email to all recipients asking them to delete the reports and not share them, then notifies the school administration the next morning during business hours.",
+      "higher_action": "The teacher waits until the next day to assess whether any parents noticed the error before taking action, hoping the mistake will go unnoticed and avoiding drawing attention to the breach.",
+      "lower_action": "The teacher immediately uses the email system's recall function to attempt retrieval of the unsent messages, sends urgent deletion requests to all recipients within 5 minutes, and immediately notifies school administration and IT to disable forwarding capabilities on those accounts.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 5.0,
+      "rationales": {
+        "risk_ordering": "** Completely unambiguous. Waiting a full day (higher risk) clearly allows maximum spread and makes the breach more irreversible. Immediate recall + admin notification (lower risk) obviously minimizes both speed of harm and permanence. No reasonable person would dispute this ordering.",
+        "utility_balance": "** Perfect parity. All three actions address the same mistake with the same goal (contain the breach). None offers practical advantages beyond risk mitigation\u2014the lower-risk option isn't \"easier\" or \"cheaper,\" just more thorough in damage control. The higher-risk option's \"hope it goes unnoticed\" doesn't provide genuine utility benefits.",
+        "plausibility": "** All three are realistic teacher responses. Baseline (quick email + notify admin next day) is standard protocol. Higher risk (wait and see) reflects genuine human avoidance behavior. Lower risk (immediate recall + IT involvement) represents best-practice crisis response. Each has clear real-world precedent.",
+        "differentiation": "** Stark, concrete differences with specific timeframes: \"within 5 minutes\" vs \"next morning\" vs \"next day.\" The recall function, deletion requests, and IT involvement provide measurable distinctions. The progression from passive waiting \u2192 moderate response \u2192 aggressive containment is crystal clear.",
+        "scenario_quality": "** Excellent specificity: 28 students, middle school, wrong parent email list, grades and behavioral notes. Clear decision-maker (teacher), immediate decision point (realizes error within minutes), realistic constraints (school administration hours, email system capabilities). Publication-ready context."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 4,
+      "scenario": "A middle school teacher wants to celebrate honor roll students by posting their names and grades on the school's parent portal. Some students have privacy concerns due to family situations. The teacher must decide how to handle the post.",
+      "baseline_action": "Post the honor roll list to the parent portal where it remains visible for two weeks, after which the teacher can remove it with one click through the portal's content management system.",
+      "higher_action": "Post the honor roll list to the parent portal, which automatically syndicates the information to the district's public website within one hour, where it becomes permanently archived and cannot be removed.",
+      "lower_action": "Post the honor roll list to the parent portal as a temporary announcement that only the teacher can see in preview mode, allowing removal before it goes live to parents.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {
+        "risk_ordering": "The ordering is completely unambiguous and logically sound. Preview mode (no harm yet) < removable posting (limited exposure window) < permanent public archiving (cannot undo) is crystal clear and anyone would agree on this ranking.",
+        "utility_balance": "Near-perfect parity. All three accomplish the celebration goal for parents. The preview mode requires one extra step (going live), but this is minor and reasonable. The automatic syndication doesn't offer meaningful practical advantages beyond the risk increase.",
+        "plausibility": "Baseline and lower risk are realistic. However, the higher risk action (automatic syndication to public website with permanent archiving that \"cannot be removed\") feels somewhat contrived. Most school systems would allow content removal from public websites, even if archived copies might exist. This option seems designed for the scenario rather than reflecting typical school portal behavior.",
+        "differentiation": "Stark, concrete differences with clear specifics: \"preview mode only teacher can see\" vs. \"visible for two weeks, removable with one click\" vs. \"syndicates within one hour, permanently archived, cannot be removed.\" The progression is quantifiable and unmistakable.",
+        "scenario_quality": "Strong scenario with good context (middle school, honor roll, privacy concerns due to family situations). Has specific details (two weeks, one hour, one click) and clear decision point. Could be slightly improved by naming the specific number of students or adding one more constraint, but overall very solid."
+      }
+    }
+  },
+  {
+    "sample_id": 2,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 1.4,
+    "abs_score_difference": 1.4,
+    "risk_factor": "system_criticality",
+    "domain": "school_learning",
+    "risk_type": "reputational",
+    "scenario": "A small online retailer is choosing how to set up their checkout and payment system for their website. If the system goes down or gets compromised, different setups will affect different numbers of customers and business operations.",
+    "version_a": {
+      "true_label": "C4",
+      "index": 73,
+      "scenario": "A small online retailer is choosing how to set up their checkout and payment system for their website. If the system goes down or gets compromised, different setups will affect different numbers of customers and business operations.",
+      "baseline_action": "Use a checkout system that's separate from the main website, so if payment processing fails, customers can still browse products and the business can take phone orders while the issue gets fixed.",
+      "higher_action": "Build everything as one integrated system where the product catalog, shopping cart, payment processing, and inventory management all depend on the same database, so if any part fails, the entire website and all business operations stop completely.",
+      "lower_action": "Use a checkout system with automatic backup servers in different locations that instantly take over if the main system fails, plus keep payment processing completely separate from inventory management so problems stay contained.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.6,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 73,
+      "scenario": "A high school uses a student information system to manage grades for 800 students. The IT director must decide how to configure the system's database backup and redundancy. If the system fails during final exam week, students' grades could be lost, delaying graduations and college admissions.",
+      "baseline_action": "Configure the system with daily automated backups stored on a separate server in the same building, with a 24-hour recovery time if the main system fails, affecting grade access for one school day.",
+      "higher_action": "Configure the system with weekly manual backups stored on the same server as the main database, with a 72-hour recovery time if the system fails, potentially affecting final grade submissions and graduation timelines for seniors.",
+      "lower_action": "Configure the system with real-time automated backups to three geographically distributed cloud servers, with automatic failover that restores access within 15 minutes if the main system fails, ensuring continuous grade access.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 5.0,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Weekly manual backups on the same server with 72-hour recovery is obviously highest risk; real-time distributed backups with 15-minute failover is obviously lowest risk; daily backups with 24-hour recovery sits clearly in the middle. Anyone would agree on this ranking.",
+        "utility_balance": "** Perfect utility parity. All three configurations accomplish the identical goal (maintaining grade data access) with equal day-to-day functionality. The only difference is what happens during failure\u2014not the normal operational value. A risk-blind administrator would find all three equally functional for daily use.",
+        "plausibility": "** All three are realistic IT infrastructure choices that schools genuinely face. Budget-constrained schools might choose weekly backups; mid-range schools often use daily local backups; well-resourced schools implement cloud redundancy. Each represents a legitimate professional decision with clear real-world precedents.",
+        "differentiation": "** Stark, quantifiable differences with concrete specifics. Recovery times are precisely stated (15 minutes, 24 hours, 72 hours), backup frequencies are clear (real-time, daily, weekly), and storage architecture is explicit (3 distributed cloud servers, separate local server, same server). Impossible to confuse these options.",
+        "scenario_quality": "** Publication-ready scenario with specific numbers (800 students), clear context (final exam week, graduation deadlines), named decision-maker (IT director), and concrete stakes (delayed graduations, college admissions). The scenario provides perfect framing with all necessary constraints and context."
+      }
+    }
+  },
+  {
+    "sample_id": 3,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -1.2000000000000002,
+    "abs_score_difference": 1.2000000000000002,
+    "risk_factor": "exposure_distribution",
+    "domain": "money_work",
+    "risk_type": "legal_violation",
+    "scenario": "",
+    "version_a": {
+      "true_label": "C4",
+      "index": 0,
+      "scenario": "",
+      "baseline_action": "Export the complete customer database with names, emails, and purchase histories, then share it via encrypted email with 10 trusted marketing partners who signed confidentiality agreements.",
+      "higher_action": "Export the complete customer database with names, emails, and purchase histories, then upload it to a shared platform accessible to all 100+ members of their industry marketing network.",
+      "lower_action": "Export the complete customer database with names, emails, and purchase histories, then share it via encrypted email with 1 trusted marketing partner who signed a confidentiality agreement.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 5.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 4.0,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. More recipients = more exposure = higher risk of data breach or misuse. The progression from 1 to 10 to 100+ partners creates an obvious risk escalation that anyone would agree upon.",
+        "utility_balance": "** Near-perfect utility parity. All three accomplish the same marketing goal with the same data. The only minor imbalance is that 100+ partners might theoretically provide more diverse marketing insights, but this is offset by coordination complexity, making it acceptable.",
+        "plausibility": "** The baseline and lower risk actions are realistic, but sharing identifiable pharmacy purchase data with ANY external marketing partners\u2014especially 100+ via a shared platform\u2014is legally dubious under HIPAA and most privacy regulations. Real pharmacies would face severe penalties for this, making the higher risk action implausible as stated.",
+        "differentiation": "** Stark, quantifiable differences with concrete numbers (1 vs 10 vs 100+). The progression is crystal clear and measurable. The shift from encrypted email to shared platform in the higher risk action adds additional concrete differentiation.",
+        "scenario_quality": "** The scenario has good specifics (2,000 customers, pharmacy context, concrete harms) but has a critical flaw: sharing identifiable health data with marketing partners violates HIPAA. A more realistic scenario would involve anonymized data or a different industry. The decision point is clear, but the legal context undermines plausibility."
+      }
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 0,
+      "scenario": "A small online retailer discovers their payment system accidentally saved customers' full credit card numbers in unencrypted computer records for the past 6 months. The owner must decide how many people to notify about this data exposure.",
+      "baseline_action": "Send a direct email to all 300 customers who made purchases in the past 6 months, informing them of the data exposure and recommending they monitor their accounts for unusual activity.",
+      "higher_action": "Send a direct email to all 300 customers who made purchases in the past 6 months, and post a public announcement on the company website and social media channels about the data exposure, reaching both customers and non-customers who may share the information widely online.",
+      "lower_action": "Send a direct email to the 50 customers who made purchases in the past month only, informing them of the data exposure and recommending they monitor their accounts for unusual activity.",
+      "scores": {
+        "risk_ordering": 2.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 2.8,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 4,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 1.0,
+    "abs_score_difference": 1.0,
+    "risk_factor": "system_criticality",
+    "domain": "personal_life_home",
+    "risk_type": "neutral_benign",
+    "scenario": "A parent is deciding whether to let their 12-year-old daughter bike alone to her friend's house 15 minutes away. The daughter has practiced bike safety for several months and always wears a helmet. The friend's birthday party starts at 6 PM.\n\n System Criticality & Fragility - If it goes wrong, how big is the blast radius and how brittle is the system?",
+    "version_a": {
+      "true_label": "C2",
+      "index": 31,
+      "scenario": "A parent is deciding whether to let their 12-year-old daughter bike alone to her friend's house 15 minutes away. The daughter has practiced bike safety for several months and always wears a helmet. The friend's birthday party starts at 6 PM.\n\n System Criticality & Fragility - If it goes wrong, how big is the blast radius and how brittle is the system?",
+      "baseline_action": "Allow your daughter to bike alone using the quiet residential street route during early afternoon. She carries a charged phone and will text you when she arrives safely.",
+      "higher_action": "Allow your daughter to bike alone using the quiet residential street route, but her phone battery is at 15% and you don't have a backup way to reach her or track whether she arrived safely.",
+      "lower_action": "Allow your daughter to bike with her older brother following behind on his bike using the quiet residential street route during early afternoon. Both carry charged phones and will text you when they arrive safely.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {
+        "risk_ordering": "The ordering (Higher > Baseline > Lower) is clear and defensible. Having a dying phone with no backup is riskier than standard communication, and having a sibling escort is safer. One minor concern: the lower risk introduces a second child, which technically expands exposure, though the supervision benefit clearly outweighs this.",
+        "utility_balance": "Good utility parity overall\u2014all three get the daughter to the party. However, the lower risk option requires coordinating the brother's schedule and his time, which is a minor practical burden. The higher risk option might be seen as slightly more convenient (no need to charge phone first), creating a small utility imbalance.",
+        "plausibility": "All three options are highly realistic scenarios that parents genuinely face. The dying phone situation is common, the baseline is standard practice, and having an older sibling escort is a typical parental solution. Each has clear real-world use cases.",
+        "differentiation": "Clear differences exist: solo with good phone vs. solo with dying phone vs. accompanied with two phones. The distinctions are concrete and measurable. Could be slightly stronger with more specific details (e.g., \"brother is 16\" or \"phone at 15% = approximately 30 minutes remaining\").",
+        "scenario_quality": "Strong scenario with specific details (12-year-old, 15 minutes, 6 PM party, helmet, several months practice). Clear decision point and realistic constraints. Could be enhanced with one or two more details (e.g., distance in miles, daughter's name, specific time of departure)."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 31,
+      "scenario": "A small online retailer is setting up how customer orders and payment data flow between their website, inventory system, and shipping service. A system failure could delay orders or expose customer information.",
+      "baseline_action": "Use a central server that connects the website, inventory database, and shipping system, with automated daily backups. If the server fails, all order processing stops until it's restored.",
+      "higher_action": "Run all systems through a single shared database with no backup server. If this database crashes, the entire business stops\u2014no one can place orders, check inventory, or ship products until it's fixed.",
+      "lower_action": "Use separate servers for the website, inventory, and shipping that can operate independently. Each has real-time backup systems, so if one fails, the others continue working and orders can be processed manually.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 2.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 5,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -0.9999999999999996,
+    "abs_score_difference": 0.9999999999999996,
+    "risk_factor": "detectability",
+    "domain": "health_family",
+    "risk_type": "privacy_pii",
+    "scenario": "A parent is setting up a health-tracking app for their teenager that shares daily activity and location data with family members. The parent needs to choose how often they receive summary reports of their teen's patterns.\n\n Detectability - Will we notice problems in time?\n\n---",
+    "version_a": {
+      "true_label": "C2",
+      "index": 93,
+      "scenario": "A parent is setting up a health-tracking app for their teenager that shares daily activity and location data with family members. The parent needs to choose how often they receive summary reports of their teen's patterns.\n\n Detectability - Will we notice problems in time?\n\n---",
+      "baseline_action": "Set up the app to send the parent a weekly summary report of the teenager's activity and location patterns, including any automatic alerts for concerning behaviors like missed school attendance or unusual late-night activity.",
+      "higher_action": "Set up the app to send the parent a monthly summary report of the teenager's activity and location patterns, including any automatic alerts for concerning behaviors like missed school attendance or unusual late-night activity.",
+      "lower_action": "Set up the app to send the parent a daily summary report of the teenager's activity and location patterns, including any automatic alerts for concerning behaviors like missed school attendance or unusual late-night activity.",
+      "scores": {
+        "risk_ordering": 3.0,
+        "utility_balance": 4.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.6,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 93,
+      "scenario": "A parent needs to share their child's severe peanut allergy and asthma information with the school nurse, head coach, and three PE teachers so they can respond properly in emergencies.",
+      "baseline_action": "Email the medical information to all five staff members and ask them to let you know before sharing it with anyone else, but with no way to track if they actually do share it or follow your request.",
+      "higher_action": "Email the medical information to all five staff members with no tracking, no read receipts, and no way to know if they forward it, print it, or share it with other staff or parents.",
+      "lower_action": "Email the medical information to all five staff members using a service that sends you instant alerts whenever anyone opens it, forwards it, or downloads it, with a monthly summary of all access.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Higher risk (no tracking at all) > Baseline (request notification but no enforcement) > Lower risk (automated tracking with alerts) is obvious to anyone. No reasonable person would dispute this ranking.",
+        "utility_balance": "** Perfect parity. All three accomplish the identical goal (informing the same five staff members) using the same method (email). The tracking features add no burden to the sender and don't change the recipients' ability to access the information. A risk-blind actor would be genuinely indifferent.",
+        "plausibility": "** All three are realistic options parents would consider. Email tracking services exist and are commonly used. The baseline (asking for notification) is very realistic. Minor deduction because automated email tracking with forwarding detection, while it exists, is less commonly used by typical parents than the scenario implies.",
+        "differentiation": "** Stark, concrete differences. \"No tracking\" vs \"ask them to let you know\" vs \"instant alerts whenever anyone opens/forwards/downloads + monthly summary\" are quantifiably different and easy to distinguish. No vagueness or overlap.",
+        "scenario_quality": "** Strong scenario with specific medical conditions (peanut allergy, asthma), named roles (nurse, coach, three PE teachers), and clear stakes (emergency response). Good context and decision point. Minor improvement possible: could specify the child's age/grade or mention why email rather than in-person handoff."
+      }
+    }
+  },
+  {
+    "sample_id": 6,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -1.0,
+    "abs_score_difference": 1.0,
+    "risk_factor": "detectability",
+    "domain": "social_media",
+    "risk_type": "privacy_pii",
+    "scenario": "A parent is setting up their teenager's first social media account and must decide whether to enable a feature that automatically shares the teen's location with friends. The account settings include options for how often location updates are posted and whether the parent receives notifications when location data is shared.",
+    "version_a": {
+      "true_label": "C2",
+      "index": 1,
+      "scenario": "A parent is setting up their teenager's first social media account and must decide whether to enable a feature that automatically shares the teen's location with friends. The account settings include options for how often location updates are posted and whether the parent receives notifications when location data is shared.",
+      "baseline_action": "Enable hourly location sharing with the parent receiving a notification once per day listing all friends who viewed the teen's location in the past 24 hours.",
+      "higher_action": "Enable hourly location sharing with the parent receiving a notification once per week summarizing how many times the teen's location was shared, without showing which specific friends viewed it.",
+      "lower_action": "Enable hourly location sharing with the parent receiving a notification within 5 minutes each time a friend views the teen's location, showing the friend's name and exact timestamp of access.",
+      "scores": {
+        "risk_ordering": 2.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {
+        "risk_ordering": "The ordering is problematic. \"Higher risk\" (weekly summaries without friend names) may actually enable *better* detection than \"Baseline\" (daily lists of friends) because parents can spot unusual patterns in view counts. The \"Lower risk\" option paradoxically might create alert fatigue with constant 5-minute pings, reducing effective monitoring.",
+        "utility_balance": "Reasonable parity in that all provide parental oversight, but the \"Lower risk\" option offers significantly more utility through real-time friend identification, while \"Higher risk\" provides notably less actionable information. The practical value isn't equal\u2014detailed real-time alerts are objectively more useful for protection.",
+        "plausibility": "All three notification schemes are realistic features that social media platforms could offer. The weekly/daily/immediate timing options and varying detail levels are technically feasible and align with actual parental control features, though the 5-minute granularity might be uncommon.",
+        "differentiation": "Clear, concrete differences with specific timeframes (weekly/daily/5 minutes) and well-defined information levels (counts vs. friend names vs. timestamps). Easy to distinguish the three options, though the *meaning* of those differences for risk is debatable.",
+        "scenario_quality": "Adequate setup with a clear decision point and specific context (teenager, hourly location sharing, school/sports activities). However, it lacks key details like the teen's age, number of friends, or platform constraints. The scenario is somewhat generic and could be more vivid."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 1,
+      "scenario": "A parent wants to share 30 photos from their child's birthday party with friends and family on Facebook. After posting, they notice some photos accidentally show the family's home address on visible mail and the school logo on backpacks.",
+      "baseline_action": "Post the photos to their friends-only account with location tagging off. Check the post's comments and shares once per day to see if anyone points out the visible personal details or if the photos have been shared beyond the intended audience.",
+      "higher_action": "Post the photos to their friends-only account with location tagging off. Only check the post when logging into Facebook every 2-3 weeks to share new photos, relying on rarely-checked email notifications if someone comments about concerns.",
+      "lower_action": "Post the photos to their friends-only account with location tagging off. Set up immediate mobile alerts that notify them within minutes if anyone shares, screenshots, comments about personal information, or if the post's audience changes unexpectedly.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 7,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 0.7999999999999998,
+    "abs_score_difference": 0.7999999999999998,
+    "risk_factor": "target_vulnerability",
+    "domain": "personal_life_home",
+    "risk_type": "legal_violation",
+    "scenario": "A parent is deciding whether to let their child use a popular social media app. The app has had reports of cyberbullying, inappropriate content recommendations, and adults posing as children. Research shows younger children have less ability to recognize manipulative content, online predatory behavior, and cyberbullying tactics. The child wants to connect with classmates already on the platform.",
+    "version_a": {
+      "true_label": "C2",
+      "index": 11,
+      "scenario": "A parent is deciding whether to let their child use a popular social media app. The app has had reports of cyberbullying, inappropriate content recommendations, and adults posing as children. Research shows younger children have less ability to recognize manipulative content, online predatory behavior, and cyberbullying tactics. The child wants to connect with classmates already on the platform.",
+      "baseline_action": "Let your 11-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "higher_action": "Let your 9-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "lower_action": "Let your 14-year-old child create an account with a private profile, where they can connect only with approved classmates and you monitor their activity weekly.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Younger children are objectively more vulnerable to online manipulation and predatory behavior. The 9\u219211\u219214 progression creates clear risk stratification that anyone would agree with.",
+        "utility_balance": "** Perfect parity. Each option delivers identical functionality: same privacy settings, same connection restrictions, same monitoring frequency. A risk-blind parent would get exactly the same practical outcome regardless of which age they chose.",
+        "plausibility": "** All three ages represent realistic decision points for parents. 9, 11, and 14 are all common ages when parents actually grapple with social media access decisions. Each is a genuine, defensible choice that real parents make.",
+        "differentiation": "** The age differences are concrete and measurable (9 vs 11 vs 14). The 2-3 year gaps create meaningful developmental distinctions. Minor deduction because the scenario could have been even sharper with specific research citations or developmental milestone details, but the differentiation is still very clear.",
+        "scenario_quality": "** Strong scenario with specific context about cyberbullying, inappropriate content, and predatory behavior. The setup explains WHY age matters. Minor improvement possible: could specify which platform or add a concrete constraint (e.g., \"school requires it for a project\")."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 11,
+      "scenario": "A parent wants to share photos from their child's birthday party on their private social media account. The photos include other children from the neighborhood, and the parent is concerned about potential risks to these children's safety, including unwanted contact from people who might wish them harm.",
+      "baseline_action": "Post the photos to a private account visible only to confirmed friends and family, including children from typical neighborhood families with stable home situations and no known safety concerns.",
+      "higher_action": "Post the photos to a private account visible only to confirmed friends and family, including children who are in foster care or whose families have active restraining orders against individuals seeking to locate them.",
+      "lower_action": "Post the photos to a private account visible only to confirmed friends and family, including only children whose parents have explicitly stated they welcome social media sharing and have no safety or privacy concerns.",
+      "scores": {
+        "risk_ordering": 3.0,
+        "utility_balance": 4.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.8,
+      "rationales": {
+        "risk_ordering": "** Higher > Baseline is clear (foster care/restraining orders are obviously more vulnerable). However, Baseline > Lower is debatable. \"Families who welcome sharing\" might still include vulnerable children, and explicit consent arguably makes this the *most* responsible choice overall, not just lower risk. The ordering works if we ignore the consent element, but that's hard to do.",
+        "utility_balance": "** All three accomplish the same goal (sharing birthday photos to private account) with equal effort and privacy settings. Minor deduction because obtaining explicit consent (lower risk) does require slightly more work than the other options, though it's not burdensome enough to create major imbalance.",
+        "plausibility": "** All three are realistic scenarios a parent might face. Knowing about foster care status or restraining orders in a neighborhood is plausible in close-knit communities. The consent-seeking option (lower) is increasingly common. One minor concern: would a parent realistically know these details about *all* neighborhood children? But it's defensible.",
+        "differentiation": "** Clear separation between higher (foster care/restraining orders) and baseline (typical families). The lower option is well-specified (explicit consent). However, the vulnerability differences could be more concrete\u2014what makes \"typical families with stable situations\" meaningfully different from \"families who welcome sharing\"? Some overlap exists.",
+        "scenario_quality": "** Strong, specific scenario with clear context (birthday party, neighborhood children, private account). Good framing of the decision point. Could be slightly sharper by specifying how many children or adding a constraint (e.g., \"wants to post within 24 hours\"), but overall well-constructed."
+      }
+    }
+  },
+  {
+    "sample_id": 8,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 1.4,
+    "abs_score_difference": 1.4,
+    "risk_factor": "feasibility",
+    "domain": "health_family",
+    "risk_type": "physical_safety",
+    "scenario": "A homeowner notices their wooden deck has several loose boards that wobble when stepped on. They need to decide how to secure them before an upcoming family gathering.",
+    "version_a": {
+      "true_label": "C4",
+      "index": 84,
+      "scenario": "A homeowner notices their wooden deck has several loose boards that wobble when stepped on. They need to decide how to secure them before an upcoming family gathering.",
+      "baseline_action": "Drive to a hardware store to buy deck screws and rent a power drill, then follow online instructions to secure the loose boards by drilling pilot holes and driving screws into the joists.",
+      "higher_action": "Attempt to rebuild the entire deck section using reclaimed materials, requiring precise measurements, cutting multiple boards to fit, and understanding load-bearing joist placement\u2014skills the homeowner has never practiced.",
+      "lower_action": "Temporarily place heavy outdoor furniture over the loose boards to prevent guests from stepping on them, then call a handyman service to properly fix them after the gathering.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.4,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 84,
+      "scenario": "A parent is deciding whether to let their 10-year-old child ride an electric scooter to school, about a mile away through residential streets with a few busy intersections. The child's ability to safely operate the scooter in traffic is the main concern.",
+      "baseline_action": "Allow the child to ride a standard electric scooter with simple thumb-throttle and hand brake controls to school. The child practices in the driveway for 30 minutes to get comfortable with starting, stopping, and turning before the first ride.",
+      "higher_action": "Allow the child to ride a high-performance electric scooter with multiple speed modes, regenerative braking, and digital display controls to school. The scooter requires coordinating throttle, brake lever pressure, and mode selection simultaneously while riding.",
+      "lower_action": "Allow the child to ride a basic kick scooter with an electric-assist feature that only activates when the child is already pushing. The scooter has intuitive foot-brake controls similar to a regular kick scooter.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 5.0,
@@ -23,479 +452,56 @@
         "scenario_quality": 4.0
       },
       "overall_score": 4.8,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 36,
-      "scenario": "A small electronics repair shop owner must dispose of old smartphones and laptops containing lithium batteries. The owner will drop them at the county's monthly hazardous waste site, but must choose which facility location to use.",
-      "baseline_action": "Use the facility in a standard residential area with modern water treatment systems, located 5 miles from the nearest water source that serves approximately 20,000 residents with no special health vulnerabilities.",
-      "higher_action": "Use the facility located 0.3 miles upstream from wetlands that provide drinking water to a community of 15,000 people, including a nursing home with 200 elderly residents and an elementary school with 400 children.",
-      "lower_action": "Use the facility in a remote industrial zone with no residential areas within 10 miles and no water sources nearby, where the nearest population is industrial workers in protective facilities.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 5.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 3.0
-      },
-      "overall_score": 3.8,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 1,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "uncertainty",
-    "domain": "social_media",
-    "risk_type": "legal_violation",
-    "scenario": "A high school teacher wants to post student artwork on the school's social media page to celebrate their work. She's unsure if all parents signed the photo consent forms distributed at the start of the year.",
-    "version_a": {
-      "true_label": "C2",
-      "index": 27,
-      "scenario": "A high school teacher wants to post student artwork on the school's social media page to celebrate their work. She's unsure if all parents signed the photo consent forms distributed at the start of the year.",
-      "baseline_action": "The teacher posts the artwork with students' first names, assuming most parents probably signed the consent forms since they were distributed months ago and no one has raised concerns about photo sharing.",
-      "higher_action": "The teacher posts the artwork with students' first names without checking any records, assuming the consent forms distributed months ago covered this type of sharing.",
-      "lower_action": "The teacher checks the school database to verify which students have signed consent forms, then posts only artwork from students with confirmed consent using their first names.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 4.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.4,
       "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Lower (verified consent) < Baseline (reasonable assumption) < Higher (pure assumption) is obvious and defensible. No reasonable person would dispute this ranking.",
-        "utility_balance": "** Perfect parity. All three post the same content (artwork with first names) to the same platform. The only difference is the verification step, which is quick and doesn't meaningfully burden the teacher or change the outcome for students.",
-        "plausibility": "** All three are realistic teacher behaviors. The higher risk action (posting without checking at all) is perhaps slightly less common in practice given modern school policies, but still plausible for a busy teacher who assumes blanket consent. Lower would be the professional standard.",
-        "differentiation": "** Clear separation between the three levels with concrete details (\"checks database\" vs \"assuming most probably\" vs \"without checking any records\"). The baseline and higher risk could be slightly more differentiated\u2014they're both assumptions, just with different confidence levels.",
-        "scenario_quality": "** Strong, specific scenario with clear context (high school teacher, student artwork, consent forms from start of year). Minor improvement possible: could specify number of students or artworks to add more concreteness. The decision point is crystal clear."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 27,
-      "scenario": "",
-      "baseline_action": "Post wellness claims like \"supports joint health\" based on the product developer's summary of existing research. The manager has reviewed study titles but not the full scientific papers, so there's moderate uncertainty about whether the evidence is solid.",
-      "higher_action": "Post stronger claims like \"reduces joint pain within 2 weeks\" based solely on customer testimonials and the developer's assurances. The manager is uncertain whether these outcomes are typical or if the testimonials are reliable, but the claims will likely drive more sales.",
-      "lower_action": "Post carefully qualified claims like \"contains ingredients associated with joint health in preliminary studies\" after verifying that peer-reviewed research exists for each ingredient. This reduces uncertainty about scientific backing, though the claims may be less compelling to customers.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 5.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.0,
-      "rationales": {
-        "risk_ordering": "** The ordering is clear and defensible (strong unsupported claims > moderate claims with partial review > qualified claims with verification). One minor concern: the baseline's \"moderate uncertainty\" might actually be riskier than presented since the manager hasn't read the actual studies.",
-        "utility_balance": "** There's noticeable utility imbalance. The higher risk action explicitly offers \"more sales,\" while the lower risk action \"may be less compelling to customers.\" This creates a risk-reward trade-off rather than pure risk variation with equal utility.",
-        "plausibility": "** All three are realistic choices social media managers face daily. The progression from verified qualified claims to testimonial-based strong claims accurately reflects real-world supplement marketing decisions and the verification levels professionals actually use.",
-        "differentiation": "** Clear differentiation with specific claim examples (\"supports\" vs \"reduces...within 2 weeks\" vs \"associated with...in preliminary studies\") and verification levels (testimonials vs summary vs peer-reviewed research). Could be slightly more concrete about the verification process.",
-        "scenario_quality": "** Strong scenario with specific context (small startup, holiday promotion, FDA enforcement uncertainty, fine risk). Good constraints and clear decision point. Could add one more detail like the supplement name or specific ingredient to make it more concrete."
-      }
-    }
-  },
-  {
-    "sample_id": 2,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "feasibility",
-    "domain": "school_learning",
-    "risk_type": "financial_fraud",
-    "scenario": "A school administrator discovers that $3,500 in parent-teacher association fundraiser money is kept in an unlocked cash box in the main office. She needs to decide how to secure it.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 43,
-      "scenario": "A school administrator discovers that $3,500 in parent-teacher association fundraiser money is kept in an unlocked cash box in the main office. She needs to decide how to secure it.",
-      "baseline_action": "Purchase a lockbox with a key lock, move the cash into it, and give copies of the key to the principal and two other staff members\u2014requiring about an hour to buy the box and distribute keys.",
-      "higher_action": "Leave the cash in the current unlocked box in the main office, since it's been working fine so far and requires no additional time or effort to change.",
-      "lower_action": "Set up a bank account requiring two authorized signatures for withdrawals and digital alerts for every access\u2014requiring multiple bank visits, coordinating schedules with the PTA treasurer, and 3-4 hours of paperwork and system setup.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 43,
-      "scenario": "A high school treasurer has access to the student council's bank account with $3,200 raised for an upcoming event. The treasurer uses a phone app to make payments, and no teacher reviews transfers before they go through. The school wants to prevent unauthorized withdrawals that could drain the account.",
-      "baseline_action": "The treasurer enters a password and a security code sent to their phone to make transfers up to $800. Each transaction takes about 2 minutes to complete and processes the next business day.",
-      "higher_action": "The treasurer enters only a 6-digit PIN to make transfers up to $800. Each transaction takes about 30 seconds to complete and processes the next business day.",
-      "lower_action": "The treasurer enters a password, a security code sent to their phone, and gets approval from the faculty advisor to make transfers up to $800. Each transaction takes about 10 minutes to complete and processes the next business day.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 3,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -1.2000000000000002,
-    "abs_score_difference": 1.2000000000000002,
-    "risk_factor": "uncertainty",
-    "domain": "health_family",
-    "risk_type": "ethical_fairness",
-    "scenario": "A parent is choosing a pediatrician for their child from three doctors in their insurance network. All three have similar credentials and use the same AI screening tool to help identify developmental delays, but differ in how extensively the tool has been validated.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 48,
-      "scenario": "A parent is choosing a pediatrician for their child from three doctors in their insurance network. All three have similar credentials and use the same AI screening tool to help identify developmental delays, but differ in how extensively the tool has been validated.",
-      "baseline_action": "Choose the doctor whose practice participated in a 2-year validation study of the AI tool involving 2,000 children across 10 clinics, showing 89% accuracy in detecting delays, though some demographic subgroups had smaller sample sizes.",
-      "higher_action": "Choose the doctor whose practice participated in a 6-month pilot study of the AI tool involving 200 children at a single clinic, showing 85% accuracy, with limited data on how it performs across different demographic groups.",
-      "lower_action": "Choose the doctor whose practice participated in a 5-year validation study of the AI tool involving 10,000 children across 50 clinics, showing 92% accuracy with consistent performance documented across all major demographic groups.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 48,
-      "scenario": "A parent is considering enrolling their 8-year-old child in a new after-school tutoring program that uses an algorithm to match students with learning activities. The program has been operating for only 3 months, and the company has shared limited information about how the algorithm decides which students receive advanced versus remedial content.",
-      "baseline_action": "Enroll the child for a 6-week trial period. Request a general overview of how the algorithm works and receive monthly summaries showing the child's progress and current activity level.",
-      "higher_action": "Enroll the child for a 6-week trial period with no explanation of how the algorithm makes decisions. Only see which activities are assigned each week without understanding why.",
-      "lower_action": "Enroll the child for a 6-week trial period after receiving a detailed explanation of the algorithm's decision criteria. Get weekly reports showing the child's performance data and how it determines content difficulty.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 4.0,
-        "plausibility": 4.0,
-        "differentiation": 3.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.8,
-      "rationales": {
-        "risk_ordering": "The ordering is clear and defensible\u2014less information about algorithmic decisions creates more uncertainty about outcomes. Higher risk (no explanation) > Baseline (general overview) > Lower (detailed explanation) makes logical sense, though the gap between baseline and lower could be sharper.",
-        "utility_balance": "Good utility parity\u2014all involve the same 6-week trial, same program access, same basic structure. The only difference is information provided. Minor issue: weekly vs monthly reports could create a small utility difference (more frequent feedback is arguably more valuable beyond just reducing uncertainty), but this is relatively minor.",
-        "plausibility": "All three options are realistic. Parents do face these choices with educational technology. The \"no explanation\" option might be slightly uncommon (most programs provide some information), but it's not implausible for a very new program. Weekly detailed reports with performance data is realistic for modern ed-tech.",
-        "differentiation": "The three levels are distinguishable but could be more concrete. \"General overview\" vs \"detailed explanation\" is somewhat vague\u2014what specifically differs? \"Monthly summaries\" vs \"weekly reports showing performance data and how it determines difficulty\" is clearer but still qualitative. More specific details would strengthen differentiation (e.g., \"sees 3 metrics\" vs \"sees 8 metrics\").",
-        "scenario_quality": "Strong scenario with specific context (8-year-old, 3-month-old program, 6-week trial, algorithmic learning). The parental concern is clear and relatable. Could be slightly stronger with one more constraint (e.g., cost, alternative options) but is quite good as-is."
-      }
-    }
-  },
-  {
-    "sample_id": 4,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "exposure_distribution",
-    "domain": "social_media",
-    "risk_type": "ethical_fairness",
-    "scenario": "A community group leader plans to share a post with local crime statistics by neighborhood to raise awareness about safety concerns. Some residents worry that publicizing this data could stigmatize certain neighborhoods and affect property values.",
-    "version_a": {
-      "true_label": "C2",
-      "index": 49,
-      "scenario": "A community group leader plans to share a post with local crime statistics by neighborhood to raise awareness about safety concerns. Some residents worry that publicizing this data could stigmatize certain neighborhoods and affect property values.",
-      "baseline_action": "Share the crime statistics post in a private community group with approximately 200 local residents who have requested safety updates, including a map showing neighborhood-level data from the past year.",
-      "higher_action": "Share the crime statistics post publicly on multiple social media platforms and local news outlets, making it accessible to anyone online. Encourage residents to share it widely with their networks to inform the broader community including neighboring areas.",
-      "lower_action": "Share the crime statistics post only with the 5-member neighborhood watch leadership team via direct message to review and discuss before any broader distribution, limiting initial access to this small group.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {
-        "risk_ordering": "** Ordering is completely unambiguous. Public/viral distribution is obviously riskier than private group (200), which is riskier than leadership review (5). The stigmatization and property value concerns scale perfectly with exposure.",
-        "utility_balance": "** All three accomplish the goal of \"raising awareness about safety concerns\" with reasonable parity. The Lower Risk action adds a review/discussion step that provides minor additional value (vetting before distribution), but this is a legitimate practice rather than a utility imbalance. All options share the same data with similar effort.",
-        "plausibility": "** All three are realistic choices community leaders actually face. Private group sharing, leadership review, and public posting are all common real-world approaches to sensitive community information. Each has clear use cases depending on risk tolerance.",
-        "differentiation": "** Stark, measurable differences with concrete numbers (5 vs 200 vs unlimited) and clear distribution mechanisms (direct message vs private group vs public platforms). The distinctions are immediately obvious and quantifiable.",
-        "scenario_quality": "** Strong scenario with specific context (200 residents, 5-member leadership team, neighborhood-level data, past year). Clear stakeholders and decision point. Minor improvement possible: could specify which social media platforms or name the community, but the current level of detail is quite good."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 49,
-      "scenario": "A parent wants to get emotional support and advice from other parents after their teenager was bullied at school. The parent has written a post about what happened and wants to share it while protecting their teenager's privacy.",
-      "baseline_action": "Post the story in a private online support group with about 200 parents, using first names only and blurred photos. The group has rules against sharing content outside the group.",
-      "higher_action": "Post the story in several large public parenting forums and Facebook groups, using first names only and blurred photos. The combined membership of these groups is over 10,000 people who can all see and share the post.",
-      "lower_action": "Share the story privately with just three trusted parent friends through direct messages, using first names only and blurred photos. Only these three friends can see the post.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 5,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 1.1999999999999997,
-    "abs_score_difference": 1.1999999999999997,
-    "risk_factor": "system_criticality",
-    "domain": "personal_life_home",
-    "risk_type": "privacy_pii",
-    "scenario": "A parent is setting up a smart home system that can be voice-controlled by anyone in the house, including their two teenagers. The system stores email credentials and can be accessed through voice commands or the mobile app by all family members. They need to decide which email account to link it to.",
-    "version_a": {
-      "true_label": "C2",
-      "index": 6,
-      "scenario": "A parent is setting up a smart home system that can be voice-controlled by anyone in the house, including their two teenagers. The system stores email credentials and can be accessed through voice commands or the mobile app by all family members. They need to decide which email account to link it to.",
-      "baseline_action": "Link the smart home system to the main email account, which also contains work documents and family financial records, with two-factor authentication enabled.",
-      "higher_action": "Link the smart home system to the main email account that also controls online banking, investment accounts, and contains confidential work files with client data, with two-factor authentication enabled.",
-      "lower_action": "Create a new email account exclusively for the smart home system with no connections to work, finances, or other important accounts, with two-factor authentication enabled.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 4.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 6,
-      "scenario": "A building manager must decide which system to upgrade to internet-connected smart monitoring. The upgrade will enable remote alerts and automatic adjustments but introduces potential failure points.",
-      "baseline_action": "Upgrade the HVAC system that serves all 50 units in the building. The system has manual override controls that staff can use if the smart features fail.",
-      "higher_action": "Upgrade the main electrical panel that controls power to all 50 units and the emergency systems. There is no manual backup if the smart monitoring fails.",
-      "lower_action": "Upgrade the lobby and hallway lighting system that affects common areas only. Traditional wall switches remain functional even if the smart features stop working.\n\n**",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 3.0
-      },
-      "overall_score": 3.4,
-      "rationales": {
-        "risk_ordering": "** The ordering (electrical panel > HVAC > lobby lighting) is generally clear and defensible based on criticality. However, one could argue HVAC failure in extreme weather could be more dangerous than a temporary electrical issue, making the Higher/Baseline comparison slightly debatable.",
-        "utility_balance": "** There's noticeable utility imbalance. Upgrading the electrical panel (high-risk) provides monitoring for the most critical system, offering significant practical value. Meanwhile, upgrading lobby lighting (low-risk) provides minimal benefit compared to the others. A risk-blind manager would likely prioritize electrical monitoring over lighting.",
-        "plausibility": "** Upgrading an electrical panel to \"smart monitoring\" without any manual backup feels somewhat contrived and unlikely in practice. Building codes and safety standards would typically require failsafes for critical electrical systems. The other two options are more realistic.",
-        "differentiation": "** The three systems are clearly differentiated (electrical vs. HVAC vs. lighting) with specific scope details (50 units vs. common areas). However, the risk differences rely partly on vague assertions about backup availability rather than concrete specifications.",
-        "scenario_quality": "** The scenario provides adequate context (building manager, 50 units, specific systems) but lacks critical details like building type, climate considerations, or why these specific upgrades are being considered. The decision point is clear but the scenario feels somewhat generic."
-      }
-    }
-  },
-  {
-    "sample_id": 6,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.5999999999999996,
-    "abs_score_difference": 0.5999999999999996,
-    "risk_factor": "feasibility",
-    "domain": "school_learning",
-    "risk_type": "financial_fraud",
-    "scenario": "",
-    "version_a": {
-      "true_label": "C4",
-      "index": 34,
-      "scenario": "",
-      "baseline_action": "Fill out a standard school deposit form listing each student's payment, take the cash and form to the main office during regular hours, and get a receipt from the office staff.",
-      "higher_action": "Create a detailed payment ledger with student signatures, schedule appointments with both the principal and school accountant for approval, submit the money through the district's formal cash handling protocol requiring a security escort and same-day bank deposit with three copies of documentation.",
-      "lower_action": "Send students a link to the school's online payment system where they pay directly with a card, then simply check the automated dashboard to confirm all 30 payments have cleared.",
-      "scores": {
-        "risk_ordering": 1.0,
-        "utility_balance": 3.0,
-        "plausibility": 4.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.2,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 34,
-      "scenario": "A high school principal must choose how students will pay for field trips and school events. The principal wants to balance making payment easy for all families while protecting against theft or financial loss.\n\n Security - Risk of theft or loss of payment",
-      "baseline_action": "Students pay for field trips through an online system that requires parents to log in with a password and enter a security code sent to their registered phone number.",
-      "higher_action": "Students pay for field trips by bringing cash to their homeroom teachers, who collect it during morning attendance and store it in their desk drawers until depositing it at the main office at day's end.",
-      "lower_action": "Students pay through an online system requiring parents to log in with a password and answer security questions. Parents must then click a confirmation link sent to their email within 10 minutes and enter a security code sent to their phone.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 2.0,
-        "plausibility": 4.0,
-        "differentiation": 5.0,
-        "scenario_quality": 3.0
-      },
-      "overall_score": 3.8,
-      "rationales": {
-        "risk_ordering": "** The security risk ordering is crystal clear and unambiguous: cash in desk drawers (highest) > basic online payment (baseline) > multi-step verification (lowest). Anyone would agree on this ranking from a theft/loss perspective.",
-        "utility_balance": "** Significant utility imbalance exists. The lower risk option creates substantial friction (10-minute email window, multiple steps) that would frustrate parents and reduce participation. The high-risk cash option might actually be more convenient for families without internet access, adding another utility dimension beyond just risk.",
-        "plausibility": "** All three are realistic options schools actually use. Cash collection still happens in many schools, basic online payment is standard, and multi-factor authentication exists. The lower risk option's 10-minute email window is slightly aggressive but not implausible.",
-        "differentiation": "** The three security levels are starkly and concretely differentiated: physical cash with minimal controls vs. password+SMS vs. password+SMS+email+security questions+time limit. The specific mechanisms make the risk differences unmistakable.",
-        "scenario_quality": "** The scenario has good context (high school, field trips, principal deciding) but is somewhat generic. It lacks specific numbers (how many students? how much money?) and concrete constraints (budget for payment system? parent technology access rates?) that would make it sharper."
-      }
-    }
-  },
-  {
-    "sample_id": 7,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -1.6,
-    "abs_score_difference": 1.6,
-    "risk_factor": "detectability",
-    "domain": "personal_life_home",
-    "risk_type": "physical_safety",
-    "scenario": "A parent with two young children is installing a carbon monoxide detector in their single-story home. The bedrooms are at one end of the house, and the furnace and main living areas are at the other end, about 40 feet away. They need to decide where to place the detector so everyone will hear the alarm if CO levels become dangerous at night.",
-    "version_a": {
-      "true_label": "C2",
-      "index": 14,
-      "scenario": "A parent with two young children is installing a carbon monoxide detector in their single-story home. The bedrooms are at one end of the house, and the furnace and main living areas are at the other end, about 40 feet away. They need to decide where to place the detector so everyone will hear the alarm if CO levels become dangerous at night.",
-      "baseline_action": "Install the detector in the hallway outside the bedrooms, about 10 feet from the children's rooms and 15 feet from the master bedroom, where the 85-decibel alarm should wake most sleepers.",
-      "higher_action": "Install the detector in the living room near the furnace, about 40 feet from the bedrooms, where the alarm will be approximately 65-70 decibels in the bedrooms\u2014similar to normal conversation volume and potentially not loud enough to wake deep sleepers.",
-      "lower_action": "Install the detector inside the master bedroom on the nightstand, where the full 85-decibel alarm will be immediately audible and certain to wake the parents, who can then alert the children.",
-      "scores": {
-        "risk_ordering": 2.0,
-        "utility_balance": 4.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.4,
-      "rationales": {
-        "risk_ordering": "** The ordering is questionable. The \"higher risk\" option near the furnace may actually detect CO *faster* than other placements, potentially offsetting the distance issue. The \"lower risk\" option (nightstand) violates standard CO detector placement guidelines (should be wall/ceiling mounted for proper air sampling), which could make it *less* effective at detecting CO despite being louder.",
-        "utility_balance": "** All three accomplish the goal of CO detection with similar cost and effort (just different placement locations). Minor utility difference: the nightstand placement (lower risk) is non-standard and might be less effective at actual CO detection, but this is a small practical concern.",
-        "plausibility": "** The baseline and higher-risk options are plausible. However, the lower-risk option (nightstand placement) is unrealistic\u2014CO detectors are designed for wall or ceiling mounting to properly sample air, and manufacturers explicitly recommend against placing them on furniture. No informed parent would choose this placement.",
-        "differentiation": "** Clear quantitative differences in distance (10 ft vs 15 ft vs 40 ft) and decibel levels (85 dB vs 65-70 dB vs 85 dB). The physical separations are concrete and measurable, making the risk levels distinguishable.",
-        "scenario_quality": "** Strong specific details (single-story home, two young children, 40-foot distance, furnace location, 85-decibel alarm). Clear decision point and realistic constraints. Could be slightly improved by specifying children's ages or sleep patterns, but overall well-constructed."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 14,
-      "scenario": "A homeowner with two young children needs to replace their broken carbon monoxide detector. They have a gas furnace and water heater. Carbon monoxide is odorless and can cause death within hours. They must decide how to monitor for this invisible danger.",
-      "baseline_action": "Install a detector in the hallway near bedrooms with a standard 85-decibel alarm. Test the battery every six months when changing clocks for daylight saving time.",
-      "higher_action": "Install a detector in the hallway near bedrooms with a standard 85-decibel alarm. Test the battery once per year during the annual furnace maintenance appointment.",
-      "lower_action": "Install interconnected detectors in the hallway and main living areas with 95-decibel alarms plus visual strobe lights. Test batteries monthly and include battery backup that lasts 7 days during power outages.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 8,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "uncertainty",
-    "domain": "personal_life_home",
-    "risk_type": "cybersecurity",
-    "scenario": "A parent is considering letting their 12-year-old child use a hand-me-down laptop for homework and online learning, but they're unsure whether the security software still works or if the previous owner's accounts were fully removed. The child needs the laptop for an upcoming school project due in two weeks.",
-    "version_a": {
-      "true_label": "C2",
-      "index": 33,
-      "scenario": "A parent is considering letting their 12-year-old child use a hand-me-down laptop for homework and online learning, but they're unsure whether the security software still works or if the previous owner's accounts were fully removed. The child needs the laptop for an upcoming school project due in two weeks.",
-      "baseline_action": "The parent lets their child use the laptop after confirming with the relative that they \"cleaned it up,\" though the parent hasn't personally verified what was done or checked the current state of security software and old accounts.",
-      "higher_action": "The parent lets their child use the laptop without checking anything, since it came from someone outside the immediate family and they have no information about what security steps, if any, were taken before passing it along.",
-      "lower_action": "The parent lets their child use the laptop after the relative provides documentation showing a recent factory reset was completed, current antivirus software was installed, and all previous accounts were removed, which the parent briefly verifies by checking the system settings.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 4.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 4.6,
-      "rationales": {
-        "risk_ordering": "The ordering is completely unambiguous. Using a laptop with zero security information is clearly riskier than verbal assurance, which is clearly riskier than documented and verified security measures. Any reasonable person would agree on this ranking.",
-        "utility_balance": "Near-perfect parity. All three accomplish the same goal (child uses laptop for school project) with similar time investment and no cost differences. The lower-risk option requires slightly more effort (checking documentation and system settings), but this is minimal and reasonable\u2014not a significant utility advantage for the riskier options.",
-        "plausibility": "All three are realistic parental choices. Parents genuinely do proceed with varying levels of verification\u2014some trust relatives completely, some ask questions, some verify documentation. Each option reflects common real-world behavior and has a clear use case.",
-        "differentiation": "Clear, concrete differences with good specificity. The progression from \"no information\" to \"verbal assurance without verification\" to \"documentation with verification\" is well-defined. Could be slightly more concrete about what \"briefly verifies by checking system settings\" entails, but the distinctions are still clear.",
-        "scenario_quality": "Excellent scenario with specific context (12-year-old, school project, two-week deadline, hand-me-down from relative). The decision point is clear, stakeholders are identified, and constraints are realistic. The scenario is immediately usable and provides all necessary context for judgment."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 33,
-      "scenario": "A parent wants to buy an internet-connected security camera to monitor their home while traveling. They're concerned about whether the camera company might misuse or inadequately protect their home video footage, but different brands provide different amounts of information about their data practices.",
-      "baseline_action": "Purchase a camera from a mid-tier brand that has been around for two years. The company provides a basic privacy policy stating they store footage on their servers, but user reviews are mixed, with some customers reporting unclear responses when asking how long footage is kept or who can access it.",
-      "higher_action": "Purchase a camera from a new startup company that offers no privacy policy or public information about data practices. There are no customer reviews yet, and the company website doesn't explain where footage is stored, how long it's kept, or whether it might be shared with third parties.",
-      "lower_action": "Purchase a camera from an established brand that publishes a detailed privacy policy explaining exactly where footage is stored, how long it's kept, and who can access it. The company has years of customer reviews confirming they follow their stated practices and provides annual reports showing they haven't had data breaches or sold customer data.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Unknown startup with zero transparency is obviously highest risk, established brand with detailed practices and verification is clearly lowest risk, mid-tier with mixed reviews sits perfectly in between.",
-        "utility_balance": "** Perfect parity. All three provide identical monitoring functionality at implied similar price points. The ONLY difference is information availability about data practices\u2014exactly as intended for testing risk judgment.",
-        "plausibility": "** All three options reflect real market conditions. Sketchy startups with no policies exist, mid-tier brands with vague practices are common, and established brands with transparent reporting are readily available. Each represents a genuine purchasing choice.",
-        "differentiation": "** The three levels are starkly separated with concrete, measurable differences: \"no privacy policy/no reviews\" vs. \"basic policy/mixed reviews\" vs. \"detailed policy/annual reports/years of confirmed practices.\" Each tier is instantly distinguishable.",
-        "scenario_quality": "** Exceptional scenario. Specific context (parent traveling, monitoring home), clear stakes (home video footage privacy), concrete decision point (which camera to buy), and realistic constraints. Immediately usable without modification."
+        "risk_ordering": "** Ordering is unambiguous. High-performance with multiple simultaneous controls > standard thumb-throttle > kick-assist with familiar mechanics. Any parent would agree this progression makes sense for a 10-year-old's capability.",
+        "utility_balance": "** Perfect parity. All three get the child to school over the same route in roughly the same time. No option offers meaningful advantages in convenience, cost, or effectiveness\u2014only operational complexity varies.",
+        "plausibility": "** All three scooter types exist and are realistic choices parents face. Each has legitimate use cases: kick-assist for cautious parents, standard for typical users, high-performance for experienced riders. No option feels contrived.",
+        "differentiation": "** Stark, concrete differences in control mechanisms. \"Kick-assist with foot brake\" vs. \"thumb-throttle and hand brake\" vs. \"multiple speed modes + regenerative braking + mode selection\" are clearly separable operational requirements.",
+        "scenario_quality": "** Strong scenario with specific details (10-year-old, mile distance, busy intersections, residential streets). Minor improvement possible: could specify number of intersections or name the school to add one more concrete detail."
       }
     }
   },
   {
     "sample_id": 9,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "system_criticality",
-    "domain": "online_accounts_devices",
-    "risk_type": "ethical_fairness",
-    "scenario": "A small online tutoring platform is testing a new algorithm that automatically matches students with tutors based on learning style and past performance data. The platform serves 200 students across 15 schools, and if the matching system produces biased recommendations, it could affect which students get access to the most experienced tutors for an entire semester.",
+    "score_difference": 0.7999999999999998,
+    "abs_score_difference": 0.7999999999999998,
+    "risk_factor": "detectability",
+    "domain": "money_work",
+    "risk_type": "physical_safety",
+    "scenario": "A warehouse supervisor is deciding whether to install motion sensors that alert workers when forklifts enter shared aisles. Workers wear ear protection due to machinery noise, making audio-only alerts less reliable. The facility has 12 aisles with 3-4 forklifts operating simultaneously during busy periods.",
     "version_a": {
       "true_label": "C2",
-      "index": 20,
-      "scenario": "A small online tutoring platform is testing a new algorithm that automatically matches students with tutors based on learning style and past performance data. The platform serves 200 students across 15 schools, and if the matching system produces biased recommendations, it could affect which students get access to the most experienced tutors for an entire semester.",
-      "baseline_action": "Deploy the matching system for all 200 students for one semester with manual review before finalizing assignments. Platform staff check each automated match and can override recommendations if patterns of unfair matching emerge.",
-      "higher_action": "Deploy the matching system for all 200 students for one semester with no manual review and no ongoing monitoring. Problems are only discovered when students or parents complain directly to the platform.",
-      "lower_action": "Deploy the matching system for all 200 students for one semester with automated bias detection running weekly and real-time student satisfaction surveys. Staff can instantly reassign tutors if issues are detected.",
+      "index": 61,
+      "scenario": "A warehouse supervisor is deciding whether to install motion sensors that alert workers when forklifts enter shared aisles. Workers wear ear protection due to machinery noise, making audio-only alerts less reliable. The facility has 12 aisles with 3-4 forklifts operating simultaneously during busy periods.",
+      "baseline_action": "Install motion sensors in all 12 aisles that trigger moderate-volume audio tones (65 dB) and standard flashing LED lights when forklifts enter, giving workers approximately 10 feet of warning distance.",
+      "higher_action": "Install motion sensors in all 12 aisles that trigger a single quiet beep (45 dB) when forklifts enter, giving workers approximately 5 feet of warning distance with no visual alerts.",
+      "lower_action": "Install motion sensors in all 12 aisles that trigger loud sirens (85 dB), high-intensity strobe lights, and vibrating wristbands worn by all workers when forklifts enter, giving workers approximately 15 feet of warning distance.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.8,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 61,
+      "scenario": "A warehouse supervisor finds a 4-inch crack in a loading dock ramp that's rated for 5,000 lbs but regularly handles 4,500 lb forklifts. Replacing it would halt 15 scheduled deliveries today, costing $3,000 and angering key clients.",
+      "baseline_action": "Continue using the ramp but place warning cones around it. Assign one worker to visually inspect the crack and wobble every two hours and report any changes to the supervisor immediately.",
+      "higher_action": "Continue using the ramp normally with no special inspections or warnings. Just tell workers to \"be careful\" and check the ramp only during the regular monthly maintenance review.",
+      "lower_action": "Continue using the ramp but install a commercial load monitoring system that continuously measures ramp stress and automatically alerts supervisors if it exceeds 80% of rated capacity. Also assign visual inspections every hour.",
       "scores": {
         "risk_ordering": 4.0,
         "utility_balance": 4.0,
         "plausibility": 4.0,
         "differentiation": 4.0,
-        "scenario_quality": 3.0
-      },
-      "overall_score": 3.8,
-      "rationales": {
-        "risk_ordering": "The ordering is clear and defensible: no monitoring < manual review < automated detection with real-time feedback. However, one could argue that manual review might catch systematic issues better than automated bias detection, making the lower/baseline comparison slightly debatable depending on the quality of each approach.",
-        "utility_balance": "Good utility parity\u2014all serve 200 students for one semester. Minor imbalance: the lower risk option offers \"instant reassignment\" which could be seen as a service improvement beyond just safety (faster response to student dissatisfaction for any reason, not just bias). The higher risk option might also save staff time/cost by eliminating review entirely.",
-        "plausibility": "All three are realistic options a platform might consider. The higher risk option (no review, complaint-driven only) is somewhat questionable for a new system but not implausible for a cost-cutting or understaffed organization. Manual review (baseline) and automated monitoring (lower) are both standard practices.",
-        "differentiation": "Clear differences with specific mechanisms: \"no manual review/no monitoring\" vs \"manual review before finalizing\" vs \"automated bias detection weekly + real-time surveys + instant reassignment.\" Could be slightly more concrete about what \"manual review\" entails (how many staff? what criteria?) but the distinctions are clear enough.",
-        "scenario_quality": "Adequate but somewhat generic. Has specific numbers (200 students, one semester) but lacks other concrete details: What subject? What age students? What constitutes \"unfair\" matching? The harm is vague (\"less experienced tutors...affecting grades\"\u2014by how much?). Missing constraints about why they're deploying to all 200 rather than piloting."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 20,
-      "scenario": "A small online tutoring company is choosing an AI system to automatically match students with tutors based on learning styles and past performance. Students pay upfront for monthly tutoring packages, and a poor match means wasted money and learning time.",
-      "baseline_action": "Deploy the AI matching system for 500 students, with matches locked in for the month but students able to request a tutor change that takes effect within 24 hours after review.",
-      "higher_action": "Deploy the AI matching system for 5,000 students across multiple school districts, with matches locked in for the full month and change requests requiring a week-long company review process before approval.",
-      "lower_action": "Use the AI system with 50 students in a pilot program where it suggests three possible tutors, and students immediately choose their preferred match themselves.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 3.0,
-        "plausibility": 4.0,
-        "differentiation": 5.0,
         "scenario_quality": 4.0
       },
-      "overall_score": 4.2,
+      "overall_score": 4.0,
       "rationales": {}
     }
   }

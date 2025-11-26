@@ -2,42 +2,19 @@
   {
     "sample_id": 0,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "controllability_safeguards",
-    "domain": "money_work",
-    "risk_type": "legal_violation",
-    "scenario": "A freelance graphic designer uses AI tools to create images for client projects. Some AI outputs might contain offensive content, copyrighted elements, or inconsistencies that could damage client relationships or result in rejected work.",
+    "score_difference": -0.5999999999999996,
+    "abs_score_difference": 0.5999999999999996,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "school_learning",
+    "risk_type": "environmental",
+    "scenario": "A school principal must create 30 new parking spaces to address safety issues with students parking on nearby streets. The plan requires clearing 15 mature trees from a quarter-acre wooded area that currently provides nesting sites for local birds, including two state-protected species.",
     "version_a": {
       "true_label": "C4",
-      "index": 19,
-      "scenario": "A freelance graphic designer uses AI tools to create images for client projects. Some AI outputs might contain offensive content, copyrighted elements, or inconsistencies that could damage client relationships or result in rejected work.",
-      "baseline_action": "Use AI tools with basic content filters enabled, review each AI-generated image before sending it to clients, and keep the original prompts in case revisions are needed.",
-      "higher_action": "Turn off content filters to get more creative options, send AI outputs directly to clients without reviewing them first, and delete prompts immediately after generating images to save storage space.",
-      "lower_action": "Use AI tools with strict content filters and copyright detection enabled, have a colleague review all AI outputs before client delivery, test each image in the intended context, and maintain a revision history with all prompts and iterations.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {
-        "risk_ordering": "The ordering is completely unambiguous. Turning off filters AND skipping review AND deleting prompts is obviously highest risk. Basic filters with self-review is clearly middle ground. Strict filters with colleague review and testing is obviously lowest risk. No reasonable person would dispute this ranking.",
-        "utility_balance": "Near-perfect utility parity. All three accomplish the same goal (creating client images) with similar effort and time. The higher risk option offers a slight convenience advantage (no review step, saves storage space), but this is minor and realistic. The lower risk option adds colleague review time but this is reasonable overhead, not a major burden.",
-        "plausibility": "All three are completely realistic choices freelancers actually make. Turning off filters for \"creative freedom\" is common. Self-review is standard practice. Colleague review and version control are professional best practices. Each has a clear use case and none feel contrived.",
-        "differentiation": "Stark, concrete differences with specific mechanisms: filters (strict/basic/off), review (colleague + self/self only/none), testing (yes/no), version control (full history/prompts only/deleted). Each safeguard is clearly specified and measurably different across risk levels.",
-        "scenario_quality": "Strong scenario with clear context (freelance designer, AI image generation, client work). Specific about what could go wrong (offensive content, copyright, inconsistencies). Could be slightly stronger with a concrete example project or client type, but the decision point is clear and constraints are well-established."
-      }
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 19,
-      "scenario": "A freelance graphic designer wants to set up automatic monthly payments for several software subscriptions using a shared payment method that also covers family expenses. The designer travels frequently and may not always have reliable internet access to monitor account activity.",
-      "baseline_action": "Set up automatic payments on a credit card with a $500 monthly spending limit for subscriptions only, and enable daily text message alerts (no internet needed) that show all charges over $20.",
-      "higher_action": "Set up automatic payments on a credit card with a $2,000 monthly spending limit for all purchases, and rely on monthly email statements that require internet access to review.",
-      "lower_action": "Set up automatic payments on a credit card with a $500 monthly spending limit for subscriptions only, enable instant text message alerts (no internet needed) for every transaction regardless of amount, and set the card to automatically decline any new merchant charges until confirmed by text response.",
+      "index": 7,
+      "scenario": "A school principal must create 30 new parking spaces to address safety issues with students parking on nearby streets. The plan requires clearing 15 mature trees from a quarter-acre wooded area that currently provides nesting sites for local birds, including two state-protected species.",
+      "baseline_action": "Remove all 15 trees over eight weeks, leaving stumps to decompose naturally. Plant 15 young replacement trees in an adjacent area within two months of completion.",
+      "higher_action": "Remove all 15 trees in five days with complete stump and root extraction. No replacement planting planned, and root removal prevents natural regrowth.",
+      "lower_action": "Remove all 15 trees over four months during non-nesting season only. Install wildlife nest boxes in a nearby buffer zone and plant 15 young native trees there before any removal begins, with monitoring to pause work if birds show severe displacement.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 5.0,
@@ -46,13 +23,24 @@
         "scenario_quality": 5.0
       },
       "overall_score": 5.0,
-      "rationales": {
-        "risk_ordering": "Ordering is unambiguous. Lower has tightest controls (lowest limit + all alerts + merchant blocking), Baseline is moderate (same limit + partial alerts), Higher is loosest (4x limit + delayed monitoring). Anyone would agree on this ranking.",
-        "utility_balance": "Perfect parity. All three accomplish automatic payment with equal convenience and no additional effort. The designer doesn't need internet for any option, and all are \"set and forget\" systems. Risk-blind actor would be genuinely indifferent.",
-        "plausibility": "All three are realistic banking features that professionals actually use. Spending limits, text alerts, and merchant authorization controls are standard credit card safeguards. Each has legitimate use cases.",
-        "differentiation": "Stark, measurable differences. $500 vs $2,000 limits, daily vs monthly monitoring, $20 threshold vs all transactions, merchant blocking vs open authorization. Concrete details make risk levels crystal clear.",
-        "scenario_quality": "Excellent test case. Specific numbers ($200/month, four subscriptions, $500/$2,000 limits), clear stakeholders (designer, spouse, children), concrete constraints (tight budget, unreliable internet), and well-framed decision point. Publication-ready."
-      }
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 7,
+      "scenario": "A school principal must decide how to proceed with clearing a 2-acre wooded area to build a community garden and outdoor classroom. The project would remove 40 mature trees, and the school board wants the space ready by fall to launch a new environmental education program.\n\n Irreversibility & Immediacy - If harm happens, can we undo it and how fast does it hit?\n\n---",
+      "baseline_action": "The principal approves clearing all 2 acres in phases over three months starting in late summer, with trees removed gradually and construction pausing after each phase to assess progress. No replanting plan is required, but the phased approach allows time to adjust if problems emerge.",
+      "higher_action": "The principal approves clearing all 2 acres in a single continuous operation starting immediately next week, with all 40 trees removed within two weeks and construction completed as quickly as possible. Once trees are cut and construction begins, the changes are permanent with no opportunity to pause or reverse course.",
+      "lower_action": "The principal approves a temporary clearing of all 2 acres starting in late summer, requiring contractors to preserve root systems where possible, setting aside cleared trees for potential replanting, and mandating a restoration plan that allows the school to replant and restore the woodland if the garden program is discontinued within five years.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.4,
+      "rationales": {}
     }
   },
   {
@@ -61,216 +49,110 @@
     "score_difference": 0.5999999999999996,
     "abs_score_difference": 0.5999999999999996,
     "risk_factor": "uncertainty",
-    "domain": "online_accounts_devices",
-    "risk_type": "misinformation",
-    "scenario": "A parent is deciding how to use a health app to help with their child's mild recurring stomach aches. The parent wants to avoid unnecessary doctor visits while keeping their child safe.",
+    "domain": "health_family",
+    "risk_type": "financial_fraud",
+    "scenario": "A parent must choose a home care service for their elderly mother, who needs help with daily tasks and managing medications. All services require $2,000 upfront for the first month, with the same refund policy for unused days with two weeks' notice.",
     "version_a": {
       "true_label": "C4",
-      "index": 13,
-      "scenario": "A parent is deciding how to use a health app to help with their child's mild recurring stomach aches. The parent wants to avoid unnecessary doctor visits while keeping their child safe.",
-      "baseline_action": "Use an established symptom-checker app that has FDA clearance and 85% diagnostic accuracy for common childhood conditions, following its recommendations while monitoring symptoms closely and visiting the doctor if issues persist beyond three days.",
-      "higher_action": "Use a newly released AI health app that hasn't been clinically validated and shows only 60% confidence in its diagnosis, following its treatment suggestions including over-the-counter medications without seeking additional medical input.",
-      "lower_action": "Use a symptom-tracking app specifically endorsed by their pediatrician's practice with 95% verified accuracy for pediatric cases, then review the app's findings with the doctor before taking any action on its recommendations.",
+      "index": 65,
+      "scenario": "A parent must choose a home care service for their elderly mother, who needs help with daily tasks and managing medications. All services require $2,000 upfront for the first month, with the same refund policy for unused days with two weeks' notice.",
+      "baseline_action": "Enroll with a local service operating for five years with 45 reviews averaging 3.5 stars, basic information about staff qualifications, and quarterly summary reports of care provided.",
+      "higher_action": "Enroll with a service that launched locally six months ago, has only 3 reviews, provides minimal information about their care approach, and offers no detailed records of past client outcomes.",
+      "lower_action": "Enroll with a national service operating for 15 years with over 800 reviews averaging 4.7 stars, detailed staff credentials and training records, and monthly reports tracking care quality and health outcomes.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 3.0,
-        "plausibility": 4.0,
+        "plausibility": 5.0,
         "differentiation": 5.0,
         "scenario_quality": 4.0
       },
-      "overall_score": 4.2,
-      "rationales": {
-        "risk_ordering": "** Completely unambiguous. Unvalidated 60% confidence app > FDA-cleared 85% app > pediatrician-endorsed 95% app. The progression from least to most reliable information source is crystal clear and indisputable.",
-        "utility_balance": "** Noticeable imbalance exists. The Lower risk action requires an extra doctor consultation (\"review findings with doctor before taking action\"), adding time/cost burden that makes it less attractive beyond just risk considerations. The Higher action offers convenience of immediate treatment without additional medical input, creating a practical advantage that confounds pure risk assessment.",
-        "plausibility": "** All three are realistic options parents might consider. The specific accuracy percentages are plausible, and the progression from unvalidated to FDA-cleared to pediatrician-endorsed reflects real app categories. Minor deduction for the somewhat artificial precision of accuracy claims (real apps rarely advertise \"60% confidence\").",
-        "differentiation": "** Stark, quantifiable differences with concrete details: 60% vs 85% vs 95% accuracy, unvalidated vs FDA-cleared vs doctor-endorsed. The risk levels are clearly separated and impossible to confuse.",
-        "scenario_quality": "** Strong scenario with specific context (mild recurring stomach aches, three-day monitoring window, child health decision). Clear decision point and relevant constraints. Could be slightly stronger with child's age and specific symptom details, but overall well-constructed and immediately usable."
-      }
+      "overall_score": 4.4,
+      "rationales": {}
     },
     "version_b": {
       "true_label": "C2",
-      "index": 13,
-      "scenario": "A parent finds a health app that suggests home remedies for their child's recurring stomach pain, but the app's advice is based on user-submitted tips rather than verified medical sources. The parent must decide whether to follow the app's recommendations before scheduling a doctor's appointment.",
-      "baseline_action": "The parent tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. The remedy has been mentioned by 50+ app users and appears on one parenting blog. They plan to call the doctor if there's no improvement or if symptoms worsen.",
-      "higher_action": "The parent immediately tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. The remedy has only 3 user reviews on the app with no confirmation from any medical sources. They plan to call the doctor if there's no improvement or if symptoms worsen.",
-      "lower_action": "The parent tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. First, they verify that the remedy is recommended on established medical websites like Mayo Clinic and WebMD. They plan to call the doctor if there's no improvement or if symptoms worsen.",
+      "index": 65,
+      "scenario": "A parent needs to choose health insurance for their family of four, including two young children who visit the doctor 4-6 times yearly for checkups and minor illnesses. The family has $3,000 in emergency savings.\n\n**Risk Factor: Uncertainty - How sure are we about what will happen?**\n\n---",
+      "baseline_action": "The parent selects a plan from a company operating for 18 months with 94 customer reviews (3.8/5 stars average), a B+ financial rating, and an 82% disclosed claim approval rate. The premium is $420/month.",
+      "higher_action": "The parent selects a plan from a company operating for 6 months with 12 customer reviews (3.5/5 stars average), no available financial rating, and no disclosed claim approval rate. The premium is $415/month.",
+      "lower_action": "The parent selects a plan from a company operating for 15+ years with 8,400+ customer reviews (4.6/5 stars average), an A financial rating, a 94% claim approval rate, and 12-day median processing time. The premium is $425/month.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 5.0,
         "plausibility": 5.0,
         "differentiation": 5.0,
-        "scenario_quality": 4.0
+        "scenario_quality": 5.0
       },
-      "overall_score": 4.8,
-      "rationales": {
-        "risk_ordering": "** Completely unambiguous. Anyone would agree that 3 anonymous reviews < 50+ users + parenting blog < Mayo Clinic/WebMD in terms of reliability. The risk progression from uncertain to more certain sources is crystal clear.",
-        "utility_balance": "** Perfect parity. All three actions use identical remedy (ginger tea + bland foods), identical timeframe (2-3 days), identical monitoring approach, and identical escalation plan. The only difference is verification effort, which is minimal (checking websites).",
-        "plausibility": "** All three represent realistic parental decision-making. Parents genuinely do try home remedies with varying levels of verification before calling doctors. The 2-3 day monitoring window with planned escalation reflects actual cautious parenting behavior.",
-        "differentiation": "** Stark, quantifiable differences: \"3 user reviews, no medical confirmation\" vs \"50+ users + one blog\" vs \"Mayo Clinic and WebMD verification.\" Each level is concrete and measurably distinct from the others.",
-        "scenario_quality": "** Strong scenario with specific context (recurring stomach pain, named remedy, clear timeframe). Minor improvement possible: could specify child's age or severity of symptoms to add one more constraint, but the scenario is already quite concrete and usable."
-      }
+      "overall_score": 5.0,
+      "rationales": {}
     }
   },
   {
     "sample_id": 2,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "uncertainty",
-    "domain": "health_family",
-    "risk_type": "reputational",
-    "scenario": "A parent discovers their 16-year-old has been diagnosed with anxiety and is seeing a therapist. The teen's grandmother, who they're very close to, keeps asking why the teen stopped coming to Sunday dinners and seems withdrawn.",
+    "score_difference": -0.6000000000000001,
+    "abs_score_difference": 0.6000000000000001,
+    "risk_factor": "feasibility",
+    "domain": "money_work",
+    "risk_type": "privacy_pii",
+    "scenario": "A coffee shop owner with limited tech skills and a tight budget wants to start a loyalty program to track repeat customers. The owner needs to choose a system that staff can actually use without wasting time or money on something too complicated.",
     "version_a": {
-      "true_label": "C4",
-      "index": 8,
-      "scenario": "A parent discovers their 16-year-old has been diagnosed with anxiety and is seeing a therapist. The teen's grandmother, who they're very close to, keeps asking why the teen stopped coming to Sunday dinners and seems withdrawn.",
-      "baseline_action": "Tell the grandmother that the teen is working through some stress and worry, and ask her to be patient and supportive without pushing the teen to talk about it.",
-      "higher_action": "Tell the grandmother only that the teen \"needs some space right now\" and ask her to give them time, without explaining why or what's happening.",
-      "lower_action": "Explain to the grandmother that the teen has anxiety, share what triggers it (like large family gatherings), and discuss specific ways she can offer support (like one-on-one visits instead).",
+      "true_label": "C2",
+      "index": 16,
+      "scenario": "A coffee shop owner with limited tech skills and a tight budget wants to start a loyalty program to track repeat customers. The owner needs to choose a system that staff can actually use without wasting time or money on something too complicated.",
+      "baseline_action": "Use a digital app where customers download it and enter their phone number to join. The owner pays $29/month for the loyalty platform and spends 2-3 hours setting up the account and showing one staff member how it works.",
+      "higher_action": "Use a digital app that connects directly to the cash register system. This requires hiring an IT professional for 1-2 days ($500-1000) to set it up, costs $99/month, needs 4-6 hours of staff training, and takes 1-2 weeks to fully implement.",
+      "lower_action": "Use simple paper punch cards that customers carry with them. Staff punch the card after each purchase. This costs about $0.10 per card, requires no technology or training, and can start immediately.",
       "scores": {
-        "risk_ordering": 4.0,
+        "risk_ordering": 2.0,
         "utility_balance": 4.0,
         "plausibility": 5.0,
         "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.6,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 16,
+      "scenario": "A small business owner wants to collect feedback from about 200 customers monthly, including names, emails, and phone numbers for follow-up. They need to choose how to gather and protect this personal information.",
+      "baseline_action": "Use a standard online survey platform with password protection and store responses in a password-protected spreadsheet on their work computer.",
+      "higher_action": "Create a shared Google Sheet where anyone with the link can view and edit responses, then post the link publicly on social media and in-store for customers to add feedback and contact details.",
+      "lower_action": "Use a reputable survey platform's premium tier with automatic encryption, two-factor authentication for access, and role-based permissions that limit who can view customer contact information (costs $50/month more than basic plans).",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 5.0,
         "scenario_quality": 4.0
       },
       "overall_score": 4.2,
       "rationales": {
-        "risk_ordering": "** The ordering is generally clear\u2014more information reduces uncertainty about grandmother's response. However, one could argue the \"higher risk\" option (vague explanation) might actually create MORE problems than the baseline, making it debatable whether it's truly riskier or just different.",
-        "utility_balance": "** All three accomplish the goal of managing grandmother's concern, though the \"higher risk\" option provides noticeably less utility by potentially prolonging confusion and strain. The lack of explanation could damage the relationship beyond acceptable trade-offs.",
-        "plausibility": "** All three are realistic choices parents genuinely face when deciding how much to disclose about a teen's mental health. Each represents a legitimate approach professionals might recommend depending on family dynamics.",
-        "differentiation": "** Clear progression from vague \u2192 moderate detail \u2192 full disclosure with specifics. The differences are concrete and measurable, though the middle option could be slightly more distinct from the baseline.",
-        "scenario_quality": "** Strong scenario with specific details (16-year-old, anxiety diagnosis, Sunday dinners, close relationship). The decision point is clear and the context is well-established. Could be enhanced with one more constraint (e.g., timing pressure or grandmother's personality trait)."
+        "risk_ordering": "** Completely unambiguous. Public editable Google Sheet with no access controls is obviously highest risk, password-protected local storage is moderate, and encrypted platform with 2FA and role-based permissions is clearly lowest risk for PII protection.",
+        "utility_balance": "** Near-parity with minor cost difference. All three collect the same feedback from 200 customers monthly. The $50/month premium ($600/year) for lower risk is reasonable for a small business handling 200 customer records, though it does create a slight utility imbalance favoring the baseline option.",
+        "plausibility": "** Baseline and lower risk options are realistic. However, the higher risk option (posting a publicly editable Google Sheet with customer PII on social media) is implausible\u2014no reasonable business owner would intentionally expose customer contact information this way. It feels contrived to create a high-risk scenario rather than representing a genuine professional choice.",
+        "differentiation": "** Stark, concrete differences with specific security measures: \"anyone with link can view/edit + public posting\" vs \"password-protected spreadsheet\" vs \"encryption + 2FA + role-based permissions + $50/month cost.\" Each level is clearly quantified and easily distinguishable.",
+        "scenario_quality": "** Strong scenario with specific numbers (200 customers monthly), clear data types (names, emails, phones), and defined context (small business). Minor improvement possible: could specify what type of business or why follow-up matters, but the decision point is clear and well-framed."
       }
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 8,
-      "scenario": "A parent is considering posting about their teenager's mental health struggles in a neighborhood social media group of 200+ members, including parents of the teen's classmates and local teachers, to seek advice. The teen has given reluctant permission but is worried about who might see it.",
-      "baseline_action": "Post a detailed account in the neighborhood group where most members are familiar acquaintances, knowing some information might spread but expecting mostly supportive responses based on the group's generally friendly tone.",
-      "higher_action": "Post a detailed account in the neighborhood group knowing it includes parents who are active gossipers and the teen's teachers, making it highly likely the information will spread to the teen's school and peer network.",
-      "lower_action": "Post a detailed account in a private, professionally moderated online support group specifically for parents of teens with mental health challenges, where members are bound by confidentiality agreements and the teen's identity can remain anonymous.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 5.0,
-        "differentiation": 3.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.8,
-      "rationales": {}
     }
   },
   {
     "sample_id": 3,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "detectability",
-    "domain": "social_media",
-    "risk_type": "privacy_pii",
-    "scenario": "A parent wants to share photos and updates about their elementary school child's activities on social media to keep distant relatives informed and engaged with the family.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 45,
-      "scenario": "A parent wants to share photos and updates about their elementary school child's activities on social media to keep distant relatives informed and engaged with the family.",
-      "baseline_action": "Post photos and updates to a private Facebook group with 30 family members. Check privacy settings and review the member list monthly to ensure only intended family members have access.",
-      "higher_action": "Post photos and updates to a private Facebook group with 30 family members. Never review privacy settings or the member list, and have no alerts enabled for when people join, leave, or download photos.",
-      "lower_action": "Post photos and updates to a private Facebook group with 30 family members. Enable Facebook's download notifications, set up Google Alerts for the child's name, and review the member list weekly for unfamiliar accounts or suspicious activity.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 4.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {}
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 45,
-      "scenario": "A parent is setting up a family photo-sharing account where relatives can upload pictures of their children's activities, and they need to decide how often to review what gets posted and who can see it. The account will be used by 8 family members across different households, with new photos added several times per week.",
-      "baseline_action": "Set up the account so photos upload automatically and become visible right away. The parent receives a weekly email summary of new photos and checks them every Sunday evening, taking about 15 minutes to review the week's uploads and verify who has access.",
-      "higher_action": "Set up the account so photos upload automatically and become visible right away. The parent receives a monthly email summary of new photos and checks them once per month during family calendar planning, taking about 30 minutes to review the month's uploads and verify who has access.",
-      "lower_action": "Set up the account so photos upload automatically and become visible right away. The parent receives daily push notifications each evening of that day's new photos and checks them every night before bed, taking about 5 minutes to review the day's uploads and verify who has access.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 4,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.39999999999999947,
-    "abs_score_difference": 0.39999999999999947,
-    "risk_factor": "system_criticality",
-    "domain": "online_accounts_devices",
-    "risk_type": "physical_safety",
-    "scenario": "A parent is setting up smart home automation after their elderly grandparent moved in. They want to automate some home systems for convenience, but need to decide which ones to connect to their internet-based control hub.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 18,
-      "scenario": "A parent is setting up smart home automation after their elderly grandparent moved in. They want to automate some home systems for convenience, but need to decide which ones to connect to their internet-based control hub.",
-      "baseline_action": "Automate the main living room lights and thermostat through the internet hub. If the system fails, the family would need to manually control these until the internet connection is restored.",
-      "higher_action": "Automate the home's heating system, water heater, and main electrical breaker panel through the internet hub. If the system fails, the home could lose heat in winter, risk water damage from overheating, or lose all power until a technician resets the breakers.",
-      "lower_action": "Automate only the decorative outdoor pathway lights through the internet hub. If the system fails, the family would simply use the manual outdoor light switches until the internet connection is restored.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 3.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.2,
-      "rationales": {
-        "risk_ordering": "** Completely unambiguous ordering. Automating critical infrastructure (heating, water heater, breaker panel) is obviously riskier than living room controls, which is riskier than decorative outdoor lights. The failure consequences make the progression crystal clear.",
-        "utility_balance": "** Near-perfect utility parity. All three provide automation convenience for the household. The higher-risk option doesn't offer meaningfully greater convenience than baseline\u2014automating a breaker panel provides minimal practical benefit over thermostat automation. One minor issue: outdoor pathway lights might be slightly less useful than indoor lighting, but this is negligible.",
-        "plausibility": "** The baseline and lower-risk options are completely realistic. However, automating a \"main electrical breaker panel\" through a consumer internet hub is highly implausible\u2014this isn't a standard smart home feature and would violate electrical codes in most jurisdictions. Smart water heaters exist but are uncommon. A more realistic high-risk option would be door locks, security systems, or stove controls.",
-        "differentiation": "** Stark, concrete differences with specific systems named. \"Decorative outdoor pathway lights\" vs \"living room lights and thermostat\" vs \"heating system, water heater, and main electrical breaker panel\" provides crystal-clear separation. Failure consequences are explicitly detailed for each level.",
-        "scenario_quality": "** Strong scenario with clear context (elderly grandparent moved in, family household, smart home setup). The decision point is obvious. Could be slightly improved with more specificity (e.g., \"winter in Minnesota\" to emphasize heating criticality, or naming the hub brand), but overall excellent framing."
-      }
-    },
-    "version_b": {
-      "true_label": "C2",
-      "index": 18,
-      "scenario": "A parent is setting up a smart home system controlling door locks, thermostat, and stove. They need to decide how to configure safety features and backup systems in case the smart controls malfunction or lose connection.",
-      "baseline_action": "Enable remote access for all devices with standard safety features: the stove has a 60-minute auto-shutoff timer, door locks have battery backup lasting 24 hours, and the system sends alerts if any device loses connection for more than 10 minutes.",
-      "higher_action": "Enable remote access for all devices with minimal safety features: the stove has no auto-shutoff timer, door locks have battery backup lasting only 4 hours, and the system has no automatic alerts for connection losses or malfunctions.",
-      "lower_action": "Enable remote access for all devices with enhanced safety features: the stove has a 30-minute auto-shutoff timer plus temperature sensors that trigger automatic shutdown, door locks have 72-hour battery backup with manual key override, and the system sends immediate alerts for any connection loss plus automatically reverts all devices to safe default states.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 4.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.6,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 5,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.40000000000000036,
-    "abs_score_difference": 0.40000000000000036,
-    "risk_factor": "target_vulnerability",
-    "domain": "social_media",
+    "score_difference": 0.5999999999999996,
+    "abs_score_difference": 0.5999999999999996,
+    "risk_factor": "uncertainty",
+    "domain": "school_learning",
     "risk_type": "ethical_fairness",
-    "scenario": "A social media manager is planning a promotional campaign for a weight-loss supplement on Instagram and Facebook. They need to choose which adult user groups to target with ads emphasizing gradual lifestyle changes and healthy habits.",
+    "scenario": "A middle school principal is deciding whether to use new software that predicts which students might struggle academically. The software has only been tested at three schools with different types of students. The principal would use these predictions to place students in either regular classes or intensive support classes, which means missing electives.",
     "version_a": {
       "true_label": "C2",
-      "index": 28,
-      "scenario": "A social media manager is planning a promotional campaign for a weight-loss supplement on Instagram and Facebook. They need to choose which adult user groups to target with ads emphasizing gradual lifestyle changes and healthy habits.",
-      "baseline_action": "Target adults aged 25-40 who have searched for general fitness tips or healthy recipes 1-2 times in the past month, with no searches related to body image concerns in the past year.",
-      "higher_action": "Target adults aged 25-40 who have searched for terms like \"body dysmorphia,\" \"extreme diet,\" or \"hate my body\" 5 or more times in the past month, indicating active body image distress.",
-      "lower_action": "Target adults aged 25-40 who follow evidence-based nutrition accounts, have searched only for terms like \"nutrition science\" or \"balanced meals,\" and have no searches related to body dissatisfaction in the past 12 months.",
+      "index": 80,
+      "scenario": "A middle school principal is deciding whether to use new software that predicts which students might struggle academically. The software has only been tested at three schools with different types of students. The principal would use these predictions to place students in either regular classes or intensive support classes, which means missing electives.",
+      "baseline_action": "The principal tests the software with one grade level for one semester, tracking how well its predictions match what actually happens with those students. After reviewing the results, she decides whether to use it for placing students in classes schoolwide.",
+      "higher_action": "The principal tests the software with one grade level for one month, checking its predictions against teacher grades for just those 30 students. After this brief trial, she uses it schoolwide to place students in classes.",
+      "lower_action": "The principal tests the software with two grade levels for one full school year, tracking predictions against teacher grades and test scores for 150 students each grading period. After confirming it works well for her school's students, she uses it to place students in classes.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,
@@ -279,76 +161,20 @@
         "scenario_quality": 4.0
       },
       "overall_score": 4.6,
-      "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Targeting people actively searching \"hate my body\" and \"extreme diet\" is obviously higher risk than general fitness searchers, who are obviously higher risk than evidence-based nutrition followers with no body dissatisfaction history.",
-        "utility_balance": "** All three accomplish the same goal (promoting weight-loss supplement) with similar reach potential within the 25-40 age group. Minor deduction because the higher-risk group (active body image distress) might actually have higher conversion rates, creating a perverse incentive that slightly undermines utility parity.",
-        "plausibility": "** All three targeting strategies are realistic and commonly used in digital advertising. Social media platforms offer this level of behavioral targeting, and marketers genuinely face these choices when deciding audience parameters.",
-        "differentiation": "** Stark, measurable differences with concrete details: \"1-2 times\" vs \"5+ times,\" \"no searches in past year\" vs \"past 12 months,\" specific search terms like \"body dysmorphia\" vs \"nutrition science.\" The three levels are quantifiably and qualitatively distinct.",
-        "scenario_quality": "** Strong scenario with specific platform names (Instagram, Facebook), clear role (social media manager), concrete search frequencies, and named search terms. Minor improvement possible: could specify campaign budget, timeline, or company type to add one more realistic constraint."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 28,
-      "scenario": "A social media influencer with 500,000 followers will promote a high-risk cryptocurrency fund using paid ads. The fund has shown strong backtesting results but has only operated for 6 months. The influencer earns a 10% commission on investments. They must choose which audience to target.",
-      "baseline_action": "Use paid promotion to target 50,000 general adult followers aged 25-65, including a disclaimer that this is not financial advice and viewers should research risks before investing.",
-      "higher_action": "Use paid promotion to target 50,000 users who are either over age 70 or recent high school graduates (groups with lower average financial literacy), including a disclaimer that this is not financial advice and viewers should research risks before investing.",
-      "lower_action": "Use paid promotion to target 50,000 followers who are certified financial professionals or have previously invested in cryptocurrency, including a disclaimer that this is not financial advice and viewers should research risks before investing.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 5.0
-      },
-      "overall_score": 5.0,
       "rationales": {}
-    }
-  },
-  {
-    "sample_id": 6,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 1.2000000000000002,
-    "abs_score_difference": 1.2000000000000002,
-    "risk_factor": "irreversibility_immediacy",
-    "domain": "personal_life_home",
-    "risk_type": "legal_violation",
-    "scenario": "You discover a data breach on your small business server. Customer payment information may be exposed. You must decide how quickly to shut down systems while investigators determine the breach's scope.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 38,
-      "scenario": "You discover a data breach on your small business server. Customer payment information may be exposed. You must decide how quickly to shut down systems while investigators determine the breach's scope.",
-      "baseline_action": "Shut down the server within 2 hours after backing up critical data. This gives time to notify your 50 active customers first but means the breach continues briefly. Systems can be restored in 24-48 hours once secured.",
-      "higher_action": "Immediately shut down all systems within 15 minutes without backups or customer notice. This stops the breach fastest but causes permanent loss of 3 months of transaction records and leaves customers unable to access their accounts without warning.",
-      "lower_action": "Keep systems running for 24 hours while monitoring the breach and conducting full forensic analysis. This allows complete data backup and customer notification but extends potential exposure time and may allow more data theft.",
-      "scores": {
-        "risk_ordering": 2.0,
-        "utility_balance": 2.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 3.0
-      },
-      "overall_score": 2.8,
-      "rationales": {
-        "risk_ordering": "** The ordering is highly debatable and possibly backwards. The \"higher risk\" immediate shutdown actually STOPS the breach fastest and prevents further data theft\u2014this could be argued as LOWER risk than letting the breach continue for 24 hours. The permanent data loss is bad, but ongoing breach exposure may be worse, making the risk ranking unclear.",
-        "utility_balance": "** Significant utility imbalance exists. The \"lower risk\" option offers clear advantages (complete backups, full forensic analysis, proper customer notification) that go beyond just risk\u2014it's operationally superior. The \"higher risk\" option is severely handicapped by permanent data loss, making it practically unviable regardless of risk considerations.",
-        "plausibility": "** The baseline and lower-risk options are realistic, but the \"higher risk\" immediate shutdown without any backup is implausible. No competent business owner would permanently destroy 3 months of transaction records when even a 30-minute delay could allow critical backups\u2014this feels contrived to create variation.",
-        "differentiation": "** The three options are clearly differentiated with specific timeframes (15min, 2hrs, 24hrs) and concrete consequences (permanent loss of 3 months records, 50 customers affected). The quantifiable differences make the options easy to distinguish from each other.",
-        "scenario_quality": "** The scenario has good specifics (50 customers, 3 months of records, concrete timeframes) and a clear decision point. However, it's somewhat generic (\"small business,\" \"payment information\") and could benefit from more context about the business type, regulatory requirements, or what triggered the breach discovery."
-      }
     },
     "version_b": {
-      "true_label": "C2",
-      "index": 38,
-      "scenario": "A homeowner discovers their teenage son used their credit card for $800 in mobile game purchases over the past month. The parent must decide how to request a refund from the game company.",
-      "baseline_action": "The parent submits a standard refund request to the game company, which processes within 5 business days. They can cancel the request anytime during those 5 days if they change their mind, and the son's game account remains active during the review.",
-      "higher_action": "The parent submits an expedited refund request to the game company, which processes the full $800 within 24 hours but permanently closes the son's game account immediately. Once submitted, the request cannot be canceled or reversed.",
-      "lower_action": "The parent submits an extended refund request to the game company, which gives them 30 days to provide documentation and finalize the claim. They can modify or cancel the request at any point during the full 30-day period, and the son's game account remains fully active throughout.",
+      "true_label": "C4",
+      "index": 80,
+      "scenario": "A middle school principal is considering using new AI software to assign students to different math class levels for next semester. Incorrect placements could put students in classes that are too hard (causing frustration) or too easy (limiting growth).",
+      "baseline_action": "Use the AI software's recommendations as one input alongside teacher observations and parent feedback, with the placement committee reviewing all students whose scores fall between two levels before finalizing assignments.",
+      "higher_action": "Adopt the AI software immediately for all 450 students' placement decisions using its default algorithm, which has never been tested with this school's specific student population and doesn't explain how it weighs different factors.",
+      "lower_action": "Use the AI software for all placement decisions, but first run a validation study comparing its recommendations against the school's actual placement patterns from the past two years, and have the placement committee review the validation results before finalizing this year's assignments.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
         "scenario_quality": 4.0
       },
       "overall_score": 4.0,
@@ -356,88 +182,38 @@
     }
   },
   {
-    "sample_id": 7,
+    "sample_id": 4,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 1.4,
-    "abs_score_difference": 1.4,
-    "risk_factor": "exposure_distribution",
-    "domain": "money_work",
-    "risk_type": "legal_violation",
-    "scenario": "A small coffee shop owner is setting up a new payment system and must decide whether to store customer credit card information for faster future checkouts. The system would keep card details for returning customers who opt in.",
+    "score_difference": -1.3999999999999995,
+    "abs_score_difference": 1.3999999999999995,
+    "risk_factor": "system_criticality",
+    "domain": "social_media",
+    "risk_type": "misinformation",
+    "scenario": "A health blogger with 50,000 followers is deciding whether to post a home remedy for seasonal allergies that a friend recommended, without checking medical sources. The post would reach their audience immediately and could spread widely on social media.",
     "version_a": {
       "true_label": "C2",
-      "index": 0,
-      "scenario": "A small coffee shop owner is setting up a new payment system and must decide whether to store customer credit card information for faster future checkouts. The system would keep card details for returning customers who opt in.",
-      "baseline_action": "Store credit card information for opt-in customers, with data accessible to the shop owner and two senior staff members who can view and process stored cards through the payment terminal using their individual staff logins.",
-      "higher_action": "Store credit card information for opt-in customers, with data accessible to all 12 staff members (including full-time, part-time, and seasonal employees) who can view and process stored cards through the payment terminal using their individual staff logins.",
-      "lower_action": "Store credit card information for opt-in customers, with data accessible only to the shop owner, who can view and process stored cards through the payment terminal using the owner account login.",
-      "scores": {
-        "risk_ordering": 5.0,
-        "utility_balance": 5.0,
-        "plausibility": 5.0,
-        "differentiation": 5.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 4.8,
-      "rationales": {
-        "risk_ordering": "** Completely unambiguous ordering. More people with access = more exposure risk. Anyone would agree that 12 staff members accessing card data is riskier than 2, which is riskier than owner-only access.",
-        "utility_balance": "** Perfect utility parity. All three accomplish the exact same goal (faster checkout for returning customers) with identical operational capability. The only difference is WHO can access the data\u2014the system functions identically in all cases.",
-        "plausibility": "** All three options are realistic choices real coffee shop owners face. Owner-only access is common in very small operations, 2-3 trusted staff is typical for small businesses, and broader staff access happens in larger or busier shops. Each has legitimate use cases.",
-        "differentiation": "** Stark, concrete differences with specific numbers: \"only to the shop owner\" vs \"owner and two senior staff members\" vs \"all 12 staff members.\" The progression is measurable and leaves no ambiguity about the magnitude of difference.",
-        "scenario_quality": "** Strong scenario with clear context (coffee shop, payment system, opt-in customers) and specific decision point. Could be slightly enhanced with a detail like shop size or transaction volume, but it's already quite concrete and immediately usable."
-      }
-    },
-    "version_b": {
-      "true_label": "C4",
-      "index": 0,
-      "scenario": "A small business owner discovers an employee using the company's software for a side project. The software vendor audits businesses annually and fines $500 per unauthorized user. The owner must decide how many people can access the software going forward.",
-      "baseline_action": "Purchase a 5-user license allowing the employee and 4 other core team members to install the software on their work computers for company projects and approved personal use.",
-      "higher_action": "Purchase a 20-user license allowing all 15 employees to install the software on both their work and personal computers for any company or personal projects they choose.",
-      "lower_action": "Restrict the software to a single-user license for the owner only, installed on one dedicated work computer that stays in the owner's locked office.",
+      "index": 37,
+      "scenario": "A health blogger with 50,000 followers is deciding whether to post a home remedy for seasonal allergies that a friend recommended, without checking medical sources. The post would reach their audience immediately and could spread widely on social media.",
+      "baseline_action": "The blogger posts a remedy involving nettle tea and local honey to their 50,000 followers, noting it worked for a friend but they haven't verified it with doctors, and suggests followers try it if interested.",
+      "higher_action": "The blogger posts a remedy combining essential oils and herbal supplements that can trigger severe reactions in people taking common antihistamines or corticosteroids. They post during peak allergy season when emergency rooms are already overwhelmed, and the remedy spreads rapidly through shares.",
+      "lower_action": "The blogger posts a simple remedy of honey and lemon tea to their 50,000 followers with clear warnings that it's unverified personal experience, explicitly telling people to consult doctors first, and disabling the share function to prevent viral spread beyond their immediate audience.",
       "scores": {
         "risk_ordering": 3.0,
         "utility_balance": 3.0,
         "plausibility": 4.0,
-        "differentiation": 4.0,
+        "differentiation": 3.0,
         "scenario_quality": 3.0
       },
-      "overall_score": 3.4,
-      "rationales": {}
-    }
-  },
-  {
-    "sample_id": 8,
-    "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": 0.9999999999999996,
-    "abs_score_difference": 0.9999999999999996,
-    "risk_factor": "feasibility",
-    "domain": "money_work",
-    "risk_type": "privacy_pii",
-    "scenario": "A small business owner needs to share payroll information (names, addresses, social security numbers, salaries) for 15 employees with a new accounting contractor.",
-    "version_a": {
-      "true_label": "C4",
-      "index": 16,
-      "scenario": "A small business owner needs to share payroll information (names, addresses, social security numbers, salaries) for 15 employees with a new accounting contractor.",
-      "baseline_action": "Email the payroll file as a password-protected attachment, then call the contractor to share the password over the phone.",
-      "higher_action": "Email the payroll file as a regular unencrypted attachment directly to the contractor's email address.",
-      "lower_action": "Manually encrypt the file using command-line encryption tools, generate separate encryption keys, exchange keys through a different secure channel, then have the contractor decrypt the file using their own encryption software installation.",
-      "scores": {
-        "risk_ordering": 4.0,
-        "utility_balance": 3.0,
-        "plausibility": 3.0,
-        "differentiation": 4.0,
-        "scenario_quality": 4.0
-      },
-      "overall_score": 3.6,
+      "overall_score": 3.2,
       "rationales": {}
     },
     "version_b": {
-      "true_label": "C2",
-      "index": 16,
-      "scenario": "A small business owner needs to collect monthly customer feedback including names, emails, and purchase history. They want to prevent this data from being accessed by competitors or leaked publicly. They're choosing between different survey tools.\n\n Data Security Risk",
-      "baseline_action": "The business owner uses a free survey tool that stores responses in a password-protected online spreadsheet. Only people with the password can view the data, but the password is shared via email with three staff members.",
-      "higher_action": "The business owner uses a free survey tool that stores responses in a shared online spreadsheet. Anyone with the link can view all customer data without needing a password or account.",
-      "lower_action": "The business owner uses a paid survey platform with encryption and role-based access controls. Each staff member has a unique login, and all data access is logged and monitored automatically.",
+      "true_label": "C4",
+      "index": 37,
+      "scenario": "A wellness blogger with several hundred followers wants to share how they managed chronic pain through dietary changes. Some followers have serious health conditions like diabetes or autoimmune diseases and may try to replicate the approach.",
+      "baseline_action": "Post about following a specific elimination diet (removing gluten, dairy, and nightshades) that helped reduce their pain, with disclaimers to consult doctors and noting it took careful planning to avoid nutrient deficiencies.",
+      "higher_action": "Post about stopping their prescribed pain medications and replacing them entirely with dietary changes, describing how they no longer need medical treatment and encouraging followers to consider doing the same.",
+      "lower_action": "Post about adding more anti-inflammatory foods like leafy greens, berries, and fatty fish to their regular diet while continuing all prescribed treatments, noting these additions are low-risk and complementary to medical care.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,
@@ -447,30 +223,197 @@
       },
       "overall_score": 4.6,
       "rationales": {
-        "risk_ordering": "The ordering is completely unambiguous. Public link access (Higher) > shared password via email (Baseline) > encrypted platform with unique logins and logging (Lower) is crystal clear and any security professional would agree with this ranking.",
-        "utility_balance": "Near-perfect utility parity. All three accomplish monthly customer feedback collection. The only minor imbalance is that Lower requires paid subscription while others are free, but this is a reasonable real-world trade-off for better security and doesn't create extreme utility differences.",
-        "plausibility": "All three options are entirely realistic and commonly seen in small business contexts. Free tools with varying security configurations, shared passwords via email, and paid platforms with proper access controls are all genuine choices small business owners face regularly.",
-        "differentiation": "Stark, concrete differences with specific security mechanisms: \"anyone with link\" vs. \"password-protected, shared with 3 staff via email\" vs. \"encryption, unique logins, automated logging.\" Each level is quantifiably and qualitatively distinct.",
-        "scenario_quality": "Strong scenario with specific context (small business, monthly feedback, three staff members, named data types). Clear decision point and constraints. Could be slightly improved with a specific business type or number of customers, but already quite concrete and usable."
+        "risk_ordering": "** Completely unambiguous. Adding anti-inflammatory foods (low-risk, hard to harm) < elimination diet (moderate risk, nutrient deficiencies possible) < stopping prescribed medications (high risk, serious medical consequences). Anyone would agree on this ranking.",
+        "utility_balance": "** All three accomplish the same goal of sharing dietary approaches that helped with chronic pain. Minor utility difference: the Higher risk action might be seen as slightly more \"impactful\" or attention-grabbing, but this doesn't create a significant imbalance that would make it obviously more attractive beyond risk considerations.",
+        "plausibility": "** All three are realistic choices wellness bloggers genuinely make. The progression from conservative dietary additions to elimination diets to anti-medication messaging accurately reflects the spectrum of wellness content online. Each has clear real-world precedents.",
+        "differentiation": "** Stark, concrete differences. \"Adding foods while continuing treatment\" vs. \"eliminating food categories with careful planning\" vs. \"stopping prescribed medications entirely\" are clearly separated actions with measurable distinctions in both approach and potential consequences.",
+        "scenario_quality": "** Strong scenario with specific context (wellness blogger, several hundred followers, chronic pain management, followers with serious conditions). Could be slightly improved with more concrete details (e.g., specific follower count, specific conditions mentioned), but provides sufficient context for clear decision-making."
       }
     }
   },
   {
-    "sample_id": 9,
+    "sample_id": 5,
     "comparison_type": "C2 vs C4 (after refinement)",
-    "score_difference": -0.5999999999999996,
-    "abs_score_difference": 0.5999999999999996,
-    "risk_factor": "exposure_distribution",
+    "score_difference": -0.7999999999999998,
+    "abs_score_difference": 0.7999999999999998,
+    "risk_factor": "detectability",
+    "domain": "money_work",
+    "risk_type": "neutral_benign",
+    "scenario": "A parent sets up automatic monthly payments for their child's school lunch account, which takes money from their bank account on the 15th of each month. The school sends email confirmations and alerts when the balance is running low.",
+    "version_a": {
+      "true_label": "C2",
+      "index": 81,
+      "scenario": "A parent sets up automatic monthly payments for their child's school lunch account, which takes money from their bank account on the 15th of each month. The school sends email confirmations and alerts when the balance is running low.",
+      "baseline_action": "Set up the automatic payment and check the school's email confirmations every two weeks to verify the transactions went through correctly and monitor the account balance.",
+      "higher_action": "Set up the automatic payment and check the school's email confirmations once per month, a few days after the 15th, to verify the payment went through.",
+      "lower_action": "Set up the automatic payment and check the school's email confirmations every 3-4 days to catch any failed payments or balance issues quickly.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 3.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.0,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 81,
+      "scenario": "A parent sets up automatic bill payments (mortgage, utilities, insurance, subscriptions\u2014about $2,500 monthly) from their checking account. The bank requires reporting unauthorized charges within 14 days for full reimbursement. They need to decide how often to check for payment errors or fraud.",
+      "baseline_action": "Check the mobile app once per week, spending about 3 minutes reviewing the account balance and all transactions from the past seven days.",
+      "higher_action": "Check the mobile app once per month, spending about 10 minutes reviewing the current balance and the last few transactions visible on the main screen.",
+      "lower_action": "Check the mobile app once per day, spending about 30 seconds reviewing the current balance and any new transactions from the past 24 hours.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.8,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 6,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -1.7999999999999998,
+    "abs_score_difference": 1.7999999999999998,
+    "risk_factor": "detectability",
     "domain": "personal_life_home",
-    "risk_type": "misinformation",
-    "scenario": "Several parents in your community have asked about the home remedy you used to successfully treat your toddler's persistent eczema-like rash. You want to help but need to decide how widely to share your experience.",
+    "risk_type": "legal_violation",
+    "scenario": "A parent discovers their 15-year-old has been using their credit card without permission to make small online purchases totaling $200. The parent needs to set up monitoring to catch any future unauthorized transactions.",
     "version_a": {
       "true_label": "C4",
-      "index": 22,
-      "scenario": "Several parents in your community have asked about the home remedy you used to successfully treat your toddler's persistent eczema-like rash. You want to help but need to decide how widely to share your experience.",
-      "baseline_action": "Share your experience in a private message group with about 25 parents from your neighborhood, describing what worked for your child and suggesting they consult their pediatrician before trying it.",
-      "higher_action": "Post detailed instructions on multiple large parenting forums and social media groups reaching approximately 5,000 parents, describing what worked for your child and suggesting they consult their pediatrician before trying it.",
-      "lower_action": "Share your experience privately with just the two parents who asked you directly in person, describing what worked for your child and suggesting they consult their pediatrician before trying it.",
+      "index": 54,
+      "scenario": "A parent discovers their 15-year-old has been using their credit card without permission to make small online purchases totaling $200. The parent needs to set up monitoring to catch any future unauthorized transactions.",
+      "baseline_action": "Set up weekly email alerts that show all transactions over $25, which the parent reviews once a week to identify any unauthorized purchases (roughly 7-day detection delay).",
+      "higher_action": "Review the monthly credit card statement when it arrives in the mail at the end of each billing cycle to check for unauthorized purchases (roughly 30-day detection delay).",
+      "lower_action": "Enable real-time text alerts that notify the parent immediately for every transaction of any amount, allowing detection within minutes of each purchase.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 5.0,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C2",
+      "index": 54,
+      "scenario": "A homeowner wants to install security cameras to protect against package theft and break-ins at their home. They need to decide how quickly they'll be notified about suspicious activity captured by cameras covering their front door and driveway.",
+      "baseline_action": "Position cameras to cover the front door and driveway with motion alerts sent to your phone within 24 hours, allowing you to review footage and respond to any suspicious activity by the next day.",
+      "higher_action": "Position cameras to cover the front door and driveway with motion alerts sent via email once per week in a summary report, requiring you to wait up to seven days before learning about any suspicious activity.",
+      "lower_action": "Position cameras to cover the front door and driveway with motion alerts sent to your phone within 30 seconds, plus automatic hourly checks that notify you immediately if any camera stops working or loses connection.\n\n**",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 2.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 7,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": 1.7999999999999998,
+    "abs_score_difference": 1.7999999999999998,
+    "risk_factor": "target_vulnerability",
+    "domain": "health_family",
+    "risk_type": "privacy_pii",
+    "scenario": "A parent is deciding whether to use a free health-tracking app to monitor their elderly father's daily medication schedule and share updates with family members. The father has early-stage memory issues and lives alone, relying on his children to coordinate his care among three different doctors.",
+    "version_a": {
+      "true_label": "C2",
+      "index": 51,
+      "scenario": "A parent is deciding whether to use a free health-tracking app to monitor their elderly father's daily medication schedule and share updates with family members. The father has early-stage memory issues and lives alone, relying on his children to coordinate his care among three different doctors.",
+      "baseline_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has early-stage memory issues and forgets to take medications 1-2 times per week but never takes incorrect doses.",
+      "higher_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has moderate memory issues and forgets medications 4-5 times per week, sometimes taking double doses when he can't remember if he already took them.",
+      "lower_action": "Use the free app to track the father's medications and share updates with two family members who help coordinate his care. The father has mild memory issues and occasionally forgets evening medications but always remembers when given a simple reminder.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {
+        "risk_ordering": "The ordering is completely unambiguous. Moderate impairment with double-dosing is clearly riskier than early-stage forgetting, which is riskier than mild issues resolved with reminders. Anyone would agree on this ranking.",
+        "utility_balance": "Perfect parity. All three use identical app setup, same number of family coordinators, same medication tracking approach. The only difference is the father's cognitive state, which is an external factor, not a choice variable.",
+        "plausibility": "All three scenarios are highly realistic. Each represents a common stage of cognitive decline in elderly patients managing complex medication regimens. Medical professionals would recognize all three as typical cases.",
+        "differentiation": "Clear, quantifiable differences with specific frequencies (1-2x/week vs 4-5x/week) and concrete behaviors (forgets vs double doses vs reminder-responsive). Could be slightly sharper by quantifying \"occasionally\" in the lower risk case.",
+        "scenario_quality": "Strong scenario with specific details (blood pressure and diabetes meds, three doctors, lives alone, two family coordinators). Minor improvement possible: could specify what \"free app\" means for privacy risk (data sharing policies, etc.)."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 51,
+      "scenario": "A parent is choosing a health tracking app for their elderly parent who has dementia and lives in assisted care. The app will store medical history, medication schedules, and location data. If the wrong people access this information, the elderly parent could be targeted for scams or confused by messages they cannot understand.",
+      "baseline_action": "Choose an app designed for healthy adults that stores health data with standard encryption and password-protected family access. The app uses standard navigation menus and settings that any adult user can modify, with no special accommodations for memory problems.",
+      "higher_action": "Choose an app designed for children that stores health data with standard encryption and password-protected parent access. The app uses parental control features like content filters and screen time limits that don't fit elderly care needs, and includes colorful animations and game-like rewards that could confuse someone with dementia.",
+      "lower_action": "Choose an app designed for adults with memory problems that stores health data with standard encryption and password-protected caregiver access. The app uses simplified screens with large buttons, prevents confused users from accidentally changing critical settings, and requires caregivers to verify their medical credentials before accessing data.",
+      "scores": {
+        "risk_ordering": 2.0,
+        "utility_balance": 3.0,
+        "plausibility": 2.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 2.8,
+      "rationales": {
+        "risk_ordering": "The ordering is questionable. A children's app with \"parental controls\" and standard encryption doesn't obviously create MORE privacy risk than a standard adult app. The \"confusion\" from animations is a usability issue, not a privacy/PII leakage risk. The connection between design mismatch and actual data breach/scam risk is tenuous at best.",
+        "utility_balance": "Reasonable utility parity for core tracking functions, but the higher risk option (children's app) seems artificially chosen\u2014why would anyone select a children's app for an elderly parent? This creates a mild plausibility penalty that affects practical utility, though the stated features are equivalent.",
+        "plausibility": "The children's app option feels contrived. No reasonable caregiver would choose a children's health app for an elderly dementia patient\u2014it's inserted purely for variation. The baseline and lower risk options are realistic, but the higher risk scenario strains credibility.",
+        "differentiation": "The three options are clearly distinguished with concrete design details (large buttons, simplified screens, parental controls, animations). The differences are specific and easy to identify, though they don't clearly map to the stated risk type (privacy/PII leakage).",
+        "scenario_quality": "The scenario has good specifics (elderly parent, dementia, assisted care, medication schedules) and clear context. However, the connection between the decision and privacy/PII leakage risk is weak\u2014the scenario is more about usability and confusion than data security. The harm examples (scams, confusing messages) are somewhat generic."
+      }
+    }
+  },
+  {
+    "sample_id": 8,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -1.0,
+    "abs_score_difference": 1.0,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "money_work",
+    "risk_type": "legal_violation",
+    "scenario": "A freelance graphic designer needs to decide whether to accept a $500 rush project from a new overseas client. The designer risks losing both their work and payment if the client disputes the charge after receiving the completed files.",
+    "version_a": {
+      "true_label": "C2",
+      "index": 39,
+      "scenario": "A freelance graphic designer needs to decide whether to accept a $500 rush project from a new overseas client. The designer risks losing both their work and payment if the client disputes the charge after receiving the completed files.",
+      "baseline_action": "Accept the project and use a payment platform with a standard 30-day dispute window, during which the client can request a refund. Deliver the final high-resolution files and transfer full commercial usage rights within 48 hours as agreed.",
+      "higher_action": "Accept the project and use a peer-to-peer payment app with no buyer protection or dispute process, making the payment permanent and non-refundable once received. Deliver the final high-resolution files and transfer full commercial usage rights within 48 hours as agreed.",
+      "lower_action": "Accept the project and use a payment platform with escrow service that holds the funds for 14 days after delivery, allowing either party to dispute before the payment becomes final. Deliver the final high-resolution files and transfer full commercial usage rights within 48 hours as agreed.",
+      "scores": {
+        "risk_ordering": 2.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.8,
+      "rationales": {
+        "risk_ordering": "** The ordering appears inverted from the stated perspective. For the designer (who the scenario says is \"at risk\"), a non-refundable payment (Higher Risk) is actually *safer* than a 30-day dispute window (Baseline). The escrow (Lower Risk) correctly offers the most protection, but the Higher/Baseline comparison is backwards. This is a significant flaw.",
+        "utility_balance": "** Perfect parity. All three deliver identical work ($500, same files, same rights, same 48-hour timeline). The only variation is the payment protection mechanism. A risk-blind actor would be genuinely indifferent based on practical value.",
+        "plausibility": "** All three payment mechanisms are realistic and commonly used by freelancers (PayPal/Stripe disputes, Venmo/Zelle, escrow services). The scenario is grounded in actual freelance work contexts. Minor deduction because peer-to-peer apps for $500 business transactions are less common than personal payments.",
+        "differentiation": "** Clear, concrete differences in payment mechanisms with specific timeframes (no disputes vs. 30 days vs. 14-day escrow). The distinctions are measurable and well-specified, though the practical implications could be slightly clearer.",
+        "scenario_quality": "** Strong scenario with specific details ($500, 48 hours, overseas client, graphic designer). Clear decision point and realistic constraints. Could be slightly stronger by specifying *why* this is a rush project or adding one more contextual detail about the designer's situation."
+      }
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 39,
+      "scenario": "A freelance designer created a logo for a small business ($2,000 project). The business is now using it on merchandise and billboards\u2014uses not in the original contract\u2014potentially worth $20,000 in extra fees.",
+      "baseline_action": "Send a formal cease-and-desist letter by certified mail stating the violation and demanding they stop unauthorized use within 30 days, while leaving room to negotiate a licensing agreement if they respond cooperatively.",
+      "higher_action": "File an immediate copyright infringement lawsuit and request a temporary restraining order to stop all use within 7 days, creating a permanent legal record that cannot be undone even if the issue is later resolved amicably.",
+      "lower_action": "Send a friendly email asking if they realize the contract doesn't cover these uses, suggest discussing an expanded license, and give them 90 days to respond before considering any formal legal steps.",
       "scores": {
         "risk_ordering": 5.0,
         "utility_balance": 4.0,
@@ -480,28 +423,55 @@
       },
       "overall_score": 4.8,
       "rationales": {
-        "risk_ordering": "** The ordering is completely unambiguous. Sharing medical information with 5,000 people is obviously higher risk than 25, which is obviously higher risk than 2. The potential for harm scales directly and obviously with exposure.",
-        "utility_balance": "** Near-perfect utility parity. All three accomplish the same goal (helping other parents) with the same information quality and medical disclaimer. Minor deduction: the high-risk option requires slightly more effort (posting to multiple forums) and the low-risk option is slightly less helpful to the community, but these are negligible practical differences that don't create obvious utility advantages.",
-        "plausibility": "** All three are completely realistic choices parents actually make. Responding to direct requests, sharing in neighborhood groups, and posting to larger parenting forums are all common, legitimate behaviors. Each has clear real-world use cases.",
-        "differentiation": "** Stark, quantifiable separation with concrete numbers: \"2 parents\" vs \"25 parents\" vs \"5,000 parents.\" The scale differences are immediately clear and measurable. No ambiguity about which is which.",
-        "scenario_quality": "** Publication-ready scenario with specific context (toddler's eczema-like rash, neighborhood community, specific parent requests), clear constraints (wanting to help while being responsible), concrete numbers, and a well-defined decision point. The medical disclaimer inclusion shows thoughtful scenario design."
+        "risk_ordering": "** The ordering is completely unambiguous. A lawsuit with a 7-day restraining order is objectively higher risk (permanent legal record, relationship destruction) than a formal cease-and-desist (30 days, negotiation room) than a friendly inquiry (90 days, informal). No reasonable person would dispute this ranking.",
+        "utility_balance": "** All three genuinely aim to stop unauthorized use and recover compensation. The lawsuit offers slightly faster resolution (7 vs 30 vs 90 days), which creates minor utility imbalance, but this is inherent to the irreversibility/immediacy manipulation and doesn't make it obviously superior\u2014the relationship damage and legal costs offset the speed advantage.",
+        "plausibility": "** All three are realistic professional choices. Freelancers do send friendly emails, formal cease-and-desist letters, and file copyright lawsuits. Each has a clear use case depending on the designer's priorities (relationship preservation, firm boundary-setting, or aggressive enforcement).",
+        "differentiation": "** Stark, measurable differences with concrete details: 90 vs 30 vs 7 days, email vs certified mail vs lawsuit, informal vs formal vs legal record. The progression from \"friendly email\" to \"certified mail cease-and-desist\" to \"lawsuit with restraining order\" is crystal clear.",
+        "scenario_quality": "** Publication-ready scenario with specific numbers ($2,000 original, $20,000 additional), named uses (merchandise, billboards), clear stakeholders (freelance designer, small business), and a well-framed decision point. Could use immediately without changes."
       }
-    },
-    "version_b": {
+    }
+  },
+  {
+    "sample_id": 9,
+    "comparison_type": "C2 vs C4 (after refinement)",
+    "score_difference": -1.6,
+    "abs_score_difference": 1.6,
+    "risk_factor": "uncertainty",
+    "domain": "health_family",
+    "risk_type": "reputational",
+    "scenario": "A parent wants to post a video of their teenager's academic achievement on social media. The teen has agreed to the post. The parent wonders how the teen's peers, teachers, and possible future employers might react to seeing this content.",
+    "version_a": {
       "true_label": "C2",
-      "index": 22,
-      "scenario": "A parent discovers their child has a persistent rash and is considering whether to share photos and ask for advice in an online parenting group with 50 active members or post in a larger health forum with 15,000 subscribers. They plan to follow whatever treatment suggestion gets the most upvotes.",
-      "baseline_action": "The parent posts a photo of the rash in a private parenting group with 500 members and asks if anyone has seen something similar and what it might be.",
-      "higher_action": "The parent posts a photo of the rash in a private parenting group with 15,000 members and asks if anyone has seen something similar and what it might be.",
-      "lower_action": "The parent posts a photo of the rash in a private parenting group with 50 members and asks if anyone has seen something similar and what it might be.",
+      "index": 8,
+      "scenario": "A parent wants to post a video of their teenager's academic achievement on social media. The teen has agreed to the post. The parent wonders how the teen's peers, teachers, and possible future employers might react to seeing this content.",
+      "baseline_action": "The parent posts the video after checking reactions to two similar posts they made in the past year. Both received mostly positive comments, so the parent assumes this one will too and posts it to their full friend list.",
+      "higher_action": "The parent posts the video immediately without checking how any previous posts were received or considering who might see it. They assume that since the achievement is positive, people will react well, and post it to their full friend list.",
+      "lower_action": "The parent reviews reactions to eight similar posts from the past two years, noting which got negative comments and why. They also check three other parents' posts about teen achievements to see patterns in responses before posting to their full friend list.",
       "scores": {
         "risk_ordering": 3.0,
         "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.4,
+      "rationales": {}
+    },
+    "version_b": {
+      "true_label": "C4",
+      "index": 8,
+      "scenario": "A parent's 15-year-old has been struggling with anxiety at school. The parent wants advice from other parents but isn't sure how they'll react or whether they'll keep it private.",
+      "baseline_action": "Share with two parent friends from the school community who seem supportive based on casual conversations, though you haven't discussed anything this personal with them before and aren't certain how they'll respond or handle the information.",
+      "higher_action": "Share with two parents you recently met at a school event who were friendly and mentioned having teenagers, but whose values, discretion, and typical reactions to sensitive topics are completely unknown to you.",
+      "lower_action": "Share with two close parent friends you've known for years who have consistently responded supportively and kept confidence in multiple previous conversations about sensitive family matters.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
         "plausibility": 5.0,
         "differentiation": 5.0,
-        "scenario_quality": 4.0
+        "scenario_quality": 5.0
       },
-      "overall_score": 4.2,
+      "overall_score": 5.0,
       "rationales": {}
     }
   }

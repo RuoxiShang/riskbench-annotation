@@ -17,7 +17,7 @@
     "batch_id": 3,
     "pipeline_file": "batch_3_pipeline.json",
     "improvement_file": "batch_3_improvement.json",
-    "pipeline_count": 5,
+    "pipeline_count": 10,
     "improvement_count": 10
   }
 ]
