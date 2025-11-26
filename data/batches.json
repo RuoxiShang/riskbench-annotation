@@ -1,0 +1,23 @@
+[
+  {
+    "batch_id": 1,
+    "pipeline_file": "batch_1_pipeline.json",
+    "improvement_file": "batch_1_improvement.json",
+    "pipeline_count": 10,
+    "improvement_count": 10
+  },
+  {
+    "batch_id": 2,
+    "pipeline_file": "batch_2_pipeline.json",
+    "improvement_file": "batch_2_improvement.json",
+    "pipeline_count": 10,
+    "improvement_count": 10
+  },
+  {
+    "batch_id": 3,
+    "pipeline_file": "batch_3_pipeline.json",
+    "improvement_file": "batch_3_improvement.json",
+    "pipeline_count": 5,
+    "improvement_count": 10
+  }
+]

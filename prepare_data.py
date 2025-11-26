@@ -5,16 +5,20 @@ Prepare annotation data from experiment results.
 This script:
 1. Scans experiments/ for valid runs (or accepts explicit path)
 2. Extracts samples with HIGH CONTRAST (biggest score differences)
-3. Saves to data/ folder for the annotation UI
+3. Creates 3 BATCHES, each with 10 pipeline + 10 improvement samples
+4. Saves to data/ folder for the annotation UI
 
 Usage:
     python prepare_data.py                              # Interactive mode
     python prepare_data.py <exp_dir>                    # Use specific experiment
-    python prepare_data.py <exp_dir> <n>                # Specify sample count
-    python prepare_data.py <exp_dir> <n> <min_diff>     # Set min score difference (default: 0.3)
+    python prepare_data.py <exp_dir> <n_batches>        # Number of batches (default: 3)
+    python prepare_data.py <exp_dir> <n_batches> <per_batch>  # Samples per batch per task (default: 10)
 
-The min_diff threshold filters out low-contrast samples where score differences
-are too small to be meaningful for human evaluation.
+Output:
+    data/batch_1_pipeline.json, data/batch_1_improvement.json
+    data/batch_2_pipeline.json, data/batch_2_improvement.json
+    data/batch_3_pipeline.json, data/batch_3_improvement.json
+    data/batches.json (metadata for UI)
 """
 
 import json
@@ -349,7 +353,7 @@ def main():
     experiments_dir = current_dir.parent.parent / 'experiments'
     
     print("=" * 60)
-    print("RiskBench Annotation Data Prep")
+    print("RiskBench Annotation Data Prep (Batch Mode)")
     print("=" * 60)
     
     # Determine experiment directory
@@ -385,13 +389,19 @@ def main():
             print("\nExiting.")
             sys.exit(0)
     
-    # Determine sample count and min threshold
-    n_samples = int(sys.argv[2]) if len(sys.argv) >= 3 else 15
-    min_diff = float(sys.argv[3]) if len(sys.argv) >= 4 else 0.3
+    # Batch configuration
+    n_batches = int(sys.argv[2]) if len(sys.argv) >= 3 else 3
+    samples_per_batch = int(sys.argv[3]) if len(sys.argv) >= 4 else 10
+    min_diff = 0.3  # Fixed threshold for high contrast
+    
+    # Total samples needed
+    total_pipeline = n_batches * samples_per_batch
+    total_improvement = n_batches * samples_per_batch
     
     print(f"\nExperiment: {selected_exp.name}")
-    print(f"Samples per category: {n_samples}")
-    print(f"Min score difference: {min_diff}")
+    print(f"Batches: {n_batches}")
+    print(f"Samples per batch: {samples_per_batch} pipeline + {samples_per_batch} improvement")
+    print(f"Total needed: {total_pipeline} pipeline + {total_improvement} improvement")
     print(f"Output: {output_dir}")
     
     # Load data
@@ -407,37 +417,64 @@ def main():
     c4_data = load_data(c4_file)
     print(f"  Loaded {len(c2_data)} C2 + {len(c4_data)} C4 samples")
     
-    # Generate C2 vs C4 comparison (high contrast only)
-    print("\nGenerating pipeline comparison (high contrast)...")
-    high_contrast_pairs = find_c2_vs_c4_samples(c2_data, c4_data, n_samples, min_diff=min_diff)
+    # Generate all pipeline comparison samples (high contrast)
+    print("\nGenerating pipeline comparison samples...")
+    high_contrast_pairs = find_c2_vs_c4_samples(c2_data, c4_data, total_pipeline, min_diff=min_diff)
     
-    pipeline_samples = []
+    all_pipeline = []
     for i, pair in enumerate(high_contrast_pairs):
         s = format_sample_for_human(pair, 'c2_vs_c4', i)
-        pipeline_samples.append(s)
+        all_pipeline.append(s)
     
-    random.shuffle(pipeline_samples)
-    for i, s in enumerate(pipeline_samples):
-        s['sample_id'] = i
+    random.shuffle(all_pipeline)
+    print(f"  → {len(all_pipeline)} pipeline samples available")
     
-    save_samples(pipeline_samples, output_dir, "pipeline_comparison")
-    print(f"  → {len(pipeline_samples)} high-contrast samples saved")
-    
-    # Generate before/after comparison (high improvement only)
-    print("\nGenerating improvement comparison (high contrast)...")
-    improvement_samples = []
+    # Generate all improvement comparison samples
+    print("\nGenerating improvement comparison samples...")
+    all_improvement = []
     for data, name in [(c2_data, 'C2'), (c4_data, 'C4')]:
-        results = find_before_after_samples(data, name, n_samples, min_improvement=min_diff)
-        offset = len(improvement_samples)
-        for i, s in enumerate(results['biggest_improvements']):
-            formatted = format_sample_for_human({'condition': name, 'sample': s}, 'before_after', i + offset)
-            improvement_samples.append(formatted)
+        results = find_before_after_samples(data, name, total_improvement, min_improvement=min_diff)
+        for s in results['biggest_improvements']:
+            formatted = format_sample_for_human({'condition': name, 'sample': s}, 'before_after', 0)
+            all_improvement.append(formatted)
     
-    for i, s in enumerate(improvement_samples):
-        s['sample_id'] = i
+    random.shuffle(all_improvement)
+    print(f"  → {len(all_improvement)} improvement samples available")
     
-    save_samples(improvement_samples, output_dir, "improvement_comparison")
-    print(f"  → {len(improvement_samples)} high-contrast samples saved")
+    # Split into batches
+    print(f"\nCreating {n_batches} batches...")
+    batches_meta = []
+    
+    for batch_num in range(1, n_batches + 1):
+        start_idx = (batch_num - 1) * samples_per_batch
+        end_idx = batch_num * samples_per_batch
+        
+        # Pipeline samples for this batch
+        batch_pipeline = all_pipeline[start_idx:end_idx]
+        for i, s in enumerate(batch_pipeline):
+            s['sample_id'] = i
+        
+        # Improvement samples for this batch
+        batch_improvement = all_improvement[start_idx:end_idx]
+        for i, s in enumerate(batch_improvement):
+            s['sample_id'] = i
+        
+        # Save batch files
+        save_samples(batch_pipeline, output_dir, f"batch_{batch_num}_pipeline")
+        save_samples(batch_improvement, output_dir, f"batch_{batch_num}_improvement")
+        
+        batches_meta.append({
+            'batch_id': batch_num,
+            'pipeline_file': f"batch_{batch_num}_pipeline.json",
+            'improvement_file': f"batch_{batch_num}_improvement.json",
+            'pipeline_count': len(batch_pipeline),
+            'improvement_count': len(batch_improvement)
+        })
+        
+        print(f"  Batch {batch_num}: {len(batch_pipeline)} pipeline + {len(batch_improvement)} improvement")
+    
+    # Save batches metadata for UI
+    save_samples(batches_meta, output_dir, "batches")
     
     print("\n" + "=" * 60)
     print("Done! Start the UI with:")

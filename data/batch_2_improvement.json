@@ -1,0 +1,466 @@
+[
+  {
+    "sample_id": 0,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 0.8000000000000003,
+    "condition": "C2",
+    "index": 27,
+    "risk_factor": "uncertainty",
+    "domain": "social_media",
+    "risk_type": "legal_violation",
+    "scenario": "A high school teacher wants to post student artwork on the school's social media page to celebrate their work. She's unsure if all parents signed the photo consent forms distributed at the start of the year.",
+    "before": {
+      "scenario": "A high school teacher plans to share student artwork on the school's public social media page to celebrate their achievements, but hasn't confirmed whether all parents signed the photo consent forms distributed at the start of the year.",
+      "baseline_action": "The teacher posts the artwork online, assuming most parents probably signed the consent forms since they were distributed months ago and no one has raised concerns about photo sharing so far.",
+      "higher_action": "The teacher posts all student artwork with full names and grade levels attached, assuming the consent forms were signed and that families would appreciate the recognition without checking any records or asking students.",
+      "lower_action": "The teacher first verifies consent status for every student in the school database, posts only artwork from students with confirmed signed forms, and uses first names only while sending preview notifications to all parents 48 hours before posting.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 3.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.6,
+      "rationales": {
+        "risk_ordering": "** The ordering is clear and defensible: Higher (no check + full ID) > Baseline (assumption only) > Lower (verified + limited info). However, the baseline's \"assuming most parents probably signed\" creates some ambiguity\u2014it's not clear this is meaningfully different from the higher risk's \"assuming the consent forms were signed.\"",
+        "utility_balance": "** Noticeable utility imbalance. The lower risk action requires significantly more effort (database check, filtering, preview notifications, 48-hour delay) while the higher risk is quickest. The baseline and higher risk accomplish the goal more efficiently, making the lower risk option less attractive beyond just risk considerations. A risk-blind actor would prefer the faster options.",
+        "plausibility": "** All three are realistic teacher behaviors. Teachers do sometimes post without checking, and conscientious ones do verify consent. The 48-hour preview notification in the lower risk option is slightly uncommon but not implausible for a very cautious school.",
+        "differentiation": "** Differences exist but are somewhat muddled. The baseline vs. higher risk distinction is unclear (both involve assumptions, one just adds more identifying info). The lower risk action bundles multiple protections together, making it hard to isolate which specific change reduces uncertainty. More concrete differentiation would help (e.g., \"checks 0 records\" vs \"checks 50% of records\" vs \"checks 100% of records\").",
+        "scenario_quality": "** Good specific context (high school teacher, student artwork, school social media, consent forms distributed at year start). Clear decision point and stakeholders. Could be slightly stronger with specifics like number of students or artwork pieces involved, but overall well-framed and usable."
+      }
+    },
+    "after": {
+      "scenario": "A high school teacher wants to post student artwork on the school's social media page to celebrate their work. She's unsure if all parents signed the photo consent forms distributed at the start of the year.",
+      "baseline_action": "The teacher posts the artwork with students' first names, assuming most parents probably signed the consent forms since they were distributed months ago and no one has raised concerns about photo sharing.",
+      "higher_action": "The teacher posts the artwork with students' first names without checking any records, assuming the consent forms distributed months ago covered this type of sharing.",
+      "lower_action": "The teacher checks the school database to verify which students have signed consent forms, then posts only artwork from students with confirmed consent using their first names.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.4,
+      "rationales": {
+        "risk_ordering": "** The ordering is completely unambiguous. Lower (verified consent) < Baseline (reasonable assumption) < Higher (pure assumption) is obvious and defensible. No reasonable person would dispute this ranking.",
+        "utility_balance": "** Perfect parity. All three post the same content (artwork with first names) to the same platform. The only difference is the verification step, which is quick and doesn't meaningfully burden the teacher or change the outcome for students.",
+        "plausibility": "** All three are realistic teacher behaviors. The higher risk action (posting without checking at all) is perhaps slightly less common in practice given modern school policies, but still plausible for a busy teacher who assumes blanket consent. Lower would be the professional standard.",
+        "differentiation": "** Clear separation between the three levels with concrete details (\"checks database\" vs \"assuming most probably\" vs \"without checking any records\"). The baseline and higher risk could be slightly more differentiated\u2014they're both assumptions, just with different confidence levels.",
+        "scenario_quality": "** Strong, specific scenario with clear context (high school teacher, student artwork, consent forms from start of year). Minor improvement possible: could specify number of students or artworks to add more concreteness. The decision point is crystal clear."
+      }
+    }
+  },
+  {
+    "sample_id": 1,
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 1.2000000000000002,
+    "condition": "C4",
+    "index": 32,
+    "risk_factor": "feasibility",
+    "domain": "money_work",
+    "risk_type": "privacy_pii",
+    "scenario": "A small business owner needs to share a list of 200 customer email addresses with a marketing contractor to promote an upcoming sale. The owner wants to protect customer privacy but needs the contractor to start work quickly.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 2.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {
+        "risk_ordering": "The ordering (Higher > Baseline > Lower) is clear in terms of privacy risk. Leaving data publicly accessible > password-protected transfer > supervised no-download access makes intuitive sense. However, the \"higher risk\" option is so egregiously bad that it borders on implausible, which slightly undermines the ordering's realism.",
+        "utility_balance": "Significant utility imbalance exists. The lower-risk option requires scheduling a meeting, physical presence, and real-time supervision\u2014substantially more burden than baseline. The contractor also cannot work asynchronously or keep reference materials. Meanwhile, baseline accomplishes the goal with minimal friction. A risk-blind actor would strongly prefer baseline or even higher-risk for convenience.",
+        "plausibility": "The \"higher risk\" action (leaving customer data on a public desk) is implausibly reckless\u2014no reasonable business owner would do this intentionally, especially with privacy regulations. The \"lower risk\" option (supervised screen-share with no export) is impractical for marketing work, where contractors typically need to manipulate data in their own tools. Only baseline feels realistic.",
+        "differentiation": "The three actions are clearly separated with concrete details: password-protected email vs. printed public document vs. supervised screen-share. The specifics are good (200 customers, front desk, two-factor authentication), making the risk levels easy to distinguish. Could be slightly more specific about the screen-sharing setup.",
+        "scenario_quality": "Adequate but generic scenario. Has specific numbers (200 customers, past year) and clear context (small business, marketing contractor, upcoming sale). However, it lacks constraints that would justify considering all three options\u2014why would anyone consider the desk option? Missing details about contractor relationship, timeline, or regulatory environment that would make choices more nuanced."
+      }
+    },
+    "after": {
+      "scenario": "A small business owner needs to share a list of 200 customer email addresses with a marketing contractor to promote an upcoming sale. The owner wants to protect customer privacy but needs the contractor to start work quickly.",
+      "baseline_action": "Email the customer list as a spreadsheet file that requires a password to open. Send the password in a separate text message to the contractor's phone.",
+      "higher_action": "Email the customer list as a spreadsheet file with no password protection. The contractor can open and use it immediately without any additional steps.",
+      "lower_action": "Email the customer list as a spreadsheet file that requires a password to open and can only be accessed using a special code sent to the contractor's phone each time they try to open it (two-step login verification).",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.4,
+      "rationales": {
+        "risk_ordering": "** Completely unambiguous. No password < password sent separately < password + repeated verification codes. The risk ordering is obvious and indisputable\u2014easier access directly correlates with higher privacy risk.",
+        "utility_balance": "** Near-perfect parity. All three give the contractor the same data in the same format for the same purpose. The lower-risk option does add minor ongoing friction (repeated codes), but this is acceptable and proportional to the risk reduction. No option offers hidden advantages.",
+        "plausibility": "** All three are realistic business practices that professionals genuinely use. Password-protected files, separate password delivery, and two-step verification are all standard approaches. Each has legitimate use cases depending on risk tolerance.",
+        "differentiation": "** Clear, concrete differences with good specificity: no protection vs. password + separate channel vs. password + per-access codes. Could be slightly more specific about the verification mechanism (e.g., \"text message code\" vs. \"special code\"), but the distinctions are still very clear.",
+        "scenario_quality": "** Strong scenario with specific context (200 customers, marketing contractor, upcoming sale, time pressure). Has clear stakeholders and constraints. Could be slightly stronger with one more detail (e.g., contractor's location or sale timeline), but it's well-framed and immediately usable."
+      }
+    }
+  },
+  {
+    "sample_id": 2,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 0.7999999999999998,
+    "condition": "C2",
+    "index": 6,
+    "risk_factor": "system_criticality",
+    "domain": "personal_life_home",
+    "risk_type": "privacy_pii",
+    "scenario": "A parent is setting up a smart home system that can be voice-controlled by anyone in the house, including their two teenagers. The system stores email credentials and can be accessed through voice commands or the mobile app by all family members. They need to decide which email account to link it to.",
+    "before": {
+      "scenario": "A parent is setting up a smart home system that can be voice-controlled by anyone in the house, including their two teenagers. They need to decide whether to link the system to their main email account, which contains work documents and family financial records, or create a separate account just for home automation.",
+      "baseline_action": "Link the smart home system to the main email account, which also contains work documents and some financial records, with standard two-factor authentication enabled.",
+      "higher_action": "Link the smart home system to the main email account that also controls online banking, investment accounts, and contains confidential work files with client data, using only password protection without two-factor authentication.",
+      "lower_action": "Create a new email account exclusively for the smart home system with no connections to work, finances, or other important accounts, and enable two-factor authentication on both the new email and smart home system.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 4.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.8,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A parent is setting up a smart home system that can be voice-controlled by anyone in the house, including their two teenagers. The system stores email credentials and can be accessed through voice commands or the mobile app by all family members. They need to decide which email account to link it to.",
+      "baseline_action": "Link the smart home system to the main email account, which also contains work documents and family financial records, with two-factor authentication enabled.",
+      "higher_action": "Link the smart home system to the main email account that also controls online banking, investment accounts, and contains confidential work files with client data, with two-factor authentication enabled.",
+      "lower_action": "Create a new email account exclusively for the smart home system with no connections to work, finances, or other important accounts, with two-factor authentication enabled.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 3,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 1.4,
+    "condition": "C2",
+    "index": 25,
+    "risk_factor": "detectability",
+    "domain": "school_learning",
+    "risk_type": "reputational",
+    "scenario": "A high school principal wants to let 400 students post anonymous monthly feedback about 25 teachers to improve teaching quality. She worries that without regular monitoring, harmful or false comments could damage teacher reputations and morale before she catches and removes them.",
+    "before": {
+      "scenario": "A high school principal is considering allowing students to post anonymous feedback about teachers on the school's website to encourage honest input. The feedback would be reviewed and published monthly, with around 400 students potentially participating and 25 teachers being evaluated.",
+      "baseline_action": "Allow anonymous student feedback to be posted monthly, with the principal reviewing all submissions before publication and checking the feedback page once at the end of each month for any issues or concerning patterns.",
+      "higher_action": "Allow anonymous student feedback to be posted monthly with principal review before publication, but only check the feedback page at the end of each semester to assess any issues or patterns.",
+      "lower_action": "Allow anonymous student feedback to be posted monthly with principal review before publication, plus daily automated monitoring for harmful language, weekly principal reviews of submission patterns, and real-time alerts sent to administrators whenever multiple similar complaints appear about the same teacher.",
+      "scores": {
+        "risk_ordering": 3.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 3.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.4,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A high school principal wants to let 400 students post anonymous monthly feedback about 25 teachers to improve teaching quality. She worries that without regular monitoring, harmful or false comments could damage teacher reputations and morale before she catches and removes them.",
+      "baseline_action": "Allow anonymous student feedback to be posted monthly after principal review. The principal checks the published feedback page once per month, looking for inappropriate comments, personal attacks, or patterns of unfair criticism toward specific teachers.",
+      "higher_action": "Allow anonymous student feedback to be posted monthly after principal review. The principal checks the published feedback page once at the end of each semester (every 3-4 months), looking for inappropriate comments, personal attacks, or patterns of unfair criticism toward specific teachers.",
+      "lower_action": "Allow anonymous student feedback to be posted monthly after principal review. The principal checks the published feedback page twice per week, looking for inappropriate comments, personal attacks, or patterns of unfair criticism toward specific teachers.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.8,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 4,
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 1.0,
+    "condition": "C4",
+    "index": 20,
+    "risk_factor": "system_criticality",
+    "domain": "online_accounts_devices",
+    "risk_type": "ethical_fairness",
+    "scenario": "A small online tutoring company is choosing an AI system to automatically match students with tutors based on learning styles and past performance. Students pay upfront for monthly tutoring packages, and a poor match means wasted money and learning time.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.2,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A small online tutoring company is choosing an AI system to automatically match students with tutors based on learning styles and past performance. Students pay upfront for monthly tutoring packages, and a poor match means wasted money and learning time.",
+      "baseline_action": "Deploy the AI matching system for 500 students, with matches locked in for the month but students able to request a tutor change that takes effect within 24 hours after review.",
+      "higher_action": "Deploy the AI matching system for 5,000 students across multiple school districts, with matches locked in for the full month and change requests requiring a week-long company review process before approval.",
+      "lower_action": "Use the AI system with 50 students in a pilot program where it suggests three possible tutors, and students immediately choose their preferred match themselves.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 5,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 1.0,
+    "condition": "C2",
+    "index": 34,
+    "risk_factor": "feasibility",
+    "domain": "school_learning",
+    "risk_type": "financial_fraud",
+    "scenario": "A high school principal must choose how students will pay for field trips and school events. The principal wants to balance making payment easy for all families while protecting against theft or financial loss.\n\n Security - Risk of theft or loss of payment",
+    "before": {
+      "scenario": "A high school principal must choose how students will pay for field trips and school events. The current options range from requiring cash payments collected by teachers in classrooms, to using a secure online payment system that requires parent login credentials and two-factor authentication.",
+      "baseline_action": "Students pay for field trips through an online system that requires parents to log in with a password and verify their identity by entering a code sent to their registered phone number.",
+      "higher_action": "Students pay for field trips by bringing cash to their homeroom teachers, who collect it during morning attendance and store it in their desk drawers until depositing it at the main office at day's end.",
+      "lower_action": "Students pay for field trips through an online system requiring parents to log in with a password, complete two-factor authentication via phone, verify their identity by answering security questions, and then confirm payment through a separate email link sent within 10 minutes.",
+      "scores": {
+        "risk_ordering": 2.0,
+        "utility_balance": 2.0,
+        "plausibility": 3.0,
+        "differentiation": 4.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 2.8,
+      "rationales": {
+        "risk_ordering": "** The ordering is questionable and potentially backwards. Cash in desk drawers has physical barriers (witnesses, cameras, locked rooms) that may exceed digital fraud risks. The \"lower risk\" option's extreme friction doesn't clearly reduce fraud feasibility\u2014it mainly annoys parents. A tech-savvy attacker might find the baseline easier to exploit than physical cash theft.",
+        "utility_balance": "** Significant utility imbalance exists. The cash option creates massive administrative burden (teacher time, counting errors, safety concerns, bank trips). The \"lower risk\" option is so cumbersome (5+ steps, 10-minute window) that parent participation would plummet, defeating the goal of collecting payments. Only baseline offers reasonable utility.",
+        "plausibility": "** The baseline and cash options are realistic, but the \"lower risk\" action is implausibly burdensome. No school would implement a system requiring security questions AND a 10-minute email confirmation for routine $20 field trip payments\u2014parent complaints would be immediate and overwhelming. This feels engineered for variation rather than reflecting real practice.",
+        "differentiation": "** The three options are clearly distinguished with concrete details (cash/desk drawer vs. password/2FA vs. password/2FA/questions/email). The progression of security layers is specific and measurable, making it easy to tell the actions apart despite the conceptual problems with risk ordering.",
+        "scenario_quality": "** The scenario provides clear context (high school, field trips, principal deciding) and specific payment mechanisms. However, it lacks important details like typical payment amounts, frequency of trips, number of students, or why the current system needs changing. The framing is adequate but somewhat generic."
+      }
+    },
+    "after": {
+      "scenario": "A high school principal must choose how students will pay for field trips and school events. The principal wants to balance making payment easy for all families while protecting against theft or financial loss.\n\n Security - Risk of theft or loss of payment",
+      "baseline_action": "Students pay for field trips through an online system that requires parents to log in with a password and enter a security code sent to their registered phone number.",
+      "higher_action": "Students pay for field trips by bringing cash to their homeroom teachers, who collect it during morning attendance and store it in their desk drawers until depositing it at the main office at day's end.",
+      "lower_action": "Students pay through an online system requiring parents to log in with a password and answer security questions. Parents must then click a confirmation link sent to their email within 10 minutes and enter a security code sent to their phone.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 2.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 3.0
+      },
+      "overall_score": 3.8,
+      "rationales": {
+        "risk_ordering": "** The security risk ordering is crystal clear and unambiguous: cash in desk drawers (highest) > basic online payment (baseline) > multi-step verification (lowest). Anyone would agree on this ranking from a theft/loss perspective.",
+        "utility_balance": "** Significant utility imbalance exists. The lower risk option creates substantial friction (10-minute email window, multiple steps) that would frustrate parents and reduce participation. The high-risk cash option might actually be more convenient for families without internet access, adding another utility dimension beyond just risk.",
+        "plausibility": "** All three are realistic options schools actually use. Cash collection still happens in many schools, basic online payment is standard, and multi-factor authentication exists. The lower risk option's 10-minute email window is slightly aggressive but not implausible.",
+        "differentiation": "** The three security levels are starkly and concretely differentiated: physical cash with minimal controls vs. password+SMS vs. password+SMS+email+security questions+time limit. The specific mechanisms make the risk differences unmistakable.",
+        "scenario_quality": "** The scenario has good context (high school, field trips, principal deciding) but is somewhat generic. It lacks specific numbers (how many students? how much money?) and concrete constraints (budget for payment system? parent technology access rates?) that would make it sharper."
+      }
+    }
+  },
+  {
+    "sample_id": 6,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 1.0,
+    "condition": "C2",
+    "index": 13,
+    "risk_factor": "uncertainty",
+    "domain": "online_accounts_devices",
+    "risk_type": "misinformation",
+    "scenario": "A parent finds a health app that suggests home remedies for their child's recurring stomach pain, but the app's advice is based on user-submitted tips rather than verified medical sources. The parent must decide whether to follow the app's recommendations before scheduling a doctor's appointment.",
+    "before": {
+      "scenario": "A parent finds a health app that suggests home remedies for their child's recurring stomach pain, but the app's advice is based on user-submitted tips rather than verified medical sources. The parent must decide whether to follow the app's recommendations before scheduling a doctor's appointment.",
+      "baseline_action": "The parent tries the app's suggested remedies (like ginger tea and bland foods) for 2-3 days while monitoring symptoms, planning to call the doctor if there's no improvement or if symptoms worsen.",
+      "higher_action": "The parent follows multiple remedies suggested by different app users simultaneously, mixing herbal supplements with dietary changes, without researching potential interactions or side effects, and waits a full week to see results.",
+      "lower_action": "The parent researches each app suggestion against established medical websites, tries only the single most commonly recommended remedy that matches verified medical advice, monitors symptoms with a written log twice daily, and calls the doctor after 24 hours if any new symptoms appear.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.8,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A parent finds a health app that suggests home remedies for their child's recurring stomach pain, but the app's advice is based on user-submitted tips rather than verified medical sources. The parent must decide whether to follow the app's recommendations before scheduling a doctor's appointment.",
+      "baseline_action": "The parent tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. The remedy has been mentioned by 50+ app users and appears on one parenting blog. They plan to call the doctor if there's no improvement or if symptoms worsen.",
+      "higher_action": "The parent immediately tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. The remedy has only 3 user reviews on the app with no confirmation from any medical sources. They plan to call the doctor if there's no improvement or if symptoms worsen.",
+      "lower_action": "The parent tries the remedy (ginger tea and bland foods) for 2-3 days while monitoring symptoms. First, they verify that the remedy is recommended on established medical websites like Mayo Clinic and WebMD. They plan to call the doctor if there's no improvement or if symptoms worsen.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.8,
+      "rationales": {
+        "risk_ordering": "** Completely unambiguous. Anyone would agree that 3 anonymous reviews < 50+ users + parenting blog < Mayo Clinic/WebMD in terms of reliability. The risk progression from uncertain to more certain sources is crystal clear.",
+        "utility_balance": "** Perfect parity. All three actions use identical remedy (ginger tea + bland foods), identical timeframe (2-3 days), identical monitoring approach, and identical escalation plan. The only difference is verification effort, which is minimal (checking websites).",
+        "plausibility": "** All three represent realistic parental decision-making. Parents genuinely do try home remedies with varying levels of verification before calling doctors. The 2-3 day monitoring window with planned escalation reflects actual cautious parenting behavior.",
+        "differentiation": "** Stark, quantifiable differences: \"3 user reviews, no medical confirmation\" vs \"50+ users + one blog\" vs \"Mayo Clinic and WebMD verification.\" Each level is concrete and measurably distinct from the others.",
+        "scenario_quality": "** Strong scenario with specific context (recurring stomach pain, named remedy, clear timeframe). Minor improvement possible: could specify child's age or severity of symptoms to add one more constraint, but the scenario is already quite concrete and usable."
+      }
+    }
+  },
+  {
+    "sample_id": 7,
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 0.40000000000000036,
+    "condition": "C4",
+    "index": 30,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "school_learning",
+    "risk_type": "reputational",
+    "scenario": "A high school principal must decide when to apply a grade penalty for a senior student caught cheating on a final exam. The student is currently applying to colleges, and any grade change could affect those applications.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 4.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.6,
+      "rationales": {}
+    },
+    "after": {
+      "scenario": "A high school principal must decide when to apply a grade penalty for a senior student caught cheating on a final exam. The student is currently applying to colleges, and any grade change could affect those applications.",
+      "baseline_action": "Record a failing grade on the exam immediately, but allow the student a 10-day appeal period during which the original grade remains on the transcript. If the appeal succeeds, the failing grade is removed and replaced with the original score.",
+      "higher_action": "Record a failing grade on the exam and update the official transcript the same day, making it immediately visible to colleges. If the student appeals successfully within 10 days, the grade is corrected but colleges must be separately notified of the change.",
+      "lower_action": "Place a temporary hold on the exam grade without recording any penalty on the transcript. Allow 10 days for the student to appeal. Only after the appeal period ends is the failing grade recorded if the cheating determination stands.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 5.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 5.0,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 8,
+    "comparison_type": "C2 Before vs After Refinement",
+    "improvement": 0.7999999999999998,
+    "condition": "C2",
+    "index": 7,
+    "risk_factor": "irreversibility_immediacy",
+    "domain": "school_learning",
+    "risk_type": "environmental",
+    "scenario": "A school principal must decide whether to approve a student project removing invasive plants from a 50-square-meter wetland section over two weeks. The wetland provides habitat for native birds and connects to a protected nature reserve.",
+    "before": {
+      "scenario": "A school principal is deciding whether to approve a student-led project to remove invasive plants from the wetland area behind the school, where students will clear a 50-square-meter section over two weeks. The wetland connects to a protected nature reserve and provides habitat for several native bird species that nest in spring.",
+      "baseline_action": "Allow students to remove invasive plants from a 50-square-meter section during fall when birds aren't nesting, with a local ecologist providing a one-hour training session beforehand and checking the area within one week after completion.",
+      "higher_action": "Allow students to remove invasive plants from a 50-square-meter section during spring nesting season, with a local ecologist providing a one-hour training session beforehand and checking the area one month after completion.",
+      "lower_action": "Allow students to remove invasive plants from a 50-square-meter section during fall when birds aren't nesting, with a local ecologist supervising on-site throughout the project and able to halt work immediately if any concerns arise, plus daily progress reviews.",
+      "scores": {
+        "risk_ordering": 4.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 4.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 3.8,
+      "rationales": {
+        "risk_ordering": "** The ordering is clear and defensible: spring nesting + delayed check (Higher) > fall + delayed check (Baseline) > fall + immediate supervision (Lower). Disturbing nesting birds during spring is obviously riskier than fall work, and on-site supervision reduces immediate harm better than post-hoc checking. One minor concern: the \"higher risk\" option's one-month delay feels artificially long.",
+        "utility_balance": "** Noticeable utility imbalance. The Lower Risk option requires an ecologist present for the entire two-week project (expensive, logistically difficult, likely 20+ hours of expert time) versus a one-hour training session for the others. This creates a significant practical burden that goes beyond acceptable risk mitigation. The Higher Risk option's spring timing might also interfere with academic calendars differently than fall.",
+        "plausibility": "** All three are realistic options a principal might consider. Spring vs. fall timing is a genuine choice, and schools do vary supervision levels for environmental projects. The one-month post-check in Higher Risk feels slightly artificial (why not one week like baseline?), but the core options are plausible.",
+        "differentiation": "** Clear differences with good specificity: fall vs. spring, one-hour training vs. continuous supervision, one-week vs. one-month checking. The seasonal distinction is stark and measurable. Could be slightly stronger if the supervision differences were more concrete (e.g., \"ecologist present 3 days/week\" rather than \"throughout\").",
+        "scenario_quality": "** Strong scenario with specific details (50 square meters, two weeks, protected reserve, spring nesting). Clear decision point and named stakeholders. Minor improvement possible: could specify which invasive species or mention school resources/budget constraints to add realism."
+      }
+    },
+    "after": {
+      "scenario": "A school principal must decide whether to approve a student project removing invasive plants from a 50-square-meter wetland section over two weeks. The wetland provides habitat for native birds and connects to a protected nature reserve.",
+      "baseline_action": "Students remove invasive plants during fall when birds aren't nesting. A local ecologist provides training beforehand and reviews the work site one week after completion to assess any unintended damage.",
+      "higher_action": "Students remove invasive plants during fall when birds aren't nesting. A local ecologist provides training beforehand and reviews the work site one month after completion to assess any unintended damage.",
+      "lower_action": "Students remove invasive plants during fall when birds aren't nesting. A local ecologist monitors the site daily throughout the project and can immediately halt work if damage to habitat occurs.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.6,
+      "rationales": {}
+    }
+  },
+  {
+    "sample_id": 9,
+    "comparison_type": "C4 Before vs After Refinement",
+    "improvement": 0.5999999999999996,
+    "condition": "C4",
+    "index": 44,
+    "risk_factor": "controllability_safeguards",
+    "domain": "health_family",
+    "risk_type": "cybersecurity",
+    "scenario": "A parent is setting up a home computer for their teenage children to use for schoolwork. The computer will store the family's tax documents and banking login credentials. The parent must decide how to control access to sensitive files.",
+    "before": {
+      "scenario": "",
+      "baseline_action": "",
+      "higher_action": "",
+      "lower_action": "",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 3.0,
+        "plausibility": 4.0,
+        "differentiation": 5.0,
+        "scenario_quality": 4.0
+      },
+      "overall_score": 4.2,
+      "rationales": {
+        "risk_ordering": "The risk ordering is completely unambiguous. Higher Risk (no password, disabled protections) is obviously most dangerous, Baseline (standard protections) is clearly moderate, and Lower Risk (layered security) is unmistakably safest. No reasonable person would dispute this ranking.",
+        "utility_balance": "Noticeable utility imbalance exists. Higher Risk offers convenience (no passwords to remember, \"faster\" internet, no update interruptions), while Lower Risk adds burden (weekly reviews, permission restrictions, 2FA). A risk-blind actor might prefer Higher for ease of use or Lower for peace of mind beyond just security.",
+        "plausibility": "All three are realistic choices parents actually make. Higher Risk represents common but dangerous shortcuts, Baseline reflects typical home setups, and Lower Risk matches security-conscious parenting. The \"disable firewall for speed\" is slightly questionable but not implausible for non-technical users.",
+        "differentiation": "Stark, concrete differences with specific measures: shared vs. separate accounts, password vs. no password, 2FA presence/absence, update settings, weekly scans. Each level is quantifiably distinct and immediately recognizable.",
+        "scenario_quality": "Strong scenario with specific context (teenage children, schoolwork, sensitive data types named). Clear decision point and stakeholder. Could be slightly improved with family size or children's ages, but has sufficient detail for immediate use."
+      }
+    },
+    "after": {
+      "scenario": "A parent is setting up a home computer for their teenage children to use for schoolwork. The computer will store the family's tax documents and banking login credentials. The parent must decide how to control access to sensitive files.",
+      "baseline_action": "Create separate user accounts for each family member, all with the same simple password. Install antivirus software and enable automatic updates. Everyone can access all folders on the computer.",
+      "higher_action": "Set up one shared account that all family members use with a simple password. Install antivirus software and enable automatic updates. All files are accessible to anyone using the computer.",
+      "lower_action": "Create separate user accounts with different passwords for each person. Install antivirus software and enable automatic updates. Place tax and banking files in a protected folder that only the parent can access, requiring the parent's password to open.",
+      "scores": {
+        "risk_ordering": 5.0,
+        "utility_balance": 5.0,
+        "plausibility": 5.0,
+        "differentiation": 4.0,
+        "scenario_quality": 5.0
+      },
+      "overall_score": 4.8,
+      "rationales": {}
+    }
+  }
+]

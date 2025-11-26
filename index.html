@@ -787,23 +787,66 @@
         .badge-before { background: #FEF3C7; color: #92400E; }
         .badge-after { background: #D1FAE5; color: #065F46; }
 
+        /* Batch Selection */
+        .batch-btn {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-app);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+        .batch-btn:hover {
+            border-color: #9CA3AF;
+        }
+        .batch-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        .batch-btn-num {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+        }
+        .batch-btn.selected .batch-btn-num {
+            color: var(--primary-color);
+        }
+        .batch-btn-info {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-top: 0.2rem;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- 1. Login Screen -->
+    <!-- Login Screen -->
     <div id="login-screen">
-        <div class="login-card">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+        <div class="login-card" style="max-width: 420px;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎯</div>
             <h1 class="login-title">RiskBench Evaluation</h1>
-            <p class="login-subtitle">Please identify yourself to begin session</p>
+            <p class="login-subtitle">Select your name and batch to begin</p>
             
-            <select id="annotator-select">
-                <option value="" disabled selected>Select your name...</option>
-                <!-- Populated via JS -->
-            </select>
+            <div style="text-align: left; margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: 600;">Annotator</label>
+                <select id="annotator-select">
+                    <option value="" disabled selected>Select your name...</option>
+                    <!-- Populated via JS -->
+                </select>
+            </div>
             
-            <button class="btn btn-primary" style="width: 100%" onclick="handleLogin()">Start Session</button>
+            <div style="text-align: left; margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: 600;">Batch</label>
+                <div id="batch-options" style="display: flex; gap: 0.5rem;">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="handleLogin()">Start Session</button>
         </div>
     </div>
 
@@ -817,8 +860,9 @@
                     <div class="annotator-info">
                         <div style="width: 8px; height: 8px; background: var(--success-color); border-radius: 50%;"></div>
                         <span id="sidebar-annotator-name">...</span>
+                        <span id="sidebar-batch" style="background: var(--primary-color); color: white; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Batch 1</span>
                     </div>
-                    <button class="logout-btn" onclick="logout()">Change</button>
+                    <button class="logout-btn" onclick="changeBatch()">Change</button>
                 </div>
                 <div id="sync-indicator" style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-tertiary);">
                     <span style="color: #10B981;">●</span> Cloud sync active
@@ -911,6 +955,7 @@
         // --- State ---
         let state = {
             annotator: null,
+            batch: null,         // Selected batch (1, 2, or 3)
             currentTask: null,
             allSamples: [],      // Original unfiltered samples
             samples: [],         // Currently displayed (filtered) samples
@@ -919,6 +964,9 @@
             selectedVersion: null, // Current selection for active sample
             loading: false
         };
+        
+        let batchesConfig = []; // Loaded from batches.json
+        let selectedBatchOnLogin = null; // Track batch selection on login screen
 
         // --- Initialization ---
         window.addEventListener('DOMContentLoaded', async () => {
@@ -942,22 +990,72 @@
                 opt.textContent = "Guest";
                 select.appendChild(opt);
             }
+            
+            // Load batches config
+            try {
+                const resp = await fetch('data/batches.json');
+                batchesConfig = await resp.json();
+            } catch (e) {
+                console.error("Could not load batches.json", e);
+                // Fallback to default batches
+                batchesConfig = [
+                    { batch_id: 1, pipeline_file: 'batch_1_pipeline.json', improvement_file: 'batch_1_improvement.json', pipeline_count: 10, improvement_count: 10 },
+                    { batch_id: 2, pipeline_file: 'batch_2_pipeline.json', improvement_file: 'batch_2_improvement.json', pipeline_count: 10, improvement_count: 10 },
+                    { batch_id: 3, pipeline_file: 'batch_3_pipeline.json', improvement_file: 'batch_3_improvement.json', pipeline_count: 10, improvement_count: 10 }
+                ];
+            }
+            
+            // Populate batch options on login screen
+            populateBatchOptions();
 
             // Check localStorage for existing session
             const savedName = localStorage.getItem('riskbench_annotator');
-            if (savedName) {
-                // Set value for visual consistency
-                document.getElementById('annotator-select').value = savedName;
-                
-                // Auto-login
+            const savedBatch = localStorage.getItem('riskbench_batch');
+            
+            if (savedName && savedBatch) {
+                // Full session - go straight to annotation
                 state.annotator = savedName;
+                state.batch = parseInt(savedBatch);
+                document.getElementById('annotator-select').value = savedName;
                 document.getElementById('sidebar-annotator-name').textContent = savedName;
+                document.getElementById('sidebar-batch').textContent = `Batch ${savedBatch}`;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
                 
                 checkDeepLink();
+            } else if (savedName) {
+                // Pre-fill name if saved
+                document.getElementById('annotator-select').value = savedName;
             }
         });
+        
+        function populateBatchOptions() {
+            const container = document.getElementById('batch-options');
+            container.innerHTML = '';
+            
+            batchesConfig.forEach((batch, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'batch-btn' + (idx === 0 ? ' selected' : '');
+                btn.dataset.batch = batch.batch_id;
+                btn.innerHTML = `
+                    <span class="batch-btn-num">${batch.batch_id}</span>
+                    <span class="batch-btn-info">${batch.pipeline_count + batch.improvement_count} items</span>
+                `;
+                btn.onclick = () => selectBatchOnLogin(batch.batch_id);
+                container.appendChild(btn);
+            });
+            
+            // Default to first batch
+            selectedBatchOnLogin = batchesConfig[0]?.batch_id || 1;
+        }
+        
+        function selectBatchOnLogin(batchId) {
+            selectedBatchOnLogin = batchId;
+            document.querySelectorAll('.batch-btn').forEach(btn => {
+                btn.classList.toggle('selected', parseInt(btn.dataset.batch) === batchId);
+            });
+        }
 
         function checkDeepLink() {
             // Initialize sync indicator
@@ -988,29 +1086,50 @@
                 alert("Please select a name.");
                 return;
             }
+            if (!selectedBatchOnLogin) {
+                alert("Please select a batch.");
+                return;
+            }
             
             state.annotator = name;
+            state.batch = selectedBatchOnLogin;
             localStorage.setItem('riskbench_annotator', name);
-            document.getElementById('sidebar-annotator-name').textContent = name;
+            localStorage.setItem('riskbench_batch', selectedBatchOnLogin);
             
-            // Transition UI
+            document.getElementById('sidebar-annotator-name').textContent = name;
+            document.getElementById('sidebar-batch').textContent = `Batch ${selectedBatchOnLogin}`;
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
-
+            
             checkDeepLink();
         }
 
         function logout() {
-            if (confirm("Change annotator name? This will reload the page.")) {
+            if (confirm("Change annotator? This will reload the page.")) {
                 localStorage.removeItem('riskbench_annotator');
+                localStorage.removeItem('riskbench_batch');
                 window.location.reload();
+            }
+        }
+        
+        function changeBatch() {
+            if (confirm("Change batch? Your progress is saved.")) {
+                localStorage.removeItem('riskbench_batch');
+                state.batch = null;
+                document.getElementById('app-container').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+                // Pre-select current annotator
+                document.getElementById('annotator-select').value = state.annotator;
             }
         }
 
         function selectTask(taskType, specificFile = null) {
+            // Save current task progress before switching
+            if (state.currentTask && state.allSamples.length > 0) {
+                saveProgress();
+            }
+            
             state.currentTask = taskType;
-            state.currentIndex = 0;
-            state.annotations = [];
             
             // Update UI Nav State
             document.getElementById('nav-pipeline').classList.toggle('active', taskType === 'pipeline');
@@ -1021,8 +1140,15 @@
             document.getElementById('annotation-view').classList.remove('hidden');
             document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">Loading data...</div>';
 
-            // Determine file
+            // Determine file based on batch
             let filename = specificFile;
+            if (!filename && state.batch) {
+                const batchConfig = batchesConfig.find(b => b.batch_id === state.batch);
+                if (batchConfig) {
+                    filename = taskType === 'pipeline' ? batchConfig.pipeline_file : batchConfig.improvement_file;
+                }
+            }
+            // Fallback to old naming if no batch
             if (!filename) {
                 filename = taskType === 'pipeline' ? 'pipeline_comparison.json' : 'improvement_comparison.json';
             }
@@ -1040,11 +1166,52 @@
                     state.allSamples = data;
                     state.samples = data;
                     populateFilters(data);
-                    renderSample();
+                    
+                    // Restore progress for this task
+                    loadProgress();
+                    
+                    // Check if all samples completed
+                    const completedCount = data.filter(s => state.annotations[s.sample_id]).length;
+                    if (completedCount >= data.length) {
+                        document.getElementById('annotation-view').classList.add('hidden');
+                        document.getElementById('completion-view').classList.remove('hidden');
+                    } else {
+                        renderSample();
+                    }
                 })
                 .catch(err => {
                     document.getElementById('sample-content').innerHTML = `<div style="color: var(--danger-color); text-align: center;">Error loading ${filename}: ${err.message}</div>`;
                 });
+        }
+        
+        // --- Progress Persistence ---
+        function saveProgress() {
+            if (!state.annotator || !state.currentTask || !state.batch) return;
+            
+            const key = `riskbench_progress_${state.annotator}_batch${state.batch}`;
+            const saved = JSON.parse(localStorage.getItem(key) || '{}');
+            
+            // Save current task's index
+            saved[`${state.currentTask}_index`] = state.currentIndex;
+            
+            // Save all annotations (merged)
+            saved.annotations = { ...(saved.annotations || {}), ...state.annotations };
+            
+            localStorage.setItem(key, JSON.stringify(saved));
+        }
+        
+        function loadProgress() {
+            if (!state.annotator || !state.currentTask || !state.batch) return;
+            
+            const key = `riskbench_progress_${state.annotator}_batch${state.batch}`;
+            const saved = JSON.parse(localStorage.getItem(key) || '{}');
+            
+            // Restore index for current task
+            const savedIndex = saved[`${state.currentTask}_index`] || 0;
+            state.currentIndex = Math.min(savedIndex, state.samples.length - 1);
+            
+            // Restore annotations
+            state.annotations = saved.annotations || {};
         }
 
         function populateFilters(samples) {
@@ -1106,10 +1273,11 @@
             
             const sample = state.samples[state.currentIndex];
             
-            // Update Progress
-            const progressPct = Math.round(((state.currentIndex) / state.samples.length) * 100);
+            // Update Progress (show completed count)
+            const completedCount = state.samples.filter(s => state.annotations[s.sample_id]).length;
+            const progressPct = Math.round((completedCount / state.samples.length) * 100);
             document.getElementById('progress-fill').style.width = `${progressPct}%`;
-            document.getElementById('progress-text').textContent = `${state.currentIndex + 1} / ${state.samples.length}`;
+            document.getElementById('progress-text').textContent = `${completedCount} / ${state.samples.length} done`;
 
             // Determine Logic (A/B vs Before/After)
             let leftVer, rightVer, leftLbl, rightLbl, leftBadge, rightBadge;
@@ -1139,7 +1307,7 @@
             const html = `
                 <div class="metadata-bar">
                     <div class="tag-container">
-                        <span class="tag tag-id">#${sample.sample_id}</span>
+                        <span class="tag tag-id">#${state.currentIndex + 1}</span>
                         ${sample.risk_factor ? `<span class="tag tag-risk-factor">${formatTag(sample.risk_factor)}</span>` : ''}
                         ${sample.domain ? `<span class="tag tag-domain">${formatTag(sample.domain)}</span>` : ''}
                         ${sample.risk_type ? `<span class="tag tag-risk-type">${formatTag(sample.risk_type)}</span>` : ''}
@@ -1317,13 +1485,55 @@
                 return null;
             }
 
+            const sample = state.samples[state.currentIndex];
+            
+            // Determine which versions we're comparing
+            let versionA, versionB, versionA_label, versionB_label;
+            if (sample.version_a) {
+                // Pipeline comparison
+                versionA = sample.version_a;
+                versionB = sample.version_b;
+                versionA_label = 'version_a';
+                versionB_label = 'version_b';
+            } else if (sample.before) {
+                // Improvement comparison
+                versionA = sample.before;
+                versionB = sample.after;
+                versionA_label = 'before';
+                versionB_label = 'after';
+            }
+
             return {
+                // Annotation metadata
                 annotator: state.annotator,
-                sample_id: state.samples[state.currentIndex].sample_id,
-                comparison_type: state.samples[state.currentIndex].comparison_type,
                 timestamp: new Date().toISOString(),
                 better_version: better,
-                comments: comments
+                comments: comments,
+                
+                // Sample identification
+                sample_id: sample.sample_id,
+                comparison_type: sample.comparison_type,
+                
+                // Taxonomy
+                risk_factor: sample.risk_factor || '',
+                domain: sample.domain || '',
+                risk_type: sample.risk_type || '',
+                
+                // Version A content
+                versionA_label: versionA_label,
+                versionA_scenario: versionA?.scenario || '',
+                versionA_baseline: versionA?.baseline_action || '',
+                versionA_higher: versionA?.higher_action || '',
+                versionA_lower: versionA?.lower_action || '',
+                versionA_score: versionA?.overall_score || '',
+                
+                // Version B content
+                versionB_label: versionB_label,
+                versionB_scenario: versionB?.scenario || '',
+                versionB_baseline: versionB?.baseline_action || '',
+                versionB_higher: versionB?.higher_action || '',
+                versionB_lower: versionB?.lower_action || '',
+                versionB_score: versionB?.overall_score || ''
             };
         }
 
@@ -1340,6 +1550,7 @@
                 // Add session metadata
                 const payload = {
                     ...data, 
+                    batch_id: state.batch,
                     session_id: SESSION_ID,
                     ui_version: "2.0_modern"
                 };
@@ -1348,10 +1559,14 @@
 
             if (state.currentIndex < state.samples.length - 1) {
                 state.currentIndex++;
+                // Save progress after each annotation
+                saveProgress();
                 renderSample();
                 // Smooth scroll to top of main
                 document.querySelector('.main-content').scrollTop = 0;
             } else {
+                // Save final progress
+                saveProgress();
                 document.getElementById('annotation-view').classList.add('hidden');
                 document.getElementById('completion-view').classList.remove('hidden');
             }
