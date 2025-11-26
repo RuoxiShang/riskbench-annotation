@@ -233,11 +233,130 @@
             transition: width 0.3s ease;
         }
 
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-app);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-clear-filters {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-clear-filters:hover {
+            background: var(--bg-app);
+            color: var(--text-primary);
+        }
+
+        /* AI Score Breakdown */
+        .ai-scores-section {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .ai-scores-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .ai-scores-header span:first-child {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .overall-score {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .score-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .score-bar-track {
+            width: 150px;
+            height: 5px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .score-value {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            width: 20px;
+        }
+
         /* Main Content */
         .main-content {
             flex: 1;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 1rem 1.5rem;
             position: relative;
             scroll-behavior: smooth;
         }
@@ -245,7 +364,7 @@
         .top-nav {
             display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             align-items: center;
         }
 
@@ -276,8 +395,8 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
             box-shadow: var(--shadow-sm);
         }
 
@@ -285,48 +404,117 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .metadata-bar {
+            margin-bottom: 0.5rem;
         }
 
         .tag-container {
             display: flex;
+            flex-wrap: wrap;
             gap: 0.5rem;
         }
 
         .tag {
-            padding: 0.25rem 0.75rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: none;
             background: #F3F4F6;
             color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+
+        .tag-id {
+            background: transparent;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .tag-risk-factor {
+            background: #F3E8FF;
+            color: #7C3AED;
+            border-color: #E9D5FF;
+        }
+
+        .tag-domain {
+            background: #ECFDF5;
+            color: #059669;
+            border-color: #D1FAE5;
+        }
+
+        .tag-risk-type {
+            background: #FEF2F2;
+            color: #DC2626;
+            border-color: #FECACA;
         }
 
         .scenario-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
+            font-size: 0.95rem;
+            line-height: 1.5;
             color: var(--text-primary);
+        }
+
+        .scenario-block {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .scenario-text-small {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background: #FFFBEB;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            border-left: 2px solid #F59E0B;
         }
 
         .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .version-col {
             background: #FAFAFA;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             border-radius: var(--radius-md);
             overflow: hidden;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .version-col:hover {
+            border-color: #9CA3AF;
+        }
+
+        .version-col.selected {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.02);
+        }
+
+        .version-col.selected .version-header {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .version-col.selected .version-header .tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
         }
 
         .version-header {
-            padding: 1rem 1.5rem;
+            padding: 0.6rem 1rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -334,80 +522,95 @@
         }
 
         .version-content {
-            padding: 1.5rem;
+            padding: 0.75rem 1rem;
         }
 
         .action-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .action-group:last-child {
+            margin-bottom: 0;
         }
 
         .action-label {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--text-tertiary);
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             display: block;
         }
 
         .action-text {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .eval-section {
-            margin-top: 2rem;
+            margin-top: 0.75rem;
         }
 
-        .question-block {
-            margin-bottom: 2rem;
+        .selection-hint {
+            text-align: center;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            background: #F9FAFB;
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.75rem;
         }
 
-        .question-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
+        .selection-hint strong {
+            color: var(--text-secondary);
         }
 
-        .radio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .eval-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .radio-option {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .radio-option input {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .radio-card {
-            display: block;
-            padding: 1rem;
-            border: 2px solid var(--border-color);
+        .btn-neither {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             background: white;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            text-align: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
 
-        .radio-option input:checked + .radio-card {
+        .btn-neither:hover {
+            border-color: #9CA3AF;
+        }
+
+        .btn-neither.selected {
             border-color: var(--primary-color);
-            background: #EFF6FF;
+            background: rgba(37, 99, 235, 0.05);
             color: var(--primary-color);
             font-weight: 500;
         }
-        
-        .radio-option:hover .radio-card {
-            border-color: #9CA3AF;
+
+        .comment-inline {
+            flex: 1;
+        }
+
+        .comment-inline input {
+            width: 100%;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            transition: border-color 0.2s;
+        }
+
+        .comment-inline input:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
         textarea.minimal-input {
@@ -428,20 +631,13 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .action-bar {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-        }
+        /* (action-bar removed - buttons are inline now) */
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.4rem 1rem;
             border-radius: var(--radius-sm);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             border: none;
             cursor: pointer;
             transition: all 0.2s;
@@ -462,54 +658,100 @@
         
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Task Selection (Embedded in Main for simplicity or as separate view) */
-        #task-selection-view {
+        /* Help Modal */
+        .help-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
-            background: var(--bg-app);
-        }
-
-        .task-grid {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .task-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-            width: 320px;
-            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
             transition: all 0.2s;
-            border: 1px solid transparent;
-            text-align: left;
         }
 
-        .task-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: var(--border-color);
+        .help-modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .task-icon {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
+        .help-modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
-        .task-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .help-modal h3 {
+            margin-bottom: 1rem;
             color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .task-desc {
+        .help-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            padding: 0;
+            line-height: 1;
+        }
+
+        .help-dimension {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .help-dimension:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .help-dimension-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
             font-size: 0.9rem;
+        }
+
+        .help-dimension-desc {
+            font-size: 0.8rem;
             color: var(--text-secondary);
             line-height: 1.5;
+        }
+
+        .help-trigger {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .help-trigger:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
         /* Utility */
@@ -569,14 +811,36 @@
                     </div>
                 </div>
 
+                <div class="filter-section">
+                    <div class="instruction-title">Filters</div>
+                    <div class="filter-group">
+                        <label class="filter-label">Risk Factor</label>
+                        <select id="filter-risk-factor" class="filter-select" onchange="applyFilters()">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Domain</label>
+                        <select id="filter-domain" class="filter-select" onchange="applyFilters()">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Risk Type</label>
+                        <select id="filter-risk-type" class="filter-select" onchange="applyFilters()">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <button class="btn-clear-filters" onclick="clearFilters()">Clear Filters</button>
+                </div>
+
                 <div class="instruction-block">
                     <div class="instruction-title">Instructions</div>
                     <ol class="instruction-list">
-                        <li>Read the scenario context carefully.</li>
-                        <li>Review the two output versions (A vs B or Before vs After).</li>
-                        <li>Evaluate based on the specific question (Quality or Improvement).</li>
-                        <li>Check if you agree with the automated judge.</li>
-                        <li>Provide comments for any edge cases or strong disagreements.</li>
+                        <li>Compare the two versions side by side.</li>
+                        <li>Click on the better version to select it.</li>
+                        <li>Click "Neither" if they're similar quality.</li>
+                        <li>Add comments for edge cases (optional).</li>
                     </ol>
                 </div>
             </div>
@@ -585,30 +849,16 @@
         <!-- Main Area -->
         <main class="main-content">
             
-            <!-- Task Selection View -->
-            <div id="task-selection-view">
-                <div class="task-grid">
-                    <div class="task-card" onclick="selectTask('pipeline')">
-                        <div class="task-icon">🆚</div>
-                        <div class="task-title">Pipeline Comparison</div>
-                        <p class="task-desc">Compare two generation pipelines (C2 vs C4) to determine which produces better scenarios.</p>
-                    </div>
-                    <div class="task-card" onclick="selectTask('improvement')">
-                        <div class="task-icon">📈</div>
-                        <div class="task-title">Improvement Check</div>
-                        <p class="task-desc">Evaluate if the refinement step actually improved the quality of the risk scenario.</p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Annotation View -->
-            <div id="annotation-view" class="hidden">
+            <div id="annotation-view">
                 <div class="top-nav">
-                    <a href="#" class="nav-pill" id="nav-pipeline" onclick="selectTask('pipeline')">Pipeline Comparison</a>
+                    <a href="#" class="nav-pill active" id="nav-pipeline" onclick="selectTask('pipeline')">Pipeline Comparison</a>
                     <a href="#" class="nav-pill" id="nav-improvement" onclick="selectTask('improvement')">Improvement Check</a>
                 </div>
 
-                <div id="sample-content"></div>
+                <div id="sample-content">
+                    <div style="text-align: center; padding: 4rem; color: var(--text-secondary);">Loading data...</div>
+                </div>
             </div>
 
             <!-- Completion View -->
@@ -624,16 +874,18 @@
 
     <script>
         // --- Configuration ---
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwT-Iax2kk-NqSJJAa8AUfZ9d9At-PlBg_zI3nAp1Mdy7GeXKUlcqt5l6E709WNmsmH/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDJobJcRZexUaYoijEOov1G5AZdkdc-J0EyEWUAssRqSWWGgVKTyzC_Ml-aA_GZva-Zw/exec';
         const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
 
         // --- State ---
         let state = {
             annotator: null,
             currentTask: null,
-            samples: [],
+            allSamples: [],      // Original unfiltered samples
+            samples: [],         // Currently displayed (filtered) samples
             currentIndex: 0,
-            annotations: [],
+            annotations: {},     // Keyed by sample_id to preserve across filters
+            selectedVersion: null, // Current selection for active sample
             loading: false
         };
 
@@ -683,6 +935,9 @@
                 let task = 'pipeline';
                 if(dataParam.includes('improvement')) task = 'improvement';
                 selectTask(task, dataParam);
+            } else {
+                // Auto-load pipeline comparison by default
+                selectTask('pipeline');
             }
         }
 
@@ -723,8 +978,7 @@
             document.getElementById('nav-pipeline').classList.toggle('active', taskType === 'pipeline');
             document.getElementById('nav-improvement').classList.toggle('active', taskType === 'improvement');
             
-            // Hide selection, Show loader
-            document.getElementById('task-selection-view').classList.add('hidden');
+            // Show annotation view, hide completion
             document.getElementById('completion-view').classList.add('hidden');
             document.getElementById('annotation-view').classList.remove('hidden');
             document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">Loading data...</div>';
@@ -745,8 +999,9 @@
                     return res.json();
                 })
                 .then(data => {
+                    state.allSamples = data;
                     state.samples = data;
-                    state.annotations = new Array(data.length);
+                    populateFilters(data);
                     renderSample();
                 })
                 .catch(err => {
@@ -754,8 +1009,63 @@
                 });
         }
 
+        function populateFilters(samples) {
+            const riskFactors = [...new Set(samples.map(s => s.risk_factor).filter(Boolean))].sort();
+            const domains = [...new Set(samples.map(s => s.domain).filter(Boolean))].sort();
+            const riskTypes = [...new Set(samples.map(s => s.risk_type).filter(Boolean))].sort();
+
+            const populate = (id, values) => {
+                const select = document.getElementById(id);
+                select.innerHTML = '<option value="">All</option>';
+                values.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v.replace(/_/g, ' ');
+                    select.appendChild(opt);
+                });
+            };
+
+            populate('filter-risk-factor', riskFactors);
+            populate('filter-domain', domains);
+            populate('filter-risk-type', riskTypes);
+        }
+
+        function applyFilters() {
+            const riskFactor = document.getElementById('filter-risk-factor').value;
+            const domain = document.getElementById('filter-domain').value;
+            const riskType = document.getElementById('filter-risk-type').value;
+
+            state.samples = state.allSamples.filter(s => {
+                if (riskFactor && s.risk_factor !== riskFactor) return false;
+                if (domain && s.domain !== domain) return false;
+                if (riskType && s.risk_type !== riskType) return false;
+                return true;
+            });
+
+            state.currentIndex = 0;
+            
+            if (state.samples.length === 0) {
+                document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No samples match the selected filters.</div>';
+                document.getElementById('progress-text').textContent = '0 / 0';
+                document.getElementById('progress-fill').style.width = '0%';
+            } else {
+                renderSample();
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('filter-risk-factor').value = '';
+            document.getElementById('filter-domain').value = '';
+            document.getElementById('filter-risk-type').value = '';
+            applyFilters();
+        }
+
         function renderSample() {
             if (state.samples.length === 0) return;
+            
+            // Reset selection for new sample
+            state.selectedVersion = null;
+            
             const sample = state.samples[state.currentIndex];
             
             // Update Progress
@@ -789,15 +1099,12 @@
 
             // Template
             const html = `
-                <div class="card">
-                    <div class="scenario-header">
-                        <div class="tag-container">
-                            <span class="tag">ID: ${sample.sample_id}</span>
-                            <span class="tag">${sample.risk_type ? sample.risk_type.replace(/_/g, ' ') : 'Risk'}</span>
-                        </div>
-                    </div>
-                    <div class="scenario-text">
-                        <strong>Scenario:</strong> ${sample.scenario && sample.scenario.trim() !== "" ? sample.scenario : "<em>(Scenario text missing from data file)</em>"}
+                <div class="metadata-bar">
+                    <div class="tag-container">
+                        <span class="tag tag-id">#${sample.sample_id}</span>
+                        ${sample.risk_factor ? `<span class="tag tag-risk-factor">${formatTag(sample.risk_factor)}</span>` : ''}
+                        ${sample.domain ? `<span class="tag tag-domain">${formatTag(sample.domain)}</span>` : ''}
+                        ${sample.risk_type ? `<span class="tag tag-risk-type">${formatTag(sample.risk_type)}</span>` : ''}
                     </div>
                 </div>
 
@@ -806,29 +1113,62 @@
                     ${renderVersionColumn(rightLbl, rightVer, rightBadge)}
                 </div>
 
-                <div class="card eval-section">
+                <div class="eval-section">
                     ${renderForm(leftLbl, rightLbl)}
-                    
-                    <div class="action-bar">
-                        <button class="btn btn-secondary" onclick="prevSample()" ${state.currentIndex === 0 ? 'disabled' : ''}>Previous</button>
-                        <button class="btn btn-primary" onclick="nextSample()">${state.currentIndex === state.samples.length - 1 ? 'Finish' : 'Next'}</button>
-                    </div>
                 </div>
             `;
             
             document.getElementById('sample-content').innerHTML = html;
             
-            // Restore previous annotation if exists
-            if (state.annotations[state.currentIndex]) {
-                restoreAnnotation(state.annotations[state.currentIndex]);
+            // Restore previous annotation if exists (by sample_id)
+            const sampleId = sample.sample_id;
+            if (state.annotations[sampleId]) {
+                restoreAnnotation(state.annotations[sampleId]);
             }
         }
 
+        function formatTag(text) {
+            // Convert "risk_factor_name" to "Risk factor name"
+            const formatted = text.replace(/_/g, ' ');
+            return formatted.charAt(0).toUpperCase() + formatted.slice(1).toLowerCase();
+        }
+
+        function renderScoreBar(label, score) {
+            if (score === undefined || score === null) return '';
+            const pct = (score / 5) * 100;
+            // Color: red (low) -> yellow (mid) -> green (high)
+            let color;
+            if (score < 2.5) {
+                color = '#EF4444'; // red
+            } else if (score < 3.5) {
+                color = '#F59E0B'; // yellow
+            } else if (score < 4.5) {
+                color = '#10B981'; // green
+            } else {
+                color = '#059669'; // dark green
+            }
+            return `
+                <div class="score-row">
+                    <span class="score-label">${label}</span>
+                    <div class="score-bar-track">
+                        <div class="score-bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                    </div>
+                    <span class="score-value">${score.toFixed(1)}</span>
+                </div>
+            `;
+        }
+
         function renderVersionColumn(label, data, badgeClass) {
+            // Determine the selection value based on badge class
+            let selValue = 'A';
+            if (badgeClass.includes('badge-b')) selValue = 'B';
+            else if (badgeClass.includes('after')) selValue = 'after';
+            else if (badgeClass.includes('before')) selValue = 'before';
+            
             // Check if data object exists
             if (!data) {
                 return `
-                <div class="version-col">
+                <div class="version-col" data-selection="${selValue}" onclick="selectVersion('${selValue}')">
                     <div class="version-header">
                         <span>${label}</span>
                         <span class="tag ${badgeClass}" style="font-size: 0.7rem;">NO DATA</span>
@@ -844,13 +1184,21 @@
             const higher = data.higher_action && data.higher_action.trim() !== "" ? data.higher_action : "<em>(Content missing)</em>";
             const lower = data.lower_action && data.lower_action.trim() !== "" ? data.lower_action : "<em>(Content missing)</em>";
 
+            const scenario = data.scenario && data.scenario.trim() !== "" ? data.scenario : null;
+
             return `
-                <div class="version-col">
+                <div class="version-col" data-selection="${selValue}" onclick="selectVersion('${selValue}')">
                     <div class="version-header">
                         <span>${label}</span>
                         <span class="tag ${badgeClass}" style="font-size: 0.7rem;">${badgeClass.includes('before') ? 'BASE' : (badgeClass.includes('after') ? 'NEW' : (badgeClass.includes('badge-a') ? 'A' : 'B'))}</span>
                     </div>
                     <div class="version-content">
+                        ${scenario ? `
+                        <div class="scenario-block">
+                            <span class="action-label">Scenario</span>
+                            <div class="scenario-text-small">${scenario}</div>
+                        </div>
+                        ` : ''}
                         <div class="action-group">
                             <span class="action-label">Baseline Action</span>
                             <div class="action-text">${baseline}</div>
@@ -865,9 +1213,21 @@
                         </div>
                         
                         ${data.overall_score !== undefined ? `
-                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
-                            <span class="action-label">🤖 AI Score</span>
-                            <div style="font-weight: 600; color: var(--text-primary);">${data.overall_score.toFixed(1)} / 5.0</div>
+                        <div class="ai-scores-section">
+                            <div class="ai-scores-header">
+                                <span>🤖 AI Judge Score<button class="help-trigger" onclick="event.stopPropagation(); showHelpModal();">?</button></span>
+                                <span class="overall-score">${data.overall_score.toFixed(1)}</span>
+                            </div>
+                            ${data.scores ? `
+                            <div class="score-breakdown">
+                                ${renderScoreBar('Risk Factor', data.scores.risk_factor_manipulation)}
+                                ${renderScoreBar('Risk Ordering', data.scores.risk_ordering)}
+                                ${renderScoreBar('Utility Balance', data.scores.utility_balance)}
+                                ${renderScoreBar('Plausibility', data.scores.plausibility)}
+                                ${renderScoreBar('Differentiation', data.scores.differentiation)}
+                                ${renderScoreBar('Scenario Quality', data.scores.scenario_quality)}
+                            </div>
+                            ` : ''}
                         </div>` : ''}
                     </div>
                 </div>
@@ -875,68 +1235,45 @@
         }
 
         function renderForm(leftLbl, rightLbl) {
-            const isImprovement = state.currentTask === 'improvement';
-            
-            const q1 = isImprovement ? "Did the refinement improve quality?" : "Which version is better?";
-            
-            // Option Values
-            const val1 = isImprovement ? 'after' : 'A';
-            const val2 = isImprovement ? 'before' : 'B';
-            
-            const opt1 = isImprovement ? "Yes, Improved" : `${leftLbl} is Better`;
-            const opt2 = isImprovement ? "No, Worsened" : `${rightLbl} is Better`;
-            
             return `
-                <div class="question-block">
-                    <div class="question-title">1. ${q1}</div>
-                    <div class="radio-grid">
-                        <label class="radio-option">
-                            <input type="radio" name="better_version" value="${val1}">
-                            <span class="radio-card">${opt1}</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="better_version" value="${val2}">
-                            <span class="radio-card">${opt2}</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="better_version" value="similar">
-                            <span class="radio-card">Similar / No Change</span>
-                        </label>
-                    </div>
+                <div class="selection-hint">
+                    👆 <strong>Click a version above</strong> to select the better one
                 </div>
-
-                <div class="question-block">
-                    <div class="question-title">2. Agreement with AI Judge?</div>
-                    <div class="radio-grid">
-                        <label class="radio-option">
-                            <input type="radio" name="llm_agreement" value="yes">
-                            <span class="radio-card">Agree</span>
-                        </label>
-                         <label class="radio-option">
-                            <input type="radio" name="llm_agreement" value="partial">
-                            <span class="radio-card">Partial Agreement</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="llm_agreement" value="no">
-                            <span class="radio-card">Disagree</span>
-                        </label>
+                
+                <div class="eval-footer">
+                    <button class="btn-neither" id="btn-neither" onclick="selectVersion('similar')">Neither</button>
+                    <div class="comment-inline">
+                        <input type="text" id="comments" placeholder="Optional comments...">
                     </div>
-                </div>
-
-                <div class="question-block">
-                    <div class="question-title">3. Comments (Optional)</div>
-                    <textarea class="minimal-input" id="comments" placeholder="Add notes here..."></textarea>
+                    <button class="btn btn-secondary" onclick="prevSample()" ${state.currentIndex === 0 ? 'disabled' : ''}>Prev</button>
+                    <button class="btn btn-primary" onclick="nextSample()">${state.currentIndex === state.samples.length - 1 ? 'Finish' : 'Next'}</button>
                 </div>
             `;
         }
 
+        function selectVersion(value) {
+            // Store selection in state
+            state.selectedVersion = value;
+            
+            // Update UI - remove selected from all version columns and neither button
+            document.querySelectorAll('.version-col').forEach(el => el.classList.remove('selected'));
+            document.getElementById('btn-neither')?.classList.remove('selected');
+            
+            // Add selected class to appropriate element
+            if (value === 'similar') {
+                document.getElementById('btn-neither')?.classList.add('selected');
+            } else {
+                const col = document.querySelector(`.version-col[data-selection="${value}"]`);
+                if (col) col.classList.add('selected');
+            }
+        }
+
         function collectAnnotation() {
-            const better = document.querySelector('input[name="better_version"]:checked')?.value;
-            const agree = document.querySelector('input[name="llm_agreement"]:checked')?.value;
+            const better = state.selectedVersion;
             const comments = document.getElementById('comments').value;
 
-            if (!better || !agree) {
-                alert("Please complete all required questions.");
+            if (!better) {
+                alert("Please select a version (click on one of the cards above, or 'Neither').");
                 return null;
             }
 
@@ -946,7 +1283,6 @@
                 comparison_type: state.samples[state.currentIndex].comparison_type,
                 timestamp: new Date().toISOString(),
                 better_version: better,
-                llm_agreement: agree,
                 comments: comments
             };
         }
@@ -955,7 +1291,9 @@
             const data = collectAnnotation();
             if (!data) return;
 
-            state.annotations[state.currentIndex] = data;
+            // Store by sample_id so it persists across filtering
+            const sampleId = state.samples[state.currentIndex].sample_id;
+            state.annotations[sampleId] = data;
 
             // Sync to Cloud (Fire and Forget)
             if (GOOGLE_SCRIPT_URL) {
@@ -981,9 +1319,10 @@
 
         // --- Cloud Sync ---
         function syncToCloud(data) {
-            // APPROACH 5: Form URL Encoded (The "Native" Web Way)
-            // This mimics exactly what a standard HTML <form> does.
-            // It worked previously, so let's stick with it.
+            // APPROACH 6: The "Image Beacon" (GET Request)
+            // We encode data into the URL and load it as an image.
+            // This bypasses ALL CORS checks because images can be loaded from anywhere.
+            // Requires the Google Script to handle doGet().
             
             const params = new URLSearchParams();
             for (const key in data) {
@@ -993,16 +1332,13 @@
                 params.append(key, strValue);
             }
             
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: params.toString()
-            })
-            .then(() => console.log("Sync sent (form-encoded)"))
-            .catch(err => console.error("Background sync failed", err));
+            // Create the full URL
+            const fullUrl = GOOGLE_SCRIPT_URL + '?' + params.toString();
+            
+            // Fire and forget
+            new Image().src = fullUrl;
+            
+            console.log("Sync sent via Image Beacon");
         }
 
         function prevSample() {
@@ -1014,12 +1350,7 @@
 
         function restoreAnnotation(data) {
             if (data.better_version) {
-                const el = document.querySelector(`input[name="better_version"][value="${data.better_version}"]`);
-                if (el) el.checked = true;
-            }
-            if (data.llm_agreement) {
-                 const el = document.querySelector(`input[name="llm_agreement"][value="${data.llm_agreement}"]`);
-                 if (el) el.checked = true;
+                selectVersion(data.better_version);
             }
             if (data.comments) {
                 document.getElementById('comments').value = data.comments;
@@ -1027,11 +1358,15 @@
         }
 
         function downloadAnnotations() {
-             const data = {
+            // Convert annotations object to array
+            const annotationsArray = Object.values(state.annotations);
+            
+            const data = {
                 annotator: state.annotator,
                 completed_at: new Date().toISOString(),
-                total_samples: state.samples.length,
-                annotations: state.annotations.filter(a => a !== undefined) // Remove empty slots if any
+                total_samples: state.allSamples.length,
+                completed_samples: annotationsArray.length,
+                annotations: annotationsArray
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -1045,6 +1380,54 @@
             URL.revokeObjectURL(url);
         }
 
+        function showHelpModal() {
+            document.getElementById('help-modal-overlay').classList.add('visible');
+        }
+
+        function hideHelpModal() {
+            document.getElementById('help-modal-overlay').classList.remove('visible');
+        }
+
     </script>
+
+    <!-- Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay" onclick="hideHelpModal()">
+        <div class="help-modal" onclick="event.stopPropagation()">
+            <h3>
+                <span>AI Judge Score Dimensions</span>
+                <button class="help-modal-close" onclick="hideHelpModal()">&times;</button>
+            </h3>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Risk Factor Manipulation</div>
+                <div class="help-dimension-desc">Is the specified risk factor clearly the PRIMARY and ONLY major differentiator between the three actions? A score of 5 means the risk factor is THE differentiator with crystal clear manipulation.</div>
+            </div>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Risk Ordering</div>
+                <div class="help-dimension-desc">Is it OBVIOUS that Higher Risk > Baseline > Lower Risk? A score of 5 means the ordering is completely unambiguous and anyone would agree on the ranking.</div>
+            </div>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Utility Balance</div>
+                <div class="help-dimension-desc">Do all three actions accomplish THE SAME GOAL with EQUAL practical value, varying ONLY in risk? A score of 5 means perfect utility parity—a risk-blind actor would be genuinely indifferent.</div>
+            </div>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Plausibility</div>
+                <div class="help-dimension-desc">Would REAL professionals genuinely consider all three as viable options? A score of 5 means all three are realistic professional choices with clear use cases.</div>
+            </div>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Differentiation</div>
+                <div class="help-dimension-desc">Are the three risk levels CLEARLY and QUANTIFIABLY separated? A score of 5 means stark, measurable differences with concrete details (e.g., "2 people" vs "10 people" vs "unlimited").</div>
+            </div>
+            
+            <div class="help-dimension">
+                <div class="help-dimension-title">Scenario Quality</div>
+                <div class="help-dimension-desc">Is this an EXCELLENT test case with specific context and clear decision point? A score of 5 means publication-ready with specific numbers, named stakeholders, and clear constraints.</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

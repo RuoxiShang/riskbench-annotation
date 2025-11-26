@@ -1,0 +1,6 @@
+- add full tags for risk domain, risk type, and risk factor
+- add filter for these tags
+- have the full llm-as-a-judge (ai score) score breakdown instead of just the final average
+- there should be two scenarios per paired comparison, right now there is only one scenario task used for the comparison
+- people don't need to indicate two questions, they can just click on version A or version B to choose one
+- they can highlight and annotate or leave comments
