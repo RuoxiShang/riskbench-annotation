@@ -1,6 +1,10 @@
-- add full tags for risk domain, risk type, and risk factor
-- add filter for these tags
-- have the full llm-as-a-judge (ai score) score breakdown instead of just the final average
-- there should be two scenarios per paired comparison, right now there is only one scenario task used for the comparison
-- people don't need to indicate two questions, they can just click on version A or version B to choose one
-- they can highlight and annotate or leave comments
+- [x] add full tags for risk domain, risk type, and risk factor
+- [x] add filter for these tags
+- [x] have the full llm-as-a-judge (ai score) score breakdown instead of just the final average
+- [x] there should be two scenarios per paired comparison, right now there is only one scenario task used for the comparison
+- [x] people don't need to indicate two questions, they can just click on version A or version B to choose one
+- [x] right now the contrast is not big, i want scenarios that have greater contrast in score differences for this task, can you ensure that in data sampling stage?
+- [ ] they can highlight and annotate or leave comments
+- [x] remove the A, B tag, unnecessary
+- [x] change the style of the yellow background for scenario text, i don't like that
+- [ ] answer a list of questions (e.g. which version is better, is it really reflecting the high risk taxonomy? etc.) the questions need to be easy to answer (not ambiguous or hard to diffrentiate)

@@ -4,13 +4,17 @@ Prepare annotation data from experiment results.
 
 This script:
 1. Scans experiments/ for valid runs (or accepts explicit path)
-2. Extracts samples with biggest score differences
+2. Extracts samples with HIGH CONTRAST (biggest score differences)
 3. Saves to data/ folder for the annotation UI
 
 Usage:
-    python prepare_data.py                    # Interactive mode
-    python prepare_data.py <exp_dir>          # Use specific experiment
-    python prepare_data.py <exp_dir> <n>      # Specify sample count
+    python prepare_data.py                              # Interactive mode
+    python prepare_data.py <exp_dir>                    # Use specific experiment
+    python prepare_data.py <exp_dir> <n>                # Specify sample count
+    python prepare_data.py <exp_dir> <n> <min_diff>     # Set min score difference (default: 0.3)
+
+The min_diff threshold filters out low-contrast samples where score differences
+are too small to be meaningful for human evaluation.
 """
 
 import json
@@ -172,26 +176,52 @@ def load_data(filepath):
 # SAMPLING FUNCTIONS
 # =============================================================================
 
-def find_c2_vs_c4_samples(c2_data, c4_data, n):
-    """Find n samples where C2 and C4 differ most."""
+def find_c2_vs_c4_samples(c2_data, c4_data, n, min_diff=0.5):
+    """Find n samples where C2 and C4 differ most.
+    
+    Args:
+        c2_data: List of C2 experiment results
+        c4_data: List of C4 experiment results  
+        n: Number of samples to return
+        min_diff: Minimum score difference threshold (default 0.5)
+    """
     pairs = []
     for c2, c4 in zip(c2_data, c4_data):
         if (c2['risk_factor'] == c4['risk_factor'] and
             c2['domain'] == c4['domain'] and
             c2['risk_type'] == c4['risk_type']):
             diff = c2['after_overall'] - c4['after_overall']
-            pairs.append({'c2': c2, 'c4': c4, 'diff': diff, 'abs_diff': abs(diff)})
+            abs_diff = abs(diff)
+            # Only include pairs with sufficient contrast
+            if abs_diff >= min_diff:
+                pairs.append({'c2': c2, 'c4': c4, 'diff': diff, 'abs_diff': abs_diff})
 
     pairs.sort(key=lambda x: x['abs_diff'], reverse=True)
-    return {
-        'biggest_differences': pairs[:n],
-        'most_similar': sorted(pairs, key=lambda x: x['abs_diff'])[:n]
-    }
+    
+    print(f"  Found {len(pairs)} pairs with score diff >= {min_diff}")
+    if pairs:
+        print(f"  Score diff range: {pairs[-1]['abs_diff']:.2f} - {pairs[0]['abs_diff']:.2f}")
+    
+    return pairs[:n]
 
 
-def find_before_after_samples(data, condition_name, n):
-    """Find n samples with biggest before/after improvement."""
-    sorted_data = sorted(data, key=lambda x: x['improvement'], reverse=True)
+def find_before_after_samples(data, condition_name, n, min_improvement=0.3):
+    """Find n samples with biggest before/after improvement.
+    
+    Args:
+        data: List of experiment results
+        condition_name: Name of the condition (C2/C4)
+        n: Number of samples to return
+        min_improvement: Minimum improvement threshold (default 0.3)
+    """
+    # Filter by minimum improvement
+    filtered = [d for d in data if d['improvement'] >= min_improvement]
+    sorted_data = sorted(filtered, key=lambda x: x['improvement'], reverse=True)
+    
+    print(f"  {condition_name}: Found {len(filtered)} samples with improvement >= {min_improvement}")
+    if sorted_data:
+        print(f"  Improvement range: {sorted_data[-1]['improvement']:.2f} - {sorted_data[0]['improvement']:.2f}")
+    
     return {
         'condition': condition_name,
         'biggest_improvements': sorted_data[:n],
@@ -355,11 +385,13 @@ def main():
             print("\nExiting.")
             sys.exit(0)
     
-    # Determine sample count
+    # Determine sample count and min threshold
     n_samples = int(sys.argv[2]) if len(sys.argv) >= 3 else 15
+    min_diff = float(sys.argv[3]) if len(sys.argv) >= 4 else 0.3
     
     print(f"\nExperiment: {selected_exp.name}")
     print(f"Samples per category: {n_samples}")
+    print(f"Min score difference: {min_diff}")
     print(f"Output: {output_dir}")
     
     # Load data
@@ -375,20 +407,13 @@ def main():
     c4_data = load_data(c4_file)
     print(f"  Loaded {len(c2_data)} C2 + {len(c4_data)} C4 samples")
     
-    # Generate C2 vs C4 comparison
-    print("\nGenerating pipeline comparison...")
-    c2_vs_c4 = find_c2_vs_c4_samples(c2_data, c4_data, n_samples)
+    # Generate C2 vs C4 comparison (high contrast only)
+    print("\nGenerating pipeline comparison (high contrast)...")
+    high_contrast_pairs = find_c2_vs_c4_samples(c2_data, c4_data, n_samples, min_diff=min_diff)
     
     pipeline_samples = []
-    for i, pair in enumerate(c2_vs_c4['biggest_differences']):
+    for i, pair in enumerate(high_contrast_pairs):
         s = format_sample_for_human(pair, 'c2_vs_c4', i)
-        s['sub_task'] = 'difference'
-        pipeline_samples.append(s)
-    
-    offset = len(pipeline_samples)
-    for i, pair in enumerate(c2_vs_c4['most_similar']):
-        s = format_sample_for_human(pair, 'c2_vs_c4', i + offset)
-        s['sub_task'] = 'calibration'
         pipeline_samples.append(s)
     
     random.shuffle(pipeline_samples)
@@ -396,12 +421,13 @@ def main():
         s['sample_id'] = i
     
     save_samples(pipeline_samples, output_dir, "pipeline_comparison")
+    print(f"  → {len(pipeline_samples)} high-contrast samples saved")
     
-    # Generate before/after comparison
-    print("\nGenerating improvement comparison...")
+    # Generate before/after comparison (high improvement only)
+    print("\nGenerating improvement comparison (high contrast)...")
     improvement_samples = []
     for data, name in [(c2_data, 'C2'), (c4_data, 'C4')]:
-        results = find_before_after_samples(data, name, n_samples)
+        results = find_before_after_samples(data, name, n_samples, min_improvement=min_diff)
         offset = len(improvement_samples)
         for i, s in enumerate(results['biggest_improvements']):
             formatted = format_sample_for_human({'condition': name, 'sample': s}, 'before_after', i + offset)
@@ -411,6 +437,7 @@ def main():
         s['sample_id'] = i
     
     save_samples(improvement_samples, output_dir, "improvement_comparison")
+    print(f"  → {len(improvement_samples)} high-contrast samples saved")
     
     print("\n" + "=" * 60)
     print("Done! Start the UI with:")

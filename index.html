@@ -287,8 +287,8 @@
 
         /* AI Score Breakdown */
         .ai-scores-section {
-            margin-top: 0.5rem;
-            padding-top: 0.5rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
             border-top: 1px dashed var(--border-color);
         }
 
@@ -296,7 +296,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.4rem;
+            cursor: pointer;
+        }
+
+        .ai-scores-header:hover {
+            opacity: 0.8;
         }
 
         .ai-scores-header span:first-child {
@@ -307,25 +311,36 @@
         }
 
         .overall-score {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
+        .score-toggle {
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            margin-left: 0.5rem;
+        }
+
         .score-breakdown {
-            display: flex;
+            display: none;
             flex-direction: column;
-            gap: 0.25rem;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .score-breakdown.expanded {
+            display: flex;
         }
 
         .score-row {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.4rem;
         }
 
         .score-label {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
             width: 80px;
             flex-shrink: 0;
@@ -396,7 +411,7 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 1rem 1.25rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             box-shadow: var(--shadow-sm);
         }
 
@@ -466,13 +481,13 @@
         }
 
         .scenario-text-small {
-            font-size: 0.8rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: var(--text-primary);
-            background: #FFFBEB;
-            padding: 0.5rem 0.75rem;
+            background: #F9FAFB;
+            padding: 0.6rem 0.85rem;
             border-radius: 4px;
-            border-left: 2px solid #F59E0B;
+            border-left: 2px solid var(--border-color);
         }
 
         .comparison-grid {
@@ -512,7 +527,7 @@
         }
 
         .version-header {
-            padding: 0.6rem 1rem;
+            padding: 0.75rem 1rem;
             font-weight: 600;
             font-size: 0.85rem;
             border-bottom: 1px solid var(--border-color);
@@ -522,11 +537,11 @@
         }
 
         .version-content {
-            padding: 0.75rem 1rem;
+            padding: 1rem;
         }
 
         .action-group {
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
         
         .action-group:last-child {
@@ -534,18 +549,18 @@
         }
 
         .action-label {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text-tertiary);
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
             display: block;
         }
 
         .action-text {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-primary);
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .eval-section {
@@ -611,6 +626,13 @@
         .comment-inline input:focus {
             outline: none;
             border-color: var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
         }
 
         textarea.minimal-input {
@@ -1190,7 +1212,7 @@
                 <div class="version-col" data-selection="${selValue}" onclick="selectVersion('${selValue}')">
                     <div class="version-header">
                         <span>${label}</span>
-                        <span class="tag ${badgeClass}" style="font-size: 0.7rem;">${badgeClass.includes('before') ? 'BASE' : (badgeClass.includes('after') ? 'NEW' : (badgeClass.includes('badge-a') ? 'A' : 'B'))}</span>
+                        ${badgeClass.includes('before') || badgeClass.includes('after') ? `<span class="tag ${badgeClass}" style="font-size: 0.7rem;">${badgeClass.includes('before') ? 'BASE' : 'NEW'}</span>` : ''}
                     </div>
                     <div class="version-content">
                         ${scenario ? `
@@ -1214,18 +1236,18 @@
                         
                         ${data.overall_score !== undefined ? `
                         <div class="ai-scores-section">
-                            <div class="ai-scores-header">
-                                <span>🤖 AI Judge Score<button class="help-trigger" onclick="event.stopPropagation(); showHelpModal();">?</button></span>
+                            <div class="ai-scores-header" onclick="this.nextElementSibling?.classList.toggle('expanded'); this.querySelector('.score-toggle').textContent = this.nextElementSibling?.classList.contains('expanded') ? '▼' : '▶'">
+                                <span>🤖 AI Score<button class="help-trigger" onclick="event.stopPropagation(); showHelpModal();">?</button><span class="score-toggle">▶</span></span>
                                 <span class="overall-score">${data.overall_score.toFixed(1)}</span>
                             </div>
                             ${data.scores ? `
                             <div class="score-breakdown">
                                 ${renderScoreBar('Risk Factor', data.scores.risk_factor_manipulation)}
                                 ${renderScoreBar('Risk Ordering', data.scores.risk_ordering)}
-                                ${renderScoreBar('Utility Balance', data.scores.utility_balance)}
+                                ${renderScoreBar('Utility', data.scores.utility_balance)}
                                 ${renderScoreBar('Plausibility', data.scores.plausibility)}
                                 ${renderScoreBar('Differentiation', data.scores.differentiation)}
-                                ${renderScoreBar('Scenario Quality', data.scores.scenario_quality)}
+                                ${renderScoreBar('Scenario', data.scores.scenario_quality)}
                             </div>
                             ` : ''}
                         </div>` : ''}
@@ -1237,16 +1259,18 @@
         function renderForm(leftLbl, rightLbl) {
             return `
                 <div class="selection-hint">
-                    👆 <strong>Click a version above</strong> to select the better one
+                    👆 <strong>Click a version above</strong> to select the better one, or:
+                    <button class="btn-neither" id="btn-neither" onclick="selectVersion('similar')">Neither</button>
                 </div>
                 
                 <div class="eval-footer">
-                    <button class="btn-neither" id="btn-neither" onclick="selectVersion('similar')">Neither</button>
                     <div class="comment-inline">
-                        <input type="text" id="comments" placeholder="Optional comments...">
+                        <input type="text" id="comments" placeholder="Your comment:">
                     </div>
-                    <button class="btn btn-secondary" onclick="prevSample()" ${state.currentIndex === 0 ? 'disabled' : ''}>Prev</button>
-                    <button class="btn btn-primary" onclick="nextSample()">${state.currentIndex === state.samples.length - 1 ? 'Finish' : 'Next'}</button>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSample()" ${state.currentIndex === 0 ? 'disabled' : ''}>← Prev</button>
+                    <button class="btn btn-primary" onclick="nextSample()">${state.currentIndex === state.samples.length - 1 ? 'Finish' : 'Next →'}</button>
                 </div>
             `;
         }
