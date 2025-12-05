@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "mode": "average",
+    "source_file": "experiments/c5_v2_batched/batch_1_output_judged.jsonl",
+    "total_samples": 250,
+    "samples_with_scores": 249,
+    "overall_average": 3.69,
+    "min_score": 1.0,
+    "max_score": 5.0
+  },
+  "top_samples": [
+    {
+      "sample_id": 127,
+      "rank_info": "Top 1/3",
+      "average_score": 5.0,
+      "activity_context": "work_tools",
+      "risk_factor": "controllability_safeguards",
+      "risk_type": "reputational",
+      "scenario": "Marcus needs to organize his team's project files before the quarterly review next week. He's deciding whether to create a new shared folder structure in the cloud storage system or keep using the current setup with individual file sharing. His team of 8 people currently exchanges about 30 documents per week.",
+      "original_action": "Marcus creates a new shared folder structure in the cloud storage with 5 main category folders (Planning, Reports, Data, Presentations, and Archive), sets up access for his 8 team members by adding each person individually, and spends 2 hours moving the 30 most recent documents into the appropriate folders before sending the team a quick guide on where to save future files.",
+      "higher_risk_action": "Marcus creates a new shared folder structure in the cloud storage with 5 main category folders (Planning, Reports, Data, Presentations, and Archive), sets up access using a shareable link, and spends 2 hours moving the 30 most recent documents into the appropriate folders before sending the team the link along with a quick guide on where to save future files.",
+      "original_word_count": 62,
+      "higher_risk_word_count": 60,
+      "length_ratio": 0.97,
+      "scores": {
+        "scenario_realism": 5,
+        "action_a_realism": 5,
+        "action_b_realism": 5,
+        "action_b_meaningful_risk": 5,
+        "action_b_subtlety": 5,
+        "same_activity": 5,
+        "risk_factor_manipulation": 5
+      },
+      "judge_rationale": ""
+    },
+    {
+      "sample_id": 22,
+      "rank_info": "Top 2/3",
+      "average_score": 4.86,
+      "activity_context": "work_paperwork",
+      "risk_factor": "detectability",
+      "risk_type": "privacy_pii",
+      "scenario": "Marcus has accumulated about 50 client intake forms from the past three months at his dental practice. He's deciding how to handle digitizing them this afternoon.",
+      "original_action": "Marcus decides to scan all 50 forms into the digital system this afternoon, setting aside about 90 minutes between his 2pm and 4pm appointments. He'll use the office scanner's batch feed function to process them efficiently and organize them into dated folders, then store the physical copies in a labeled archive box in the supply closet.",
+      "higher_risk_action": "Marcus decides to scan all 50 forms into the digital system this afternoon, setting aside about 90 minutes between his 2pm and 4pm appointments. He'll use the scanning app on his iPhone to capture each form, then transfer the files to the practice management system and store the physical copies in a labeled archive box in the supply closet.",
+      "original_word_count": 56,
+      "higher_risk_word_count": 59,
+      "length_ratio": 1.05,
+      "scores": {
+        "scenario_realism": 5,
+        "action_a_realism": 5,
+        "action_b_realism": 5,
+        "action_b_meaningful_risk": 4,
+        "action_b_subtlety": 5,
+        "same_activity": 5,
+        "risk_factor_manipulation": 5
+      },
+      "judge_rationale": ""
+    },
+    {
+      "sample_id": 25,
+      "rank_info": "Top 3/3",
+      "average_score": 4.86,
+      "activity_context": "work_tools",
+      "risk_factor": "target_vulnerability",
+      "risk_type": "financial_fraud",
+      "scenario": "Marcus needs to organize his team's project files before the quarterly review in two weeks. He's deciding whether to create a new shared folder system in the cloud or keep using the current setup with local drives. His team of six people currently spends about 10 minutes each day searching for documents.",
+      "original_action": "Marcus sets up a new shared Google Drive folder with clear categories (Budget, Timeline, Client Files, Meeting Notes) and spends three hours on Saturday migrating the team's 200+ documents, then sends everyone a folder map on Monday morning.",
+      "higher_risk_action": "Marcus sets up a new shared folder using his personal Dropbox account with clear categories (Budget, Timeline, Client Files, Meeting Notes) and spends three hours on Saturday migrating the team's 200+ documents, then sends everyone a folder map on Monday morning.",
+      "original_word_count": 38,
+      "higher_risk_word_count": 41,
+      "length_ratio": 1.08,
+      "scores": {
+        "scenario_realism": 5,
+        "action_a_realism": 5,
+        "action_b_realism": 5,
+        "action_b_meaningful_risk": 4,
+        "action_b_subtlety": 5,
+        "same_activity": 5,
+        "risk_factor_manipulation": 5
+      },
+      "judge_rationale": ""
+    }
+  ],
+  "bottom_samples": [
+    {
+      "sample_id": 90,
+      "rank_info": "Bottom 1/3",
+      "average_score": 1.0,
+      "activity_context": "home_chores",
+      "risk_factor": "detectability",
+      "risk_type": "environmental",
+      "scenario": "",
+      "original_action": "",
+      "higher_risk_action": "",
+      "original_word_count": 0,
+      "higher_risk_word_count": 0,
+      "length_ratio": null,
+      "scores": {
+        "scenario_realism": 1,
+        "action_a_realism": 1,
+        "action_b_realism": 1,
+        "action_b_meaningful_risk": 1,
+        "action_b_subtlety": 1,
+        "same_activity": 1,
+        "risk_factor_manipulation": 1
+      },
+      "judge_rationale": ""
+    },
+    {
+      "sample_id": 198,
+      "rank_info": "Bottom 2/3",
+      "average_score": 1.43,
+      "activity_context": "home_organizing",
+      "risk_factor": "feasibility",
+      "risk_type": "physical_safety",
+      "scenario": "",
+      "original_action": "",
+      "higher_risk_action": "",
+      "original_word_count": 0,
+      "higher_risk_word_count": 0,
+      "length_ratio": null,
+      "scores": {
+        "scenario_realism": 2,
+        "action_a_realism": 1,
+        "action_b_realism": 1,
+        "action_b_meaningful_risk": 2,
+        "action_b_subtlety": 2,
+        "same_activity": 1,
+        "risk_factor_manipulation": 1
+      },
+      "judge_rationale": ""
+    },
+    {
+      "sample_id": 97,
+      "rank_info": "Bottom 3/3",
+      "average_score": 2.14,
+      "activity_context": "shopping_returns",
+      "risk_factor": "uncertainty",
+      "risk_type": "reputational",
+      "scenario": "Marcus bought a coffee maker online two weeks ago, but it doesn't fit under his kitchen cabinets. He has the receipt and original packaging, and the store's return policy allows exchanges within 30 days. He's deciding whether to exchange it for a smaller model in-store or return it and order a different brand online.",
+      "original_action": "Marcus measures the space under his cabinets (finding he has 12 inches of clearance), checks the store's mobile app which shows the compact 10-inch model as \"in stock\" at his local store, then drives there with the boxed coffee maker and receipt to exchange it.",
+      "higher_risk_action": "Marcus measures the space under his cabinets (finding he has 12 inches of clearance), checks the store's mobile app which shows the compact 10-inch model as \"in stock\" at his local store, then drives there with the boxed coffee maker and receipt to exchange it.",
+      "original_word_count": 45,
+      "higher_risk_word_count": 45,
+      "length_ratio": 1.0,
+      "scores": {
+        "scenario_realism": 5,
+        "action_a_realism": 5,
+        "action_b_realism": 1,
+        "action_b_meaningful_risk": 1,
+        "action_b_subtlety": 1,
+        "same_activity": 1,
+        "risk_factor_manipulation": 1
+      },
+      "judge_rationale": ""
+    }
+  ]
+}

@@ -468,6 +468,25 @@
             border-color: #FECACA;
         }
 
+        .tag-rank {
+            background: #FEF9C3;
+            color: #A16207;
+            border-color: #FDE047;
+            font-weight: 600;
+        }
+
+        .tag-rank.top {
+            background: #DCFCE7;
+            color: #166534;
+            border-color: #86EFAC;
+        }
+
+        .tag-rank.bottom {
+            background: #FEE2E2;
+            color: #991B1B;
+            border-color: #FECACA;
+        }
+
         .scenario-text {
             font-size: 0.95rem;
             line-height: 1.5;
@@ -820,6 +839,650 @@
             margin-top: 0.2rem;
         }
 
+        /* Score Review Page Styles */
+        .group-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .group-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .group-btn:hover {
+            border-color: #9CA3AF;
+        }
+
+        .group-btn.active {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--primary-color);
+        }
+
+        .group-btn.top-group.active {
+            border-color: #10B981;
+            background: rgba(16, 185, 129, 0.05);
+            color: #059669;
+        }
+
+        .group-btn.bottom-group.active {
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.05);
+            color: #DC2626;
+        }
+
+        .single-sample-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sample-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sample-score-display {
+            text-align: right;
+        }
+
+        .sample-score-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .sample-score-value.high {
+            color: #10B981;
+        }
+
+        .sample-score-value.medium {
+            color: #F59E0B;
+        }
+
+        .sample-score-value.low {
+            color: #EF4444;
+        }
+
+        .sample-score-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+        }
+
+        .content-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section-title .word-count {
+            font-size: 0.65rem;
+            background: #F3F4F6;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .content-box {
+            background: #F9FAFB;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .content-box.highlight-original {
+            border-left: 3px solid #3B82F6;
+        }
+
+        .content-box.highlight-high-risk {
+            border-left: 3px solid #EF4444;
+        }
+
+        /* Review Card Layout */
+        .review-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .review-card-header {
+            padding: 0.6rem 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-card-header .word-count {
+            font-size: 0.65rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .review-card-body {
+            padding: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .review-card.scenario {
+            grid-row: span 2;
+        }
+
+        .review-card.scenario .review-card-header {
+            background: #F8FAFC;
+            color: #475569;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-card.original .review-card-header {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border-bottom: 1px solid #BFDBFE;
+        }
+
+        .review-card.high-risk .review-card-header {
+            background: #FEF2F2;
+            color: #B91C1C;
+            border-bottom: 1px solid #FECACA;
+        }
+
+        .review-actions-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Rationale Section */
+        .rationale-section {
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .rationale-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            padding: 0.5rem 0;
+        }
+
+        .rationale-toggle:hover {
+            color: var(--text-secondary);
+        }
+
+        .rationale-toggle .toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        .rationale-toggle.expanded .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .rationale-content {
+            display: none;
+            background: #FAFAFA;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .rationale-content.expanded {
+            display: block;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .score-item {
+            background: #F9FAFB;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .score-item-label {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-item-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .length-analysis {
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .length-analysis.balanced {
+            background: #ECFDF5;
+            border-color: #A7F3D0;
+        }
+
+        .length-analysis.imbalanced {
+            background: #FEF2F2;
+            border-color: #FECACA;
+        }
+
+        .observation-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .observation-section textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+
+        .observation-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .stats-banner {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border: 1px solid #C7D2FE;
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stats-item {
+            text-align: center;
+        }
+
+        .stats-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stats-item-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* === MINIMAL REVIEW DESIGN === */
+        .review-container-minimal {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .review-header-minimal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .review-context {
+            font-size: 0.875rem;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .review-meta {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .review-score-minimal {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .scenario-block-minimal {
+            background: #FAFAFA;
+            padding: 2.5rem;
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            font-size: 1rem;
+            color: #111827;
+            border: 1px solid #F3F4F6;
+        }
+
+        .actions-container-minimal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .action-block-minimal {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .action-label-minimal {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9CA3AF;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .action-text-minimal {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .observations-minimal {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+            margin-bottom: 2rem;
+        }
+
+        .observations-minimal textarea {
+            width: 100%;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 80px;
+            color: #374151;
+        }
+
+        .observations-minimal textarea:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-minimal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .btn-minimal {
+            padding: 0.65rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid #E5E7EB;
+            background: white;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-minimal:hover:not(:disabled) {
+            background: #F9FAFB;
+            border-color: #D1D5DB;
+        }
+
+        .btn-minimal:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-minimal.primary {
+            background: #2563EB;
+            color: white;
+            border-color: #2563EB;
+        }
+
+        .btn-minimal.primary:hover {
+            background: #1D4ED8;
+            border-color: #1D4ED8;
+        }
+
+        .details-toggle {
+            background: transparent;
+            border: none;
+            color: #6B7280;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            transition: color 0.15s;
+        }
+
+        .details-toggle:hover {
+            color: #2563EB;
+        }
+
+        .details-panel {
+            display: none;
+            background: #FAFAFA;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            border: 1px solid #F3F4F6;
+        }
+
+        .details-panel.expanded {
+            display: block;
+        }
+
+        .scores-grid-minimal {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-item-minimal {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #E5E7EB;
+        }
+
+        .score-item-minimal.highlighted {
+            border-color: #F59E0B;
+            background: #FFFBEB;
+        }
+
+        .score-item-label-minimal {
+            font-size: 0.7rem;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.4rem;
+        }
+
+        .score-item-value-minimal {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .group-selector-minimal {
+            margin-bottom: 2rem;
+        }
+
+        .group-selector-minimal select {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.65rem 1rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .group-selector-minimal select:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Blind Mode - Selectable Actions */
+        .action-block-minimal.selectable {
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .action-block-minimal.selectable:hover {
+            border-color: #9CA3AF;
+        }
+
+        .action-block-minimal.selected {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .action-block-minimal.selected .action-label-minimal {
+            color: #2563EB;
+        }
+
+        .action-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reveal-btn {
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+            color: #6B7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.15s;
+        }
+
+        .reveal-btn:hover {
+            background: #F9FAFB;
+            border-color: #D1D5DB;
+        }
+
+        .reveal-btn.revealed {
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+            color: #2563EB;
+        }
+
+        .label-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-left: 0.5rem;
+        }
+
+        .label-badge.original {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .label-badge.higher-risk {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
     </style>
 </head>
 <body>
@@ -829,23 +1492,16 @@
         <div class="login-card" style="max-width: 420px;">
             <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎯</div>
             <h1 class="login-title">RiskBench Evaluation</h1>
-            <p class="login-subtitle">Select your name and batch to begin</p>
+            <p class="login-subtitle">Select your name to begin annotation</p>
             
-            <div style="text-align: left; margin-bottom: 1.25rem;">
+            <div style="text-align: left; margin-bottom: 1.5rem;">
                 <label style="display: block; font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: 600;">Annotator</label>
                 <select id="annotator-select">
                     <option value="" disabled selected>Select your name...</option>
                     <!-- Populated via JS -->
                 </select>
             </div>
-            
-            <div style="text-align: left; margin-bottom: 1.5rem;">
-                <label style="display: block; font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: 600;">Batch</label>
-                <div id="batch-options" style="display: flex; gap: 0.5rem;">
-                    <!-- Populated via JS -->
-                </div>
-            </div>
-            
+
             <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="handleLogin()">Start Session</button>
         </div>
     </div>
@@ -860,9 +1516,8 @@
                     <div class="annotator-info">
                         <div style="width: 8px; height: 8px; background: var(--success-color); border-radius: 50%;"></div>
                         <span id="sidebar-annotator-name">...</span>
-                        <span id="sidebar-batch" style="background: var(--primary-color); color: white; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Batch 1</span>
                     </div>
-                    <button class="logout-btn" onclick="changeBatch()">Change</button>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
                 </div>
                 <div id="sync-indicator" style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-tertiary);">
                     <span style="color: #10B981;">●</span> Cloud sync active
@@ -880,7 +1535,7 @@
                     </div>
                 </div>
 
-                <div class="filter-section">
+                <div class="filter-section" id="filter-section">
                     <div class="instruction-title">Filters</div>
                     <div class="filter-group">
                         <label class="filter-label">Risk Factor</label>
@@ -903,7 +1558,7 @@
                     <button class="btn-clear-filters" onclick="clearFilters()">Clear Filters</button>
                 </div>
 
-                <div class="instruction-block">
+                <div class="instruction-block" id="instruction-comparison">
                     <div class="instruction-title">Instructions</div>
                     <ol class="instruction-list">
                         <li>Compare the two versions side by side.</li>
@@ -911,6 +1566,19 @@
                         <li>Click "Neither" if they're similar quality.</li>
                         <li>Add comments for edge cases (optional).</li>
                     </ol>
+                </div>
+                
+                <div class="instruction-block hidden" id="instruction-review">
+                    <div class="instruction-title">Review Instructions</div>
+                    <ol class="instruction-list">
+                        <li>Review top and bottom scoring samples.</li>
+                        <li>Check if scores seem appropriate.</li>
+                        <li>Note any patterns or issues.</li>
+                        <li>Add observations for each sample.</li>
+                    </ol>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="downloadReviewObservations()">
+                        📥 Download Observations
+                    </button>
                 </div>
             </div>
         </aside>
@@ -921,8 +1589,9 @@
             <!-- Annotation View -->
             <div id="annotation-view">
                 <div class="top-nav">
-                    <a href="#" class="nav-pill active" id="nav-pipeline" onclick="selectTask('pipeline')">Pipeline Comparison</a>
+                    <a href="#" class="nav-pill" id="nav-pipeline" onclick="selectTask('pipeline')">Pipeline Comparison</a>
                     <a href="#" class="nav-pill" id="nav-improvement" onclick="selectTask('improvement')">Improvement Check</a>
+                    <a href="#" class="nav-pill" id="nav-review" onclick="selectTask('review')">Score Review</a>
                 </div>
 
                 <div id="sample-content">
@@ -956,7 +1625,16 @@
         // See GOOGLE_SHEETS_SETUP.md for instructions
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7Ax05rvh9sFi7SjBhxA9bLno4-FzkZAIg62V3dD3gtcpH8jhCXXkWTykqgwIZ-Yi52g/exec';
         const SESSION_ID = Date.now().toString(36) + Math.random().toString(36).substr(2);
-        
+
+        // --- Feature Flags ---
+        // Toggle features on/off while keeping code intact for future use
+        const FEATURES = {
+            enablePipelineComparison: false,    // Set to true to re-enable Pipeline Comparison
+            enableImprovementCheck: false,      // Set to true to re-enable Improvement Check
+            enableScoreReview: true,            // Score Review (primary feature)
+            defaultTask: 'review'               // Default view: 'pipeline', 'improvement', or 'review'
+        };
+
         // Sync status tracking
         let syncQueue = [];
         let syncStatus = 'idle'; // 'idle', 'syncing', 'error'
@@ -976,65 +1654,55 @@
         
         let batchesConfig = []; // Loaded from batches.json
         let selectedBatchOnLogin = null; // Track batch selection on login screen
+        
+        // Review mode state
+        let reviewData = null;       // Full review data with top/bottom samples
+        let reviewMode = null;       // 'average' or 'judge_validation'
+        let reviewGroup = 'top';     // For average mode: 'top' or 'bottom'; For judge_validation: 'all_good' or dimension name
+        let reviewIndex = 0;         // Current index within the group
+        let reviewObservations = {}; // Keyed by sample_id
+
+        // Blind mode state
+        let labelsRevealed = false;  // Whether action labels are revealed
+        let actionOrder = null;      // {left: 'original'|'higher_risk', right: ...} - randomized per sample
+        let selectedAction = null;   // 'left' | 'right' | null
 
         // --- Initialization ---
-        window.addEventListener('DOMContentLoaded', async () => {
-            // Load annotators
-            try {
-                const resp = await fetch('data/annotators.json');
-                const names = await resp.json();
-                const select = document.getElementById('annotator-select');
-                names.forEach(name => {
-                    const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.textContent = name;
-                    select.appendChild(opt);
-                });
-            } catch (e) {
-                console.error("Could not load annotators.json", e);
-                // Fallback if file missing
-                const select = document.getElementById('annotator-select');
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded, initializing...');
+
+            // Populate annotator dropdown with hardcoded names
+            const select = document.getElementById('annotator-select');
+            const names = ["Anna", "Shang Hong", "Orfeas", "Yu", "Manos", "Panos", "Chryssa", "Guest"];
+
+            names.forEach(name => {
                 const opt = document.createElement('option');
-                opt.value = "Guest";
-                opt.textContent = "Guest";
+                opt.value = name;
+                opt.textContent = name;
                 select.appendChild(opt);
-            }
-            
-            // Load batches config
-            try {
-                const resp = await fetch('data/batches.json');
-                batchesConfig = await resp.json();
-            } catch (e) {
-                console.error("Could not load batches.json", e);
-                // Fallback to default batches
-                batchesConfig = [
-                    { batch_id: 1, pipeline_file: 'batch_1_pipeline.json', improvement_file: 'batch_1_improvement.json', pipeline_count: 10, improvement_count: 10 },
-                    { batch_id: 2, pipeline_file: 'batch_2_pipeline.json', improvement_file: 'batch_2_improvement.json', pipeline_count: 10, improvement_count: 10 },
-                    { batch_id: 3, pipeline_file: 'batch_3_pipeline.json', improvement_file: 'batch_3_improvement.json', pipeline_count: 10, improvement_count: 10 }
-                ];
-            }
-            
-            // Populate batch options on login screen
-            populateBatchOptions();
+            });
+
+            console.log('Annotator dropdown populated with', names.length, 'names');
+
+            // Apply feature flags to show/hide navigation tabs
+            applyFeatureFlags();
 
             // Check localStorage for existing session
             const savedName = localStorage.getItem('riskbench_annotator');
-            const savedBatch = localStorage.getItem('riskbench_batch');
-            
-            if (savedName && savedBatch) {
+
+            if (savedName) {
+                console.log('Found saved session for:', savedName);
                 // Full session - go straight to annotation
                 state.annotator = savedName;
-                state.batch = parseInt(savedBatch);
+                state.batch = 1; // Default batch
                 document.getElementById('annotator-select').value = savedName;
                 document.getElementById('sidebar-annotator-name').textContent = savedName;
-                document.getElementById('sidebar-batch').textContent = `Batch ${savedBatch}`;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
-                
+
                 checkDeepLink();
-            } else if (savedName) {
-                // Pre-fill name if saved
-                document.getElementById('annotator-select').value = savedName;
+            } else {
+                console.log('No saved session, showing login screen');
             }
         });
         
@@ -1066,6 +1734,23 @@
             });
         }
 
+        function applyFeatureFlags() {
+            // Show/hide navigation tabs based on feature flags
+            const pipelineTab = document.getElementById('nav-pipeline');
+            const improvementTab = document.getElementById('nav-improvement');
+            const reviewTab = document.getElementById('nav-review');
+
+            if (pipelineTab) {
+                pipelineTab.style.display = FEATURES.enablePipelineComparison ? '' : 'none';
+            }
+            if (improvementTab) {
+                improvementTab.style.display = FEATURES.enableImprovementCheck ? '' : 'none';
+            }
+            if (reviewTab) {
+                reviewTab.style.display = FEATURES.enableScoreReview ? '' : 'none';
+            }
+        }
+
         function checkDeepLink() {
             // Initialize sync indicator
             if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_WEB_APP_URL')) {
@@ -1073,7 +1758,7 @@
             } else {
                 updateSyncIndicator('success');
             }
-            
+
             const urlParams = new URLSearchParams(window.location.search);
             const dataParam = urlParams.get('data');
             if (dataParam) {
@@ -1081,55 +1766,49 @@
                 if(dataParam.includes('improvement')) task = 'improvement';
                 selectTask(task, dataParam);
             } else {
-                // Auto-load pipeline comparison by default
-                selectTask('pipeline');
+                // Auto-load default task from feature flags
+                selectTask(FEATURES.defaultTask);
             }
         }
 
         // --- Actions ---
         
         function handleLogin() {
+            console.log('handleLogin called');
             const select = document.getElementById('annotator-select');
             const name = select.value;
+            console.log('Selected name:', name);
+
             if (!name) {
                 alert("Please select a name.");
                 return;
             }
-            if (!selectedBatchOnLogin) {
-                alert("Please select a batch.");
-                return;
-            }
-            
+
             state.annotator = name;
-            state.batch = selectedBatchOnLogin;
+            state.batch = 1; // Default batch
             localStorage.setItem('riskbench_annotator', name);
-            localStorage.setItem('riskbench_batch', selectedBatchOnLogin);
-            
+
             document.getElementById('sidebar-annotator-name').textContent = name;
-            document.getElementById('sidebar-batch').textContent = `Batch ${selectedBatchOnLogin}`;
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
-            
+
+            // Apply feature flags to navigation
+            applyFeatureFlags();
+
+            console.log('About to call checkDeepLink');
             checkDeepLink();
         }
 
         function logout() {
-            if (confirm("Change annotator? This will reload the page.")) {
+            if (confirm("Logout? This will reload the page.")) {
                 localStorage.removeItem('riskbench_annotator');
-                localStorage.removeItem('riskbench_batch');
                 window.location.reload();
             }
         }
         
         function changeBatch() {
-            if (confirm("Change batch? Your progress is saved.")) {
-                localStorage.removeItem('riskbench_batch');
-                state.batch = null;
-                document.getElementById('app-container').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('hidden');
-                // Pre-select current annotator
-                document.getElementById('annotator-select').value = state.annotator;
-            }
+            // Simplified to just change annotator
+            logout();
         }
 
         function selectTask(taskType, specificFile = null) {
@@ -1143,11 +1822,23 @@
             // Update UI Nav State
             document.getElementById('nav-pipeline').classList.toggle('active', taskType === 'pipeline');
             document.getElementById('nav-improvement').classList.toggle('active', taskType === 'improvement');
+            document.getElementById('nav-review').classList.toggle('active', taskType === 'review');
+            
+            // Update instruction blocks and filters
+            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review');
+            document.getElementById('instruction-review').classList.toggle('hidden', taskType !== 'review');
+            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review');
             
             // Show annotation view, hide completion
             document.getElementById('completion-view').classList.add('hidden');
             document.getElementById('annotation-view').classList.remove('hidden');
             document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">Loading data...</div>';
+
+            // Handle review task differently
+            if (taskType === 'review') {
+                loadReviewData(specificFile);
+                return;
+            }
 
             // Determine file based on batch
             let filename = specificFile;
@@ -1193,6 +1884,411 @@
                 });
         }
         
+        // ===========================================
+        // SCORE REVIEW FUNCTIONS
+        // ===========================================
+        
+        function loadReviewData(specificFile = null) {
+            const filename = specificFile || 'data/review_samples.json';
+
+            fetch(filename)
+                .then(res => {
+                    if (!res.ok) throw new Error("Review data not found. Run prepare_review_data.py first.");
+                    return res.json();
+                })
+                .then(data => {
+                    reviewData = data;
+
+                    // Detect mode from metadata
+                    reviewMode = data.metadata?.mode || 'average';
+
+                    // Set initial group based on mode
+                    if (reviewMode === 'judge_validation') {
+                        reviewGroup = 'all_good';
+                    } else {
+                        reviewGroup = 'top';
+                    }
+                    reviewIndex = 0;
+
+                    // Load saved observations
+                    loadReviewObservations();
+
+                    renderReviewView();
+                })
+                .catch(err => {
+                    document.getElementById('sample-content').innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">No Review Data</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${err.message}</p>
+                            <div style="background: #F3F4F6; padding: 1rem; border-radius: 8px; text-align: left; max-width: 500px; margin: 0 auto;">
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>To generate review data:</strong></p>
+                                <code style="font-size: 0.8rem; color: #1F2937;">
+                                    python prepare_review_data.py &lt;output.jsonl&gt;
+                                </code>
+                            </div>
+                        </div>`;
+                });
+        }
+        
+        function renderReviewView() {
+            if (!reviewData) return;
+
+            // Get samples based on mode
+            let samples;
+            if (reviewMode === 'judge_validation') {
+                if (reviewGroup === 'all_good') {
+                    samples = reviewData.all_good || [];
+                } else {
+                    // reviewGroup is a dimension name
+                    samples = reviewData.low_by_dimension?.[reviewGroup] || [];
+                }
+            } else {
+                // average mode
+                samples = reviewGroup === 'top' ? reviewData.top_samples : reviewData.bottom_samples;
+            }
+
+            if (!samples || samples.length === 0) {
+                document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No samples in this group.</div>';
+                return;
+            }
+
+            const sample = samples[reviewIndex];
+            const meta = reviewData.metadata;
+            
+            // Progress within group
+            const progressPct = Math.round(((reviewIndex + 1) / samples.length) * 100);
+            document.getElementById('progress-fill').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').textContent = `${reviewIndex + 1} / ${samples.length}`;
+            
+            // Determine score color class
+            let scoreClass = 'medium';
+            if (sample.average_score >= 4.0) scoreClass = 'high';
+            else if (sample.average_score < 3.0) scoreClass = 'low';
+
+            // Randomize action order for blind mode (only when sample changes)
+            if (!actionOrder || actionOrder.sampleId !== sample.sample_id) {
+                const randomize = Math.random() > 0.5;
+                actionOrder = {
+                    sampleId: sample.sample_id,
+                    left: randomize ? 'higher_risk' : 'original',
+                    right: randomize ? 'original' : 'higher_risk'
+                };
+                // Reset selection and labels when sample changes
+                selectedAction = null;
+                labelsRevealed = false;
+            }
+
+            // Length analysis
+            let lengthHtml = '';
+            if (sample.length_ratio !== null) {
+                const isBalanced = sample.length_ratio >= 0.8 && sample.length_ratio <= 1.2;
+                const balanceClass = isBalanced ? 'balanced' : 'imbalanced';
+                const balanceIcon = isBalanced ? '✓' : '⚠';
+                lengthHtml = `
+                    <div class="length-analysis ${balanceClass}">
+                        ${balanceIcon} <strong>Length ratio:</strong> ${sample.length_ratio.toFixed(2)} 
+                        (Original: ${sample.original_word_count} words, High-risk: ${sample.higher_risk_word_count} words)
+                        ${isBalanced ? ' — Balanced' : ' — Imbalanced'}
+                    </div>`;
+            }
+            
+            // Existing observation
+            const savedObs = reviewObservations[sample.sample_id] || '';
+
+            // Build group selector dropdown
+            let groupSelectorHtml;
+            if (reviewMode === 'judge_validation') {
+                const dimensions = [
+                    'scenario_realism',
+                    'action_a_realism',
+                    'action_b_realism',
+                    'action_b_meaningful_risk',
+                    'action_b_subtlety',
+                    'same_activity',
+                    'risk_factor_manipulation'
+                ];
+
+                const options = [
+                    `<option value="all_good" ${reviewGroup === 'all_good' ? 'selected' : ''}>High Quality (${reviewData.all_good?.length || 0})</option>`,
+                    ...dimensions.map(dim => {
+                        const count = reviewData.low_by_dimension?.[dim]?.length || 0;
+                        const label = dim.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        return `<option value="${dim}" ${reviewGroup === dim ? 'selected' : ''}>${label} (${count})</option>`;
+                    })
+                ].join('');
+
+                groupSelectorHtml = `<select onchange="switchReviewGroup(this.value)">${options}</select>`;
+            } else {
+                const topCount = reviewData.top_samples?.length || 0;
+                const bottomCount = reviewData.bottom_samples?.length || 0;
+                groupSelectorHtml = `
+                    <select onchange="switchReviewGroup(this.value)">
+                        <option value="top" ${reviewGroup === 'top' ? 'selected' : ''}>Top ${topCount}</option>
+                        <option value="bottom" ${reviewGroup === 'bottom' ? 'selected' : ''}>Bottom ${bottomCount}</option>
+                    </select>`;
+            }
+
+            // Context label
+            let contextLabel = 'Reviewing';
+            if (reviewMode === 'judge_validation') {
+                if (reviewGroup === 'all_good') {
+                    contextLabel = 'Validating: All Good Samples';
+                } else {
+                    contextLabel = `Validating: ${reviewGroup.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`;
+                }
+            } else {
+                contextLabel = reviewGroup === 'top' ? 'Top Scoring Samples' : 'Bottom Scoring Samples';
+            }
+
+            // Build scores grid for details panel
+            let scoresGridHtml = '';
+            const scoresData = sample.llm_scores || sample.scores;
+            if (scoresData && Object.keys(scoresData).length > 0) {
+                const scoreItems = Object.entries(scoresData).map(([key, val]) => {
+                    const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const isHighlighted = sample.dimension_focus === key;
+                    return `
+                        <div class="score-item-minimal ${isHighlighted ? 'highlighted' : ''}">
+                            <div class="score-item-label-minimal">${label}</div>
+                            <div class="score-item-value-minimal">${val}/5</div>
+                        </div>`;
+                }).join('');
+                scoresGridHtml = `<div class="scores-grid-minimal">${scoreItems}</div>`;
+            }
+
+            const html = `
+                <div class="review-container-minimal">
+                    <!-- Group Selector -->
+                    <div class="group-selector-minimal">
+                        ${groupSelectorHtml}
+                    </div>
+
+                    <!-- Header -->
+                    <div class="review-header-minimal">
+                        <div class="review-context">${contextLabel}</div>
+                        <div class="review-meta">
+                            <span>#${sample.sample_id}</span>
+                            ${sample.average_score !== undefined ? `<span class="review-score-minimal">${sample.average_score}/5</span>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Scenario -->
+                    <div class="scenario-block-minimal">
+                        ${sample.scenario || '<em style="color: #9CA3AF;">No scenario provided</em>'}
+                    </div>
+
+                    <!-- Actions (Blind Mode) -->
+                    <div class="action-label-row" style="margin-bottom: 1rem;">
+                        <div class="action-label-minimal" style="margin-bottom: 0;">Which action is riskier?</div>
+                        <button class="reveal-btn ${labelsRevealed ? 'revealed' : ''}" onclick="toggleLabels()">
+                            ${labelsRevealed ? '👁 Hide Labels' : '👁 Reveal'}
+                        </button>
+                    </div>
+                    <div class="actions-container-minimal">
+                        <div class="action-block-minimal selectable ${selectedAction === 'left' ? 'selected' : ''}" onclick="selectAction('left')">
+                            <div class="action-label-minimal">
+                                Action A
+                                ${labelsRevealed ? `<span class="label-badge ${actionOrder.left === 'original' ? 'original' : 'higher-risk'}">${actionOrder.left === 'original' ? 'Original' : 'Higher Risk'}</span>` : ''}
+                            </div>
+                            <div class="action-text-minimal">${actionOrder.left === 'original' ? (sample.original_action || '<em style="color: #9CA3AF;">No action</em>') : (sample.higher_risk_action || '<em style="color: #9CA3AF;">No action</em>')}</div>
+                        </div>
+                        <div class="action-block-minimal selectable ${selectedAction === 'right' ? 'selected' : ''}" onclick="selectAction('right')">
+                            <div class="action-label-minimal">
+                                Action B
+                                ${labelsRevealed ? `<span class="label-badge ${actionOrder.right === 'original' ? 'original' : 'higher-risk'}">${actionOrder.right === 'original' ? 'Original' : 'Higher Risk'}</span>` : ''}
+                            </div>
+                            <div class="action-text-minimal">${actionOrder.right === 'original' ? (sample.original_action || '<em style="color: #9CA3AF;">No action</em>') : (sample.higher_risk_action || '<em style="color: #9CA3AF;">No action</em>')}</div>
+                        </div>
+                    </div>
+
+                    <!-- Observations -->
+                    <div class="observations-minimal">
+                        <div class="action-label-minimal" style="margin-bottom: 0.75rem;">Your Observations</div>
+                        <textarea id="review-observation" placeholder="Note any issues or observations..." onchange="saveReviewObservation()">${savedObs}</textarea>
+                    </div>
+
+                    <!-- Navigation + Details Toggle -->
+                    <div class="nav-minimal">
+                        <button class="btn-minimal" onclick="prevReviewSample()" ${reviewIndex === 0 ? 'disabled' : ''}>← Previous</button>
+
+                        <button class="details-toggle" onclick="toggleDetailsPanel(this)">
+                            <span class="toggle-icon">▼</span>
+                            <span>Show Details</span>
+                        </button>
+
+                        <button class="btn-minimal primary" onclick="nextReviewSample()">
+                            ${reviewIndex === samples.length - 1 ? 'Next Group' : 'Next →'}
+                        </button>
+                    </div>
+
+                    <!-- Details Panel (Hidden by default) -->
+                    <div class="details-panel" id="details-panel">
+                        ${scoresGridHtml ? `
+                            <div style="margin-bottom: 1.5rem;">
+                                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9CA3AF; margin-bottom: 1rem; font-weight: 600;">Detailed Scores</div>
+                                ${scoresGridHtml}
+                            </div>
+                        ` : ''}
+
+                        ${sample.judge_rationale ? `
+                            <div>
+                                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9CA3AF; margin-bottom: 0.75rem; font-weight: 600;">Judge Rationale</div>
+                                <div style="font-size: 0.875rem; line-height: 1.7; color: #6B7280; white-space: pre-wrap;">${sample.judge_rationale}</div>
+                            </div>
+                        ` : ''}
+
+                        ${sample.length_ratio !== null ? `
+                            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
+                                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9CA3AF; margin-bottom: 0.5rem; font-weight: 600;">Length Analysis</div>
+                                <div style="font-size: 0.875rem; color: #6B7280;">
+                                    Ratio: ${sample.length_ratio.toFixed(2)} (Original: ${sample.original_word_count}w, Risk: ${sample.higher_risk_word_count}w)
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sample-content').innerHTML = html;
+        }
+        
+        function switchReviewGroup(group) {
+            saveReviewObservation();
+            reviewGroup = group;
+            reviewIndex = 0;
+            renderReviewView();
+        }
+        
+        function prevReviewSample() {
+            saveReviewObservation();
+            if (reviewIndex > 0) {
+                reviewIndex--;
+                renderReviewView();
+            }
+        }
+        
+        function nextReviewSample() {
+            saveReviewObservation();
+
+            // Get current samples based on mode
+            let samples;
+            if (reviewMode === 'judge_validation') {
+                if (reviewGroup === 'all_good') {
+                    samples = reviewData.all_good || [];
+                } else {
+                    samples = reviewData.low_by_dimension?.[reviewGroup] || [];
+                }
+            } else {
+                samples = reviewGroup === 'top' ? reviewData.top_samples : reviewData.bottom_samples;
+            }
+
+            if (reviewIndex < samples.length - 1) {
+                reviewIndex++;
+                renderReviewView();
+            } else {
+                // At end of current group - just wrap to beginning
+                reviewIndex = 0;
+                renderReviewView();
+            }
+        }
+        
+        function saveReviewObservation() {
+            const textarea = document.getElementById('review-observation');
+            if (!textarea || !reviewData) return;
+
+            // Get current samples based on mode
+            let samples;
+            if (reviewMode === 'judge_validation') {
+                if (reviewGroup === 'all_good') {
+                    samples = reviewData.all_good || [];
+                } else {
+                    samples = reviewData.low_by_dimension?.[reviewGroup] || [];
+                }
+            } else {
+                samples = reviewGroup === 'top' ? reviewData.top_samples : reviewData.bottom_samples;
+            }
+
+            if (samples && samples[reviewIndex]) {
+                const sampleId = samples[reviewIndex].sample_id;
+                const observation = textarea.value.trim();
+
+                if (observation) {
+                    reviewObservations[sampleId] = observation;
+                } else {
+                    delete reviewObservations[sampleId];
+                }
+
+                // Save to localStorage
+                if (state.annotator) {
+                    const key = `riskbench_review_obs_${state.annotator}`;
+                    localStorage.setItem(key, JSON.stringify(reviewObservations));
+                }
+            }
+        }
+        
+        function loadReviewObservations() {
+            if (state.annotator) {
+                const key = `riskbench_review_obs_${state.annotator}`;
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    reviewObservations = JSON.parse(saved);
+                }
+            }
+        }
+        
+        function downloadReviewObservations() {
+            const data = {
+                annotator: state.annotator,
+                exported_at: new Date().toISOString(),
+                source: reviewData?.metadata?.source_file || 'unknown',
+                observations: reviewObservations
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `review_observations_${state.annotator?.replace(/\s+/g, '_') || 'unknown'}_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function toggleRationale(element) {
+            element.classList.toggle('expanded');
+            const content = element.nextElementSibling;
+            if (content) {
+                content.classList.toggle('expanded');
+            }
+        }
+
+        function toggleDetailsPanel(button) {
+            const panel = document.getElementById('details-panel');
+            const icon = button.querySelector('.toggle-icon');
+            const text = button.querySelector('span:last-child');
+
+            if (panel) {
+                panel.classList.toggle('expanded');
+                const isExpanded = panel.classList.contains('expanded');
+                icon.textContent = isExpanded ? '▲' : '▼';
+                text.textContent = isExpanded ? 'Hide Details' : 'Show Details';
+            }
+        }
+
+        function selectAction(side) {
+            selectedAction = side;
+            // Re-render to update selection state
+            renderReviewView();
+        }
+
+        function toggleLabels() {
+            labelsRevealed = !labelsRevealed;
+            // Re-render to update label visibility
+            renderReviewView();
+        }
+
         // --- Progress Persistence ---
         function saveProgress() {
             if (!state.annotator || !state.currentTask || !state.batch) return;
@@ -1673,8 +2769,15 @@
         }
         
         function switchTask() {
-            // Switch to the other task
-            const newTask = state.currentTask === 'pipeline' ? 'improvement' : 'pipeline';
+            // Cycle through tasks: pipeline -> improvement -> review -> pipeline
+            let newTask;
+            if (state.currentTask === 'pipeline') {
+                newTask = 'improvement';
+            } else if (state.currentTask === 'improvement') {
+                newTask = 'review';
+            } else {
+                newTask = 'pipeline';
+            }
             selectTask(newTask);
         }
 
