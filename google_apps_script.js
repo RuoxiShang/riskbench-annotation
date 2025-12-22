@@ -56,6 +56,27 @@ function handleRequest(e) {
     var newHeaders = [];
     var keys = Object.keys(data);
     
+    // Define preferred order for common fields
+    var preferredOrder = [
+      "server_timestamp", "timestamp", "session_id", "annotator", "sample_id",
+      "quality_flag", "verdict", 
+      "consequence", "probability",
+      "harm_type_correct", "risk_mechanism_correct",
+      "notes",
+      "risk_factor", "domain", "risk_type"
+    ];
+
+    // 1. Add missing preferred headers first
+    for (var i = 0; i < preferredOrder.length; i++) {
+      var key = preferredOrder[i];
+      if (data.hasOwnProperty(key)) {
+        if (headers.indexOf(key) === -1 && newHeaders.indexOf(key) === -1) {
+          newHeaders.push(key);
+        }
+      }
+    }
+
+    // 2. Add any other missing headers
     for (var k = 0; k < keys.length; k++) {
       var key = keys[k];
       if (headers.indexOf(key) === -1 && newHeaders.indexOf(key) === -1) {
