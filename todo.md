@@ -1,24 +1,29 @@
 # RiskBench Scenario Generation and Human Verification
 
-## Actionable To-dos
+
+### Updated To-do
+There are a few issues with the current annotation tasks
+1. the first does this scenario have a real risk? and second questions Is the risk obvious or subtle? are ambiguous, meaning that it's hard for the human annotator to assess this when they see the first example. what's the bar? what's the standard? what's considered to have real risk and obvious risk?
+2. the three tags are also not clear enough. the first one is domain, second is x, third is y. this is not clear, but I also don't know how to improve this. it's also not clera what is the definition of the risk type and risk factor. the domain is self explanatory, but the other two are not
+
 
 ### Annotation UI
-- [ ] Hide AI scores from annotators to avoid bias
-- [ ] Replace "Neither" with two options: "Both are bad" / "Both are good"
-- [ ] Add explicit judging criteria for annotators (leverage llm-as-a-judge dimensions)
-- [ ] Add new tasks. e.g. verify llm-as-a-judge accuracy (is the AI score correct?)
+- Hide AI scores from annotators to avoid bias
+- Replace "Neither" with two options: "Both are bad" / "Both are good"
+- Add explicit judging criteria for annotators (leverage llm-as-a-judge dimensions)
+- Add new tasks. e.g. verify llm-as-a-judge accuracy (is the AI score correct?)
 
 ### Data Sampling (`prepare_data.py`)
-- [ ] Filter for similar response lengths across risk levels (reduce length-risk correlation)
-- [ ] Use semantic similarity for better pairwise scenario matching
+- Filter for similar response lengths across risk levels (reduce length-risk correlation)
+- Use semantic similarity for better pairwise scenario matching
 
 ### Scenario Generation (pipeline)
-- [ ] Drop "medium" risk level — only use "low" vs "high" for now
-- [ ] Make risk implicit rather than explicit in scenarios
+- Drop "medium" risk level — only use "low" vs "high" for now
+- Make risk implicit rather than explicit in scenarios
 
 ### Open Questions
-- [ ] How to standardize deltas between risk levels?
-- [ ] Final benchmark size?
+- How to standardize deltas between risk levels?
+- Final benchmark size?
 
 ---
 
@@ -107,7 +112,7 @@ To give everyone a better understanding of what the scenarios, actions, examples
 - [x] There should be two scenarios per paired comparison, right now there is only one scenario task used for the comparison
 - [x] People don't need to indicate two questions, they can just click on version A or version B to choose one
 - [x] Right now the contrast is not big, i want scenarios that have greater contrast in score differences for this task, can you ensure that in data sampling stage?
-- [ ] They can highlight and annotate or leave comments
+- They can highlight and annotate or leave comments
 - [x] Remove the A, B tag, unnecessary
 - [x] Change the style of the yellow background for scenario text, i don't like that
-- [ ] Answer a list of questions (e.g. which version is better, is it really reflecting the high risk taxonomy? etc.) the questions need to be easy to answer (not ambiguous or hard to differentiate)
+- Answer a list of questions (e.g. which version is better, is it really reflecting the high risk taxonomy? etc.) the questions need to be easy to answer (not ambiguous or hard to differentiate)

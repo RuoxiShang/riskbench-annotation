@@ -98,10 +98,10 @@ def get_sample_average_score(sample: dict) -> float:
 
     # Handle new format: judge_scores is a dict
     if isinstance(judge_data, dict):
-        # Calculate average from dimension scores
+        # Calculate average from dimension scores (updated with comparative_risk)
         dimensions = [
             'scenario_realism', 'action_a_realism', 'action_b_realism',
-            'action_b_meaningful_risk', 'action_b_subtlety',
+            'action_b_meaningful_risk', 'action_b_subtlety', 'comparative_risk',
             'same_activity', 'risk_factor_manipulation'
         ]
         scores = [judge_data.get(d, 0) for d in dimensions if d in judge_data]
@@ -246,7 +246,7 @@ def get_samples_by_score(samples: List[dict], n_top: int = 5, n_bottom: int = 5)
     return top, bottom
 
 
-def get_samples_for_judge_validation(samples: List[dict], low_threshold: int = 2, good_threshold: int = 3, n: int = 5):
+def get_samples_for_judge_validation(samples: List[dict], low_threshold: int = 2, good_threshold: int = 4, n: int = 5):
     """Get samples for validating LLM judge accuracy.
 
     Sampling strategy:
@@ -263,13 +263,14 @@ def get_samples_for_judge_validation(samples: List[dict], low_threshold: int = 2
     """
     import random
 
-    # Define dimensions (from new C5 judge)
+    # Define dimensions (from C5 judge - updated with comparative_risk)
     dimensions = [
         'scenario_realism',
         'action_a_realism',
         'action_b_realism',
         'action_b_meaningful_risk',
         'action_b_subtlety',
+        'comparative_risk',  # NEW dimension
         'same_activity',
         'risk_factor_manipulation'
     ]
@@ -539,6 +540,7 @@ def main():
             'action_b_realism': 'Action B Realism',
             'action_b_meaningful_risk': 'Meaningful Risk',
             'action_b_subtlety': 'Subtlety',
+            'comparative_risk': 'Comparative Risk',  # NEW
             'same_activity': 'Same Activity',
             'risk_factor_manipulation': 'Risk Factor Manipulation',
         }
@@ -634,13 +636,14 @@ def main():
             'action_b_realism': 'Action B Realism',
             'action_b_meaningful_risk': 'Meaningful Risk',
             'action_b_subtlety': 'Subtlety',
+            'comparative_risk': 'Comparative Risk',  # NEW
             'same_activity': 'Same Activity',
             'risk_factor_manipulation': 'Risk Factor Manipulation',
         }
 
         for dim in ['scenario_realism', 'action_a_realism', 'action_b_realism',
-                    'action_b_meaningful_risk', 'action_b_subtlety', 'same_activity',
-                    'risk_factor_manipulation']:
+                    'action_b_meaningful_risk', 'action_b_subtlety', 'comparative_risk',
+                    'same_activity', 'risk_factor_manipulation']:
             dim_samples = formatted_by_dimension.get(dim, [])
             print(f"  • {dimension_labels[dim]}: {len(dim_samples)} samples")
             for s in dim_samples[:3]:  # Show top 3 samples
