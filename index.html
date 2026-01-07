@@ -1909,6 +1909,155 @@
             display: block;
         }
 
+        /* === TYPE REFERENCE MODAL === */
+        .type-ref-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .type-ref-modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .type-ref-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .type-ref-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .type-ref-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin: 0;
+        }
+
+        .type-ref-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #94A3B8;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .type-ref-close:hover {
+            color: #64748B;
+        }
+
+        .type-ref-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .type-ref-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .type-ref-section h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            margin: 0 0 0.75rem 0;
+            font-weight: 600;
+        }
+
+        .type-ref-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .type-ref-item {
+            padding: 0.6rem 0.75rem;
+            border-radius: 6px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            transition: all 0.15s;
+        }
+
+        .type-ref-item.highlighted {
+            background: #EEF2FF;
+            border-color: #818CF8;
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+        }
+
+        .type-ref-item-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.2rem;
+        }
+
+        .type-ref-item.highlighted .type-ref-item-name {
+            color: #4338CA;
+        }
+
+        .type-ref-item-name .current-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            background: #818CF8;
+            color: white;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .type-ref-item-desc {
+            font-size: 0.75rem;
+            color: #64748B;
+            line-height: 1.4;
+        }
+
+        .view-all-link {
+            font-size: 0.7rem;
+            color: #6366F1;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+
+        .view-all-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
         /* === CALIBRATION MODAL === */
         .calibration-modal-overlay {
             position: fixed;
@@ -2330,6 +2479,30 @@
         </div>
     </div>
 
+    <!-- Type Reference Modal -->
+    <div id="type-ref-modal" class="type-ref-modal-overlay" onclick="closeTypeRefModal(event)">
+        <div class="type-ref-modal" onclick="event.stopPropagation()">
+            <div class="type-ref-header">
+                <h3>📖 Label Reference</h3>
+                <button class="type-ref-close" onclick="closeTypeRefModal()">&times;</button>
+            </div>
+            <div class="type-ref-columns">
+                <div class="type-ref-section">
+                    <h4>Harm Types</h4>
+                    <div class="type-ref-list" id="harm-type-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <div class="type-ref-section">
+                    <h4>Risk Mechanisms</h4>
+                    <div class="type-ref-list" id="risk-mechanism-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-card" style="max-width: 420px;">
@@ -2609,7 +2782,7 @@
 
             // Populate annotator dropdown with hardcoded names
             const select = document.getElementById('annotator-select');
-            const names = ["Anna", "Shang Hong", "Orfeas", "Yu", "Manos", "Panos", "Chryssa", "Guest"];
+            const names = ["Anna", "Shang Hong", "Orfeas", "Yu", "Manos", "Panos", "Chryssa"];
 
             names.forEach(name => {
                 const opt = document.createElement('option');
@@ -3468,7 +3641,10 @@
 
                             <!-- Q3: Harm Type Correct -->
                             <div class="c6-question" style="margin-top: 0.75rem;">
-                                <label class="c6-question-label">3. Is <strong>${riskTypeDisplay}</strong> the correct harm type?</label>
+                                <label class="c6-question-label">
+                                    3. Is <strong>${riskTypeDisplay}</strong> the correct harm type?
+                                    <span class="view-all-link" onclick="showTypeRefModal()">view all</span>
+                                </label>
                                 <div class="c6-options">
                                     <button type="button" class="c6-opt-btn" data-field="harm_type_correct" data-value="true">Yes</button>
                                     <button type="button" class="c6-opt-btn" data-field="harm_type_correct" data-value="false">No</button>
@@ -3477,7 +3653,10 @@
 
                             <!-- Q4: Risk Mechanism Correct -->
                             <div class="c6-question">
-                                <label class="c6-question-label">4. Is <strong>${riskFactorDisplay}</strong> the correct risk mechanism?</label>
+                                <label class="c6-question-label">
+                                    4. Is <strong>${riskFactorDisplay}</strong> the correct risk mechanism?
+                                    <span class="view-all-link" onclick="showTypeRefModal()">view all</span>
+                                </label>
                                 <div class="c6-options">
                                     <button type="button" class="c6-opt-btn" data-field="risk_mechanism_correct" data-value="true">Yes</button>
                                     <button type="button" class="c6-opt-btn" data-field="risk_mechanism_correct" data-value="false">No</button>
@@ -3747,6 +3926,58 @@
 
             toggle.classList.toggle('expanded');
             content.classList.toggle('expanded');
+        }
+
+        // Type Reference Modal functions
+        let currentHarmType = null;
+        let currentRiskMechanism = null;
+
+        function showTypeRefModal() {
+            // Get current sample's types
+            if (c6Samples && c6Samples[c6Index]) {
+                currentHarmType = c6Samples[c6Index].risk_type;
+                currentRiskMechanism = c6Samples[c6Index].risk_factor;
+            }
+
+            // Populate harm types list
+            const harmList = document.getElementById('harm-type-list');
+            harmList.innerHTML = Object.entries(HARM_TYPE_DEFINITIONS).map(([key, desc]) => {
+                const isHighlighted = key === currentHarmType;
+                const displayName = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                return `
+                    <div class="type-ref-item ${isHighlighted ? 'highlighted' : ''}">
+                        <div class="type-ref-item-name">
+                            ${displayName}
+                            ${isHighlighted ? '<span class="current-badge">Current</span>' : ''}
+                        </div>
+                        <div class="type-ref-item-desc">${desc}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Populate risk mechanisms list
+            const mechList = document.getElementById('risk-mechanism-list');
+            mechList.innerHTML = Object.entries(RISK_MECHANISM_DEFINITIONS).map(([key, desc]) => {
+                const isHighlighted = key === currentRiskMechanism;
+                const displayName = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                return `
+                    <div class="type-ref-item ${isHighlighted ? 'highlighted' : ''}">
+                        <div class="type-ref-item-name">
+                            ${displayName}
+                            ${isHighlighted ? '<span class="current-badge">Current</span>' : ''}
+                        </div>
+                        <div class="type-ref-item-desc">${desc}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('type-ref-modal').classList.add('visible');
+        }
+
+        function closeTypeRefModal(event) {
+            // If called from overlay click, only close if clicking the overlay itself
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('type-ref-modal').classList.remove('visible');
         }
 
         function saveAndNextC6() {
