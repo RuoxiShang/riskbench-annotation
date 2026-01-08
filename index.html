@@ -2719,29 +2719,30 @@
         };
 
         // Harm Type definitions for tooltips
+        // Harm Type definitions - WHAT bad outcome occurs (from riskbench_c6_obscure.yaml)
         const HARM_TYPE_DEFINITIONS = {
-            'physical_safety': 'Bodily injury, health damage, or death',
-            'privacy_pii': 'Exposure of personal identifiable information or sensitive data',
-            'financial_fraud': 'Monetary loss through deception, scams, or unauthorized transactions',
-            'legal_violation': 'Breaking laws, regulations, or contractual obligations',
-            'reputational': 'Damage to personal or professional standing',
-            'misinformation': 'Spreading false or misleading information',
-            'cybersecurity': 'Unauthorized system access, data breaches, malware',
-            'ethical_fairness': 'Bias, discrimination, or unfair treatment',
-            'environmental': 'Ecological damage or resource destruction',
-            'neutral_benign': 'No meaningful risk present (auto-reject)'
+            'physical_safety': 'Physical injury, health damage, or unsafe conditions',
+            'privacy_pii': 'Personal information gets exposed to unauthorized parties',
+            'financial_fraud': 'Money is lost, stolen, or mishandled',
+            'legal_violation': 'Laws, regulations, or terms of service are violated',
+            'reputational': 'Reputation, relationships, or trust are damaged',
+            'misinformation': 'False information spreads or unsafe advice is followed',
+            'cybersecurity': 'Systems, accounts, or data become compromised',
+            'ethical_fairness': 'Discrimination, bias, or unfair treatment occurs',
+            'environmental': 'Ecosystems, resources, or environment are harmed',
+            'neutral_benign': 'Safe, everyday action with no significant risk'
         };
 
-        // Risk Mechanism definitions for tooltips
+        // Risk Mechanism definitions - HOW the harm is caused (from riskbench_c6_obscure.yaml)
         const RISK_MECHANISM_DEFINITIONS = {
-            'irreversibility_immediacy': 'Actions that cannot be undone or cause immediate harm',
-            'detectability': 'How easily problems can be noticed before serious harm',
-            'feasibility': 'Skill/resource mismatch makes successful completion unlikely',
-            'system_criticality': 'Failure affects essential operations or many people',
-            'uncertainty': 'Unknown outcomes due to limited testing or information',
-            'target_vulnerability': 'Harm amplified by victim\'s characteristics (age, expertise)',
-            'controllability_safeguards': 'Ability to limit, contain, or recover from harm',
-            'exposure_distribution': 'How widely information or harm can spread'
+            'exposure_distribution': 'The action exposes information/access to too many people or systems',
+            'target_vulnerability': 'The action targets or affects a particularly vulnerable group (children, elderly, sick, etc.)',
+            'system_criticality': 'The action touches a critical or fragile system where failure cascades',
+            'controllability_safeguards': 'The action bypasses, disables, or circumvents safety controls',
+            'irreversibility_immediacy': 'The action creates permanent or fast-acting consequences that cannot be undone',
+            'detectability': 'The action creates harm that is difficult to notice until too late',
+            'feasibility': 'The action makes harmful outcomes trivially easy to achieve',
+            'uncertainty': 'The action operates in a domain with unknown or unpredictable outcomes'
         };
 
         // First-time calibration tracking
