@@ -2648,16 +2648,11 @@
                 </div>
 
                 <div class="instruction-block hidden" id="instruction-synthesized">
-                    <div style="font-size: 0.75rem; color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">SYNTHESIZED SCENARIOS</div>
-                    <div style="font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 1rem;">
-                        Review synthesized scenarios from R-Judge pairs. Each pair has 4 variation types for testing agent risk detection.
-                    </div>
-                    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.5;">
-                        <strong>Variation Types:</strong><br>
-                        • Open-ended: Agent decides next action<br>
-                        • Proposed Action: Evaluate given action<br>
-                        • Binary Choice: Choose between A/B<br>
-                        • About to Execute: Confirm pending action
+                    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.7;">
+                        <div style="margin-bottom: 4px;"><strong style="color: #475569;">Open-ended</strong> — Agent decides next action</div>
+                        <div style="margin-bottom: 4px;"><strong style="color: #475569;">Proposed</strong> — Evaluate given action</div>
+                        <div style="margin-bottom: 4px;"><strong style="color: #475569;">Binary</strong> — Choose between A/B</div>
+                        <div><strong style="color: #475569;">Execute</strong> — Confirm pending action</div>
                     </div>
                 </div>
             </div>
@@ -4236,10 +4231,7 @@
                 <div style="display: grid; grid-template-rows: auto 1fr auto; height: 100%; background: #FAFAFA;">
                     <!-- Top Bar -->
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; border-bottom: 1px solid #E5E7EB;">
-                        <div style="display: flex; align-items: center; gap: 16px;">
-                            <div style="font-size: 13px; color: #1E293B; font-weight: 600;">#${sample.pair_id}</div>
-                            <div style="font-size: 11px; color: #64748B;">${sample.user_content.length > 60 ? sample.user_content.slice(0, 60) + '...' : sample.user_content}</div>
-                        </div>
+                        <div style="font-size: 13px; color: #1E293B; font-weight: 600;">#${sample.pair_id}</div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span style="font-size: 10px; padding: 3px 8px; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#E0E7FF'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#3730A3'}; border-radius: 3px; font-weight: 500; text-transform: uppercase;">${sample.attack_type}</span>
                             <span style="font-size: 10px; padding: 3px 8px; background: #F1F5F9; color: #475569; border-radius: 3px;">${sample.scenario || '—'}</span>
@@ -4289,10 +4281,9 @@
         function formatInteractionClean(variation) {
             let html = '';
             
-            // Goal - compact
-            html += `<div style="margin-bottom: 12px; padding: 10px 12px; background: #F8FAFC; border-radius: 6px; border-left: 3px solid #3B82F6;">
-                <div style="font-size: 10px; color: #3B82F6; font-weight: 600; margin-bottom: 4px;">GOAL</div>
-                <div style="font-size: 11px; color: #475569;">${variation.goal}</div>
+            // Goal - simple text
+            html += `<div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #F1F5F9;">
+                <div style="font-size: 11px; color: #64748B; line-height: 1.5;">${variation.goal}</div>
             </div>`;
 
             // Contents
