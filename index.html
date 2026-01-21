@@ -4222,59 +4222,63 @@
             const sample = synthSamples[synthIndex];
             const variation = sample.variations?.[synthVariation];
 
-            // Build variation tabs
-            const variationTabs = ['open_ended', 'proposed_action', 'binary_choice', 'about_to_execute'].map(v => {
+            // Compact variation tabs
+            const varLabels = {open_ended: 'Open', proposed_action: 'Proposed', binary_choice: 'Binary', about_to_execute: 'Execute'};
+            const variationTabs = Object.entries(varLabels).map(([v, label]) => {
                 const hasVar = sample.variations?.[v];
                 const isActive = v === synthVariation;
-                const label = v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                return `<button 
-                    class="btn ${isActive ? 'btn-primary' : 'btn-secondary'}" 
-                    style="font-size: 0.75rem; padding: 0.4rem 0.75rem; ${!hasVar ? 'opacity: 0.5;' : ''}"
-                    onclick="setSynthVariation('${v}')"
-                    ${!hasVar ? 'disabled' : ''}
+                return `<button onclick="setSynthVariation('${v}')" ${!hasVar ? 'disabled' : ''}
+                    style="padding: 6px 12px; font-size: 11px; font-weight: 500; border: none; background: ${isActive ? '#1E293B' : 'transparent'}; color: ${isActive ? '#fff' : '#64748B'}; border-radius: 4px; cursor: ${hasVar ? 'pointer' : 'default'}; opacity: ${hasVar ? 1 : 0.3}; transition: all 0.15s;"
                 >${label}</button>`;
             }).join('');
 
-            // Build content
             let contentHtml = `
-                <div style="display: flex; flex-direction: column; height: 100%; padding: 1.5rem;">
-                    <!-- Header -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-shrink: 0;">
-                        <div>
-                            <span style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Pair ${sample.pair_id}</span>
-                            <h2 style="font-size: 1.25rem; font-weight: 600; margin-top: 0.25rem;">${synthIndex + 1} of ${synthSamples.length}</h2>
+                <div style="display: grid; grid-template-rows: auto 1fr auto; height: 100%; background: #FAFAFA;">
+                    <!-- Top Bar -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; border-bottom: 1px solid #E5E7EB;">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="font-size: 13px; color: #1E293B; font-weight: 600;">#${sample.pair_id}</div>
+                            <div style="font-size: 11px; color: #64748B;">${sample.user_content.length > 60 ? sample.user_content.slice(0, 60) + '...' : sample.user_content}</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#DBEAFE'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#1E40AF'}; border-radius: 4px;">${sample.attack_type}</span>
-                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: #F3F4F6; color: #374151; border-radius: 4px;">${sample.scenario || 'unknown'}</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 10px; padding: 3px 8px; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#E0E7FF'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#3730A3'}; border-radius: 3px; font-weight: 500; text-transform: uppercase;">${sample.attack_type}</span>
+                            <span style="font-size: 10px; padding: 3px 8px; background: #F1F5F9; color: #475569; border-radius: 3px;">${sample.scenario || '—'}</span>
                         </div>
                     </div>
 
-                    <!-- User Request -->
-                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; flex-shrink: 0;">
-                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">User Request</div>
-                        <div style="font-size: 0.95rem; color: #1E293B;">${sample.user_content}</div>
-                    </div>
-
-                    <!-- Variation Tabs -->
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; flex-shrink: 0;">
-                        ${variationTabs}
-                    </div>
-
-                    <!-- Variation Content -->
-                    <div style="flex: 1; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 8px; background: white;">
-                        ${variation ? renderVariationContent(variation, synthVariation) : '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No data for this variation</div>'}
-                    </div>
-
-                    <!-- Navigation -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E2E8F0; flex-shrink: 0;">
-                        <button class="btn btn-secondary" onclick="navigateSynth(-1)" ${synthIndex === 0 ? 'disabled' : ''}>← Previous</button>
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <input type="number" id="synth-jump-input" min="1" max="${synthSamples.length}" 
-                                placeholder="#" style="width: 60px; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 4px; text-align: center; font-size: 0.85rem;">
-                            <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.75rem;" onclick="jumpToSynthSample()">Go</button>
+                    <!-- Main Content Area -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;">
+                        <!-- Left: Interaction -->
+                        <div style="border-right: 1px solid #E5E7EB; display: flex; flex-direction: column; background: #fff;">
+                            <div style="padding: 10px 16px; border-bottom: 1px solid #F1F5F9; display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 10px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px;">Interaction</span>
+                                <div style="display: flex; gap: 2px; background: #F1F5F9; padding: 3px; border-radius: 6px;">${variationTabs}</div>
+                            </div>
+                            <div style="flex: 1; overflow-y: auto; padding: 16px; font-size: 12px; line-height: 1.6; color: #334155;">
+                                ${variation ? formatInteractionClean(variation) : '<div style="color: #94A3B8; text-align: center; padding-top: 40px;">No data</div>'}
+                            </div>
                         </div>
-                        <button class="btn btn-secondary" onclick="navigateSynth(1)" ${synthIndex >= synthSamples.length - 1 ? 'disabled' : ''}>Next →</button>
+
+                        <!-- Right: Expected Responses -->
+                        <div style="display: flex; flex-direction: column; background: #FAFAFA;">
+                            <div style="padding: 10px 16px; border-bottom: 1px solid #E5E7EB; background: #fff;">
+                                <span style="font-size: 10px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.5px;">Expected Responses</span>
+                            </div>
+                            <div style="flex: 1; overflow-y: auto; padding: 16px;">
+                                ${variation ? renderExpectedResponses(variation) : ''}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Nav -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #fff; border-top: 1px solid #E5E7EB;">
+                        <button onclick="navigateSynth(-1)" ${synthIndex === 0 ? 'disabled' : ''} style="padding: 6px 14px; font-size: 12px; border: 1px solid #E5E7EB; background: #fff; border-radius: 5px; cursor: pointer; color: #475569;">← Prev</button>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 12px; color: #64748B;">${synthIndex + 1} / ${synthSamples.length}</span>
+                            <input type="number" id="synth-jump-input" min="1" max="${synthSamples.length}" placeholder="#" style="width: 48px; padding: 5px 8px; border: 1px solid #E5E7EB; border-radius: 4px; text-align: center; font-size: 11px;">
+                            <button onclick="jumpToSynthSample()" style="padding: 5px 10px; font-size: 11px; border: 1px solid #E5E7EB; background: #fff; border-radius: 4px; cursor: pointer; color: #475569;">Go</button>
+                        </div>
+                        <button onclick="navigateSynth(1)" ${synthIndex >= synthSamples.length - 1 ? 'disabled' : ''} style="padding: 6px 14px; font-size: 12px; border: 1px solid #E5E7EB; background: #fff; border-radius: 5px; cursor: pointer; color: #475569;">Next →</button>
                     </div>
                 </div>
             `;
@@ -4282,86 +4286,96 @@
             document.getElementById('sample-content').innerHTML = contentHtml;
         }
 
-        function renderVariationContent(variation, varType) {
-            let html = '<div style="padding: 1rem;">';
+        function formatInteractionClean(variation) {
+            let html = '';
+            
+            // Goal - compact
+            html += `<div style="margin-bottom: 12px; padding: 10px 12px; background: #F8FAFC; border-radius: 6px; border-left: 3px solid #3B82F6;">
+                <div style="font-size: 10px; color: #3B82F6; font-weight: 600; margin-bottom: 4px;">GOAL</div>
+                <div style="font-size: 11px; color: #475569;">${variation.goal}</div>
+            </div>`;
 
-            // Goal
-            html += `
-                <div style="margin-bottom: 1rem;">
-                    <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Goal</div>
-                    <div style="font-size: 0.85rem; color: #334155; background: #F1F5F9; padding: 0.75rem; border-radius: 6px;">${variation.goal}</div>
-                </div>
-            `;
-
-            // Interaction
+            // Contents
             if (variation.contents) {
-                html += `
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Interaction</div>
-                        <div style="font-size: 0.8rem; color: #1E293B; background: #FAFAFA; padding: 1rem; border-radius: 6px; border: 1px solid #E2E8F0; max-height: 300px; overflow-y: auto; white-space: pre-wrap; font-family: ui-monospace, monospace;">${escapeHtml(variation.contents)}</div>
-                    </div>
-                `;
+                const lines = variation.contents.split('\n\n').filter(l => l.trim());
+                lines.forEach(line => {
+                    let bgColor = '#fff', borderColor = '#E5E7EB', labelColor = '#64748B', label = '';
+                    if (line.startsWith('**USER:**')) {
+                        label = 'USER'; bgColor = '#EFF6FF'; borderColor = '#BFDBFE'; labelColor = '#1D4ED8';
+                        line = line.replace('**USER:**', '').trim();
+                    } else if (line.startsWith('**AGENT')) {
+                        label = 'AGENT'; bgColor = '#F0FDF4'; borderColor = '#BBF7D0'; labelColor = '#166534';
+                        line = line.replace(/\*\*AGENT[^*]*\*\*:?/, '').trim();
+                    } else if (line.startsWith('**ENV:**')) {
+                        label = 'ENV'; bgColor = '#FFFBEB'; borderColor = '#FDE68A'; labelColor = '#92400E';
+                        line = line.replace('**ENV:**', '').trim();
+                    } else if (line.startsWith('**SYSTEM:**')) {
+                        label = 'SYS'; bgColor = '#FDF4FF'; borderColor = '#E9D5FF'; labelColor = '#7C3AED';
+                        line = line.replace('**SYSTEM:**', '').trim();
+                    }
+                    if (label) {
+                        const truncated = line.length > 200 ? line.slice(0, 200) + '...' : line;
+                        html += `<div style="margin-bottom: 8px; padding: 8px 10px; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 5px;">
+                            <span style="font-size: 9px; font-weight: 600; color: ${labelColor}; margin-right: 6px;">${label}</span>
+                            <span style="font-size: 11px; color: #374151;">${escapeHtml(truncated)}</span>
+                        </div>`;
+                    }
+                });
             }
 
-            // Proposed/Pending Action (if applicable)
-            if (variation.proposed_action) {
-                html += `
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-size: 0.7rem; color: #DC2626; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">⚠️ Proposed Action</div>
-                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.proposed_action)}</div>
-                    </div>
-                `;
-            }
-            if (variation.pending_action) {
-                html += `
-                    <div style="margin-bottom: 1rem;">
-                        <div style="font-size: 0.7rem; color: #DC2626; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">⚠️ Pending Action</div>
-                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.pending_action)}</div>
-                    </div>
-                `;
+            // Proposed/Pending Action
+            if (variation.proposed_action || variation.pending_action) {
+                const action = variation.proposed_action || variation.pending_action;
+                const label = variation.proposed_action ? 'PROPOSED ACTION' : 'PENDING ACTION';
+                html += `<div style="margin-top: 12px; padding: 10px 12px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px;">
+                    <div style="font-size: 9px; font-weight: 600; color: #DC2626; margin-bottom: 4px;">⚠ ${label}</div>
+                    <div style="font-size: 11px; color: #7F1D1D;">${escapeHtml(action.length > 300 ? action.slice(0, 300) + '...' : action)}</div>
+                </div>`;
             }
 
-            // Options (for binary choice)
+            // Options for binary choice
             if (variation.options && Object.keys(variation.options).length > 0) {
-                html += `<div style="margin-bottom: 1rem;">
-                    <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Options</div>`;
+                html += `<div style="margin-top: 12px;">`;
                 for (const [key, val] of Object.entries(variation.options)) {
                     const isSafe = key === 'A';
-                    html += `
-                        <div style="font-size: 0.8rem; padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 6px; border: 1px solid ${isSafe ? '#BBF7D0' : '#FECACA'}; background: ${isSafe ? '#F0FDF4' : '#FEF2F2'};">
-                            <strong style="color: ${isSafe ? '#166534' : '#991B1B'};">Option ${key}:</strong> ${escapeHtml(val)}
-                        </div>
-                    `;
+                    html += `<div style="margin-bottom: 6px; padding: 8px 10px; background: ${isSafe ? '#F0FDF4' : '#FEF2F2'}; border: 1px solid ${isSafe ? '#BBF7D0' : '#FECACA'}; border-radius: 5px;">
+                        <span style="font-size: 10px; font-weight: 600; color: ${isSafe ? '#166534' : '#991B1B'}; margin-right: 6px;">${key}</span>
+                        <span style="font-size: 11px; color: #374151;">${escapeHtml(val.length > 150 ? val.slice(0, 150) + '...' : val)}</span>
+                    </div>`;
                 }
-                html += '</div>';
+                html += `</div>`;
             }
 
-            // Expected Responses
-            html += `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div>
-                        <div style="font-size: 0.7rem; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">✓ Safe Response (risk=0)</div>
-                        <div style="font-size: 0.8rem; color: #14532D; background: #F0FDF4; padding: 0.75rem; border-radius: 6px; border: 1px solid #BBF7D0;">${escapeHtml(variation.expected_safe)}</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 0.7rem; color: #991B1B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">✗ Risky Response (risk=1)</div>
-                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.expected_risky)}</div>
-                    </div>
-                </div>
-            `;
-
-            // Risk Rationale
-            if (variation.risk_rationale) {
-                html += `
-                    <div>
-                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Risk Rationale</div>
-                        <div style="font-size: 0.8rem; color: #475569; background: #F8FAFC; padding: 0.75rem; border-radius: 6px; border: 1px solid #E2E8F0;">${escapeHtml(variation.risk_rationale)}</div>
-                    </div>
-                `;
-            }
-
-            html += '</div>';
             return html;
+        }
+
+        function renderExpectedResponses(variation) {
+            return `
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background: #22C55E; border-radius: 50%;"></div>
+                        <span style="font-size: 10px; font-weight: 600; color: #166534; text-transform: uppercase;">Safe (risk=0)</span>
+                    </div>
+                    <div style="font-size: 12px; color: #14532D; background: #F0FDF4; padding: 12px; border-radius: 6px; line-height: 1.5;">${escapeHtml(variation.expected_safe)}</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background: #EF4444; border-radius: 50%;"></div>
+                        <span style="font-size: 10px; font-weight: 600; color: #991B1B; text-transform: uppercase;">Risky (risk=1)</span>
+                    </div>
+                    <div style="font-size: 12px; color: #7F1D1D; background: #FEF2F2; padding: 12px; border-radius: 6px; line-height: 1.5;">${escapeHtml(variation.expected_risky)}</div>
+                </div>
+                ${variation.risk_rationale ? `
+                <div>
+                    <div style="font-size: 10px; font-weight: 600; color: #64748B; text-transform: uppercase; margin-bottom: 8px;">Rationale</div>
+                    <div style="font-size: 11px; color: #475569; background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #E5E7EB; line-height: 1.6;">${escapeHtml(variation.risk_rationale)}</div>
+                </div>` : ''}
+            `;
+        }
+
+        function renderVariationContent(variation, varType) {
+            // Legacy function - kept for compatibility but not used in new design
+            return '';
         }
 
         function escapeHtml(text) {
