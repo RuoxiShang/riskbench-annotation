@@ -2518,7 +2518,15 @@
                 </select>
             </div>
 
-            <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="handleLogin()">Start Annotation</button>
+            <div style="text-align: left; margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; font-weight: 600;">Task</label>
+                <select id="task-select">
+                    <option value="c6_quality">C6 Quality Assessment</option>
+                    <option value="synthesized">Synthesized Scenarios (View)</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="handleLogin()">Start</button>
         </div>
     </div>
 
@@ -2638,6 +2646,20 @@
                         </button>
                     </div>
                 </div>
+
+                <div class="instruction-block hidden" id="instruction-synthesized">
+                    <div style="font-size: 0.75rem; color: #475569; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">SYNTHESIZED SCENARIOS</div>
+                    <div style="font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 1rem;">
+                        Review synthesized scenarios from R-Judge pairs. Each pair has 4 variation types for testing agent risk detection.
+                    </div>
+                    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.5;">
+                        <strong>Variation Types:</strong><br>
+                        • Open-ended: Agent decides next action<br>
+                        • Proposed Action: Evaluate given action<br>
+                        • Binary Choice: Choose between A/B<br>
+                        • About to Execute: Confirm pending action
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -2707,6 +2729,12 @@
         let c6Data = null;           // Full C6 data with samples
         let c6Samples = [];          // Array of samples
         let c6Index = 0;             // Current sample index
+
+        // Synthesized Scenarios Viewer state
+        let synthData = null;        // Full synthesized data
+        let synthSamples = [];       // Array of samples (pairs)
+        let synthIndex = 0;          // Current pair index
+        let synthVariation = 'open_ended'; // Current variation being viewed
         let c6Annotations = {};      // Annotations keyed by sample_id
         let c6CurrentAnnotation = {  // Current sample's annotation (before save)
             consequence: null,       // Q1: Consequence severity (severe/significant/minor/trivial)
@@ -2802,22 +2830,22 @@
             const savedTask = localStorage.getItem('riskbench_task');
 
             if (savedName) {
-                console.log('Found saved session for:', savedName);
+                console.log('Found saved session for:', savedName, 'task:', savedTask);
                 // Full session - go straight to annotation
                 state.annotator = savedName;
                 state.batch = 1; // Default batch
-                state.currentTask = 'c6_quality'; // Always load the single task
-
-                // Update localStorage to ensure consistency
-                localStorage.setItem('riskbench_task', 'c6_quality');
+                state.currentTask = savedTask || 'c6_quality';
 
                 document.getElementById('annotator-select').value = savedName;
+                if (document.getElementById('task-select')) {
+                    document.getElementById('task-select').value = state.currentTask;
+                }
                 document.getElementById('sidebar-annotator-name').textContent = savedName;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
 
-                // Load the scenario quality task
-                selectTask('c6_quality');
+                // Load the saved task
+                selectTask(state.currentTask);
             } else {
                 console.log('No saved session, showing login screen');
             }
@@ -2901,7 +2929,9 @@
             console.log('handleLogin called');
             const select = document.getElementById('annotator-select');
             const name = select.value;
-            console.log('Selected name:', name);
+            const taskSelect = document.getElementById('task-select');
+            const task = taskSelect ? taskSelect.value : 'c6_quality';
+            console.log('Selected name:', name, 'task:', task);
 
             if (!name) {
                 alert("Please select a name.");
@@ -2910,17 +2940,17 @@
 
             state.annotator = name;
             state.batch = 1; // Default batch
-            state.currentTask = 'c6_quality'; // Single task only
+            state.currentTask = task;
             localStorage.setItem('riskbench_annotator', name);
-            localStorage.setItem('riskbench_task', 'c6_quality');
+            localStorage.setItem('riskbench_task', task);
 
             document.getElementById('sidebar-annotator-name').textContent = name;
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
 
-            // Load the scenario quality task
-            console.log('Loading scenario quality task');
-            selectTask('c6_quality');
+            // Load the selected task
+            console.log('Loading task:', task);
+            selectTask(task);
         }
 
         function logout() {
@@ -2959,10 +2989,11 @@
             if (navReview) navReview.classList.toggle('active', taskType === 'review');
 
             // Update instruction blocks and filters
-            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality');
+            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized');
             document.getElementById('instruction-review').classList.toggle('hidden', taskType !== 'review');
             document.getElementById('instruction-c6').classList.toggle('hidden', taskType !== 'c6_quality');
-            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality');
+            document.getElementById('instruction-synthesized').classList.toggle('hidden', taskType !== 'synthesized');
+            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized');
             
             // Show annotation view, hide completion
             document.getElementById('completion-view').classList.add('hidden');
@@ -2978,6 +3009,12 @@
             // Handle C6 quality assessment task
             if (taskType === 'c6_quality') {
                 loadC6Data(specificFile);
+                return;
+            }
+
+            // Handle Synthesized scenarios viewer
+            if (taskType === 'synthesized') {
+                loadSynthesizedData(specificFile);
                 return;
             }
 
@@ -4139,6 +4176,224 @@
             const params = new URLSearchParams(payload).toString();
             const img = new Image();
             img.src = `${GOOGLE_SCRIPT_URL}?${params}`;
+        }
+
+        // ===========================================
+        // SYNTHESIZED SCENARIOS VIEWER FUNCTIONS
+        // ===========================================
+
+        function loadSynthesizedData(specificFile = null) {
+            const filename = specificFile || 'data/synthesized_samples.json';
+
+            fetch(filename)
+                .then(res => {
+                    if (!res.ok) throw new Error("Synthesized data not found. Run prepare_synthesized_data.py first.");
+                    return res.json();
+                })
+                .then(data => {
+                    synthData = data;
+                    synthSamples = data.samples || [];
+                    synthIndex = 0;
+                    synthVariation = 'open_ended';
+                    renderSynthesizedView();
+                })
+                .catch(err => {
+                    document.getElementById('sample-content').innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+                            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">No Synthesized Data</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${err.message}</p>
+                            <div style="background: #F3F4F6; padding: 1rem; border-radius: 8px; text-align: left; max-width: 500px; margin: 0 auto;">
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>To generate data:</strong></p>
+                                <code style="font-size: 0.8rem; color: #1F2937;">
+                                    python prepare_synthesized_data.py &lt;synthesized.jsonl&gt;
+                                </code>
+                            </div>
+                        </div>`;
+                });
+        }
+
+        function renderSynthesizedView() {
+            if (!synthSamples || synthSamples.length === 0) {
+                document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No samples available.</div>';
+                return;
+            }
+
+            const sample = synthSamples[synthIndex];
+            const variation = sample.variations?.[synthVariation];
+
+            // Build variation tabs
+            const variationTabs = ['open_ended', 'proposed_action', 'binary_choice', 'about_to_execute'].map(v => {
+                const hasVar = sample.variations?.[v];
+                const isActive = v === synthVariation;
+                const label = v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return `<button 
+                    class="btn ${isActive ? 'btn-primary' : 'btn-secondary'}" 
+                    style="font-size: 0.75rem; padding: 0.4rem 0.75rem; ${!hasVar ? 'opacity: 0.5;' : ''}"
+                    onclick="setSynthVariation('${v}')"
+                    ${!hasVar ? 'disabled' : ''}
+                >${label}</button>`;
+            }).join('');
+
+            // Build content
+            let contentHtml = `
+                <div style="display: flex; flex-direction: column; height: 100%; padding: 1.5rem;">
+                    <!-- Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-shrink: 0;">
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Pair ${sample.pair_id}</span>
+                            <h2 style="font-size: 1.25rem; font-weight: 600; margin-top: 0.25rem;">${synthIndex + 1} of ${synthSamples.length}</h2>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#DBEAFE'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#1E40AF'}; border-radius: 4px;">${sample.attack_type}</span>
+                            <span style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: #F3F4F6; color: #374151; border-radius: 4px;">${sample.scenario || 'unknown'}</span>
+                        </div>
+                    </div>
+
+                    <!-- User Request -->
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; flex-shrink: 0;">
+                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">User Request</div>
+                        <div style="font-size: 0.95rem; color: #1E293B;">${sample.user_content}</div>
+                    </div>
+
+                    <!-- Variation Tabs -->
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; flex-shrink: 0;">
+                        ${variationTabs}
+                    </div>
+
+                    <!-- Variation Content -->
+                    <div style="flex: 1; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 8px; background: white;">
+                        ${variation ? renderVariationContent(variation, synthVariation) : '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No data for this variation</div>'}
+                    </div>
+
+                    <!-- Navigation -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E2E8F0; flex-shrink: 0;">
+                        <button class="btn btn-secondary" onclick="navigateSynth(-1)" ${synthIndex === 0 ? 'disabled' : ''}>← Previous</button>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="number" id="synth-jump-input" min="1" max="${synthSamples.length}" 
+                                placeholder="#" style="width: 60px; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 4px; text-align: center; font-size: 0.85rem;">
+                            <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.4rem 0.75rem;" onclick="jumpToSynthSample()">Go</button>
+                        </div>
+                        <button class="btn btn-secondary" onclick="navigateSynth(1)" ${synthIndex >= synthSamples.length - 1 ? 'disabled' : ''}>Next →</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('sample-content').innerHTML = contentHtml;
+        }
+
+        function renderVariationContent(variation, varType) {
+            let html = '<div style="padding: 1rem;">';
+
+            // Goal
+            html += `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Goal</div>
+                    <div style="font-size: 0.85rem; color: #334155; background: #F1F5F9; padding: 0.75rem; border-radius: 6px;">${variation.goal}</div>
+                </div>
+            `;
+
+            // Interaction
+            if (variation.contents) {
+                html += `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Interaction</div>
+                        <div style="font-size: 0.8rem; color: #1E293B; background: #FAFAFA; padding: 1rem; border-radius: 6px; border: 1px solid #E2E8F0; max-height: 300px; overflow-y: auto; white-space: pre-wrap; font-family: ui-monospace, monospace;">${escapeHtml(variation.contents)}</div>
+                    </div>
+                `;
+            }
+
+            // Proposed/Pending Action (if applicable)
+            if (variation.proposed_action) {
+                html += `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.7rem; color: #DC2626; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">⚠️ Proposed Action</div>
+                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.proposed_action)}</div>
+                    </div>
+                `;
+            }
+            if (variation.pending_action) {
+                html += `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.7rem; color: #DC2626; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">⚠️ Pending Action</div>
+                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.pending_action)}</div>
+                    </div>
+                `;
+            }
+
+            // Options (for binary choice)
+            if (variation.options && Object.keys(variation.options).length > 0) {
+                html += `<div style="margin-bottom: 1rem;">
+                    <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Options</div>`;
+                for (const [key, val] of Object.entries(variation.options)) {
+                    const isSafe = key === 'A';
+                    html += `
+                        <div style="font-size: 0.8rem; padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 6px; border: 1px solid ${isSafe ? '#BBF7D0' : '#FECACA'}; background: ${isSafe ? '#F0FDF4' : '#FEF2F2'};">
+                            <strong style="color: ${isSafe ? '#166534' : '#991B1B'};">Option ${key}:</strong> ${escapeHtml(val)}
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            }
+
+            // Expected Responses
+            html += `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <div style="font-size: 0.7rem; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">✓ Safe Response (risk=0)</div>
+                        <div style="font-size: 0.8rem; color: #14532D; background: #F0FDF4; padding: 0.75rem; border-radius: 6px; border: 1px solid #BBF7D0;">${escapeHtml(variation.expected_safe)}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #991B1B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">✗ Risky Response (risk=1)</div>
+                        <div style="font-size: 0.8rem; color: #7F1D1D; background: #FEF2F2; padding: 0.75rem; border-radius: 6px; border: 1px solid #FECACA;">${escapeHtml(variation.expected_risky)}</div>
+                    </div>
+                </div>
+            `;
+
+            // Risk Rationale
+            if (variation.risk_rationale) {
+                html += `
+                    <div>
+                        <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Risk Rationale</div>
+                        <div style="font-size: 0.8rem; color: #475569; background: #F8FAFC; padding: 0.75rem; border-radius: 6px; border: 1px solid #E2E8F0;">${escapeHtml(variation.risk_rationale)}</div>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function setSynthVariation(varType) {
+            synthVariation = varType;
+            renderSynthesizedView();
+        }
+
+        function navigateSynth(direction) {
+            const newIndex = synthIndex + direction;
+            if (newIndex >= 0 && newIndex < synthSamples.length) {
+                synthIndex = newIndex;
+                renderSynthesizedView();
+            }
+        }
+
+        function jumpToSynthSample() {
+            const input = document.getElementById('synth-jump-input');
+            const targetNum = parseInt(input.value);
+            if (!targetNum || targetNum < 1 || targetNum > synthSamples.length) {
+                alert(`Please enter a number between 1 and ${synthSamples.length}`);
+                return;
+            }
+            synthIndex = targetNum - 1;
+            renderSynthesizedView();
+            input.value = '';
         }
 
         // --- Progress Persistence ---
