@@ -2523,6 +2523,7 @@
                 <select id="task-select">
                     <option value="c6_quality">Pipeline v1 Quality Check</option>
                     <option value="synthesized">Pipeline v2 (R-Judge)</option>
+                    <option value="pair_review">Pair Review (Pipeline v2)</option>
                 </select>
             </div>
 
@@ -2655,6 +2656,20 @@
                         <div><strong style="color: #475569;">Execute</strong> — Confirm pending action</div>
                     </div>
                 </div>
+
+                <div class="instruction-block hidden" id="instruction-pair-review">
+                    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.7;">
+                        <div style="margin-bottom: 8px;"><strong style="color: #475569;">GOAL:</strong> Verify that generated paired scenarios are correctly classified as safe (B) vs unsafe (A).</div>
+                        <div style="margin-bottom: 4px;"><strong style="color: #475569;">Steps:</strong></div>
+                        <ol style="margin: 0 0 0 1rem; padding: 0; font-size: 0.75rem; color: #64748B; line-height: 1.7;">
+                            <li>Read both versions side by side</li>
+                            <li>Check if Version A is actually unsafe</li>
+                            <li>Check if Version B is actually safe</li>
+                            <li>Assess if the change is realistic</li>
+                            <li>Give overall verdict</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -2696,7 +2711,8 @@
             enablePipelineComparison: false,    // Set to true to re-enable Pipeline Comparison
             enableImprovementCheck: false,      // Set to true to re-enable Improvement Check
             enableScoreReview: true,            // Score Review (primary feature)
-            defaultTask: 'review'               // Default view: 'pipeline', 'improvement', or 'review'
+            defaultTask: 'review',              // Default view: 'pipeline', 'improvement', or 'review'
+            enablePairReview: true               // Pair Review for Pipeline v2
         };
 
         // Sync status tracking
@@ -2740,6 +2756,13 @@
             verdict: null,           // Computed from consequence × probability
             notes: ''
         };
+
+        // Pair Review state
+        let pairSamples = [];
+        let pairIndex = 0;
+        let pairData = null;
+        let pairAnnotations = {};
+        let pairCurrentAnnotation = {};
 
         // Harm Type definitions for tooltips
         // Harm Type definitions - WHAT bad outcome occurs (from riskbench_c6_obscure.yaml)
@@ -2984,11 +3007,12 @@
             if (navReview) navReview.classList.toggle('active', taskType === 'review');
 
             // Update instruction blocks and filters
-            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized');
+            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review');
             document.getElementById('instruction-review').classList.toggle('hidden', taskType !== 'review');
             document.getElementById('instruction-c6').classList.toggle('hidden', taskType !== 'c6_quality');
             document.getElementById('instruction-synthesized').classList.toggle('hidden', taskType !== 'synthesized');
-            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized');
+            document.getElementById('instruction-pair-review').classList.toggle('hidden', taskType !== 'pair_review');
+            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review');
             
             // Show annotation view, hide completion
             document.getElementById('completion-view').classList.add('hidden');
@@ -3010,6 +3034,12 @@
             // Handle Synthesized scenarios viewer
             if (taskType === 'synthesized') {
                 loadSynthesizedData(specificFile);
+                return;
+            }
+
+            // Handle Pair Review task
+            if (taskType === 'pair_review') {
+                loadPairReviewData(specificFile);
                 return;
             }
 
@@ -4399,6 +4429,475 @@
             synthIndex = targetNum - 1;
             renderSynthesizedView();
             input.value = '';
+        }
+
+        // ===========================================
+        // PAIR REVIEW FUNCTIONS
+        // ===========================================
+
+        function loadPairReviewData(specificFile = null) {
+            const filename = specificFile || 'data/pair_review_samples.json';
+            fetch(filename)
+                .then(res => {
+                    if (!res.ok) throw new Error("Pair review data not found.");
+                    return res.json();
+                })
+                .then(data => {
+                    pairData = data;
+                    pairSamples = filterSamplesForUser(data.samples || []);
+                    pairIndex = 0;
+                    loadPairAnnotations();
+                    for (let i = 0; i < pairSamples.length; i++) {
+                        if (!pairAnnotations[pairSamples[i].sample_id]) {
+                            pairIndex = i;
+                            break;
+                        }
+                    }
+                    renderPairReview();
+                })
+                .catch(err => {
+                    document.getElementById('sample-content').innerHTML = `<div style="text-align: center; padding: 3rem;"><h3>No Pair Review Data</h3><p>${err.message}</p></div>`;
+                });
+        }
+
+        function renderPairReview() {
+            if (!pairSamples || pairSamples.length === 0) {
+                document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No samples available.</div>';
+                return;
+            }
+
+            const sample = pairSamples[pairIndex];
+
+            // Progress
+            const completedCount = Object.keys(pairAnnotations).length;
+            const progressPct = Math.round((completedCount / pairSamples.length) * 100);
+            document.getElementById('progress-fill').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').textContent = `${completedCount} / ${pairSamples.length}`;
+
+            // Load existing annotation for this sample if any
+            const existingAnnotation = pairAnnotations[sample.sample_id];
+            if (existingAnnotation) {
+                pairCurrentAnnotation = { ...existingAnnotation };
+            } else {
+                pairCurrentAnnotation = {
+                    a_unsafe: null,
+                    b_safe: null,
+                    change_realistic: null,
+                    verdict: null,
+                    notes: ''
+                };
+            }
+
+            // Dimension tags
+            const dimTags = [];
+            if (sample.risk_severity_tag) dimTags.push(`<span style="font-size: 0.7rem; padding: 2px 8px; background: #FEF2F2; color: #991B1B; border-radius: 4px; font-weight: 500;">${sample.risk_severity_tag}</span>`);
+            if (sample.scenario_difficulty_tag) dimTags.push(`<span style="font-size: 0.7rem; padding: 2px 8px; background: #EFF6FF; color: #1E40AF; border-radius: 4px; font-weight: 500;">${sample.scenario_difficulty_tag}</span>`);
+            const dimTagsHtml = dimTags.length > 0 ? `<div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">${dimTags.join('')}</div>` : '';
+
+            // Truncation info
+            const truncInfo = sample.truncation_type ? `Truncated at step ${sample.truncation_step || '?'} (${sample.truncation_type}) | Execution at step ${sample.execution_point_step || '?'} | Total ${sample.original_total_steps || '?'} steps` : '';
+
+            const html = `
+                <div class="c6-container">
+                    <!-- Header -->
+                    <div class="c6-header">
+                        <div class="c6-sample-num">Sample ${pairIndex + 1} of ${pairSamples.length}</div>
+                    </div>
+
+                    <!-- Left: Content -->
+                    <div class="c6-left-panel">
+                        <!-- Metadata -->
+                        <div style="background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem;">
+                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.7rem; padding: 2px 8px; background: #F3F4F6; color: #374151; border-radius: 4px; font-weight: 500;">${sample.category || ''}/${sample.subcategory || ''}</span>
+                                <span style="font-size: 0.7rem; padding: 2px 8px; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#E0E7FF'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#3730A3'}; border-radius: 4px; font-weight: 500; text-transform: uppercase;">${sample.attack_type || ''}</span>
+                                <span style="font-size: 0.7rem; padding: 2px 8px; background: #F0FDF4; color: #166534; border-radius: 4px; font-weight: 500;">${sample.source || ''}</span>
+                                <span style="font-size: 0.65rem; color: #9CA3AF;">ID: ${sample.record_id || sample.sample_id}</span>
+                            </div>
+                            ${dimTagsHtml}
+                            ${truncInfo ? `<div style="font-size: 0.7rem; color: #6B7280; line-height: 1.5;">${truncInfo}</div>` : ''}
+                        </div>
+
+                        <!-- Version A (Unsafe) -->
+                        <div class="c6-content-card" style="border-left: 3px solid #EF4444;">
+                            <div class="c6-content-label" style="color: #DC2626;">Version A (Unsafe)</div>
+                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6;">${(sample.version_a?.scenario || 'No scenario').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-a" style="font-size: 0.75rem; cursor: pointer; background: none; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 10px; color: #6B7280;">Show full scenario</button>
+                                <div id="pair-full-a" class="pair-full-scenario" style="display: none; margin-top: 0.5rem; padding: 0.75rem; background: #F9FAFB; border-radius: 6px; font-size: 0.8rem; line-height: 1.6; color: #374151;">${(sample.version_a?.full_scenario || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                            </div>
+                            <div style="margin-top: 0.75rem; padding: 0.6rem; background: #F9FAFB; border-radius: 6px; border: 1px solid #E5E7EB;">
+                                <div style="font-size: 0.65rem; color: #9CA3AF; font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">Ground Truth</div>
+                                <div style="font-size: 0.8rem; color: #6B7280; line-height: 1.5;">${sample.version_a?.ground_truth || 'N/A'}</div>
+                            </div>
+                        </div>
+
+                        <!-- Version B (Safe) -->
+                        <div class="c6-content-card" style="border-left: 3px solid #10B981;">
+                            <div class="c6-content-label" style="color: #059669;">Version B (Safe)</div>
+                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6;">${(sample.version_b?.scenario || 'No scenario').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-b" style="font-size: 0.75rem; cursor: pointer; background: none; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 10px; color: #6B7280;">Show full scenario</button>
+                                <div id="pair-full-b" class="pair-full-scenario" style="display: none; margin-top: 0.5rem; padding: 0.75rem; background: #F9FAFB; border-radius: 6px; font-size: 0.8rem; line-height: 1.6; color: #374151;">${(sample.version_b?.full_scenario || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                            </div>
+                            <div style="margin-top: 0.75rem; padding: 0.6rem; background: #F9FAFB; border-radius: 6px; border: 1px solid #E5E7EB;">
+                                <div style="font-size: 0.65rem; color: #9CA3AF; font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">Ground Truth</div>
+                                <div style="font-size: 0.8rem; color: #6B7280; line-height: 1.5;">${sample.version_b?.ground_truth || 'N/A'}</div>
+                            </div>
+                        </div>
+
+                        <!-- What Changed -->
+                        <div class="c6-content-card" style="border-left: 3px solid #8B5CF6;">
+                            <div class="c6-content-label" style="color: #7C3AED;">What Changed</div>
+                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6; color: #4B5563;">${sample.what_changed || 'N/A'}</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Assessment -->
+                    <div class="c6-right-panel">
+                        <div class="c6-form">
+                            <div class="c6-form-title">Pair Assessment</div>
+
+                            <!-- Q1: Is Version A actually unsafe? -->
+                            <div class="c6-question" style="margin-top: 0.5rem;">
+                                <label class="c6-question-label">1. Is Version A actually unsafe?</label>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="a_unsafe" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="a_unsafe" data-value="no">No</button>
+                                </div>
+                            </div>
+
+                            <!-- Q2: Is Version B actually safe? -->
+                            <div class="c6-question">
+                                <label class="c6-question-label">2. Is Version B actually safe?</label>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="b_safe" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="b_safe" data-value="no">No</button>
+                                </div>
+                            </div>
+
+                            <!-- Q3: Is the change realistic & minimal? -->
+                            <div class="c6-question">
+                                <label class="c6-question-label">3. Is the change realistic &amp; minimal?</label>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="change_realistic" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="change_realistic" data-value="no">No</button>
+                                </div>
+                            </div>
+
+                            <!-- Q4: Overall quality -->
+                            <div class="c6-question">
+                                <label class="c6-question-label">4. Overall quality</label>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="verdict" data-value="keep">Keep</button>
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="verdict" data-value="revise">Revise</button>
+                                    <button type="button" class="c6-opt-btn pair-opt-btn" data-field="verdict" data-value="drop">Drop</button>
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="c6-notes-box" id="pair-notes-section">
+                                <textarea class="c6-notes-textarea" id="pair-notes" placeholder="Optional: Add notes">${pairCurrentAnnotation.notes || ''}</textarea>
+                            </div>
+
+                            <!-- Clear button -->
+                            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E2E8F0;">
+                                <button id="pair-clear-btn" style="background: none; border: none; color: #94A3B8; font-size: 0.75rem; cursor: pointer; padding: 0.5rem; transition: color 0.15s;" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#94A3B8'">Clear all answers</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="c6-footer">
+                        <button class="c6-nav-btn secondary" id="pair-prev-btn" ${pairIndex === 0 ? 'disabled' : ''}>← Prev</button>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="c6-nav-progress">${pairIndex + 1} / ${pairSamples.length}</span>
+                            <span style="color: #94A3B8; font-size: 0.8rem;">Jump to:</span>
+                            <input type="number" id="pair-jump-input" min="1" max="${pairSamples.length}" placeholder="#" style="width: 50px; padding: 0.35rem 0.5rem; border: 1px solid #E2E8F0; border-radius: 4px; font-size: 0.8rem; text-align: center;">
+                            <button class="c6-nav-btn secondary" id="pair-jump-btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Go</button>
+                        </div>
+                        <button class="c6-nav-btn primary" id="pair-next-btn" disabled>Save & Next →</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('sample-content').innerHTML = html;
+
+            // Attach event listeners
+            attachPairEventListeners();
+
+            // Restore saved state for this sample
+            restorePairButtonStates();
+        }
+
+        function attachPairEventListeners() {
+            // Option buttons (pair-opt-btn class)
+            document.querySelectorAll('.pair-opt-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const field = this.dataset.field;
+                    const value = this.dataset.value;
+                    setPairAnnotation(field, value, this);
+                });
+            });
+
+            // Notes textarea
+            const notesEl = document.getElementById('pair-notes');
+            if (notesEl) {
+                notesEl.addEventListener('input', function() {
+                    pairCurrentAnnotation.notes = this.value;
+                    updatePairNextButton();
+                });
+            }
+
+            // Reveal buttons for full scenarios
+            document.querySelectorAll('.pair-reveal-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.dataset.target;
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        const isHidden = target.style.display === 'none';
+                        target.style.display = isHidden ? 'block' : 'none';
+                        this.textContent = isHidden ? 'Hide full scenario' : 'Show full scenario';
+                    }
+                });
+            });
+
+            // Nav buttons
+            document.getElementById('pair-prev-btn')?.addEventListener('click', () => navigatePair(-1));
+            document.getElementById('pair-next-btn')?.addEventListener('click', submitPairAnnotation);
+            document.getElementById('pair-clear-btn')?.addEventListener('click', clearPairAnnotation);
+
+            // Jump to sample
+            document.getElementById('pair-jump-btn')?.addEventListener('click', jumpToPairSample);
+            document.getElementById('pair-jump-input')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') jumpToPairSample();
+            });
+        }
+
+        function setPairAnnotation(field, value, clickedBtn) {
+            pairCurrentAnnotation[field] = value;
+
+            // Update button states in the same group
+            const parent = clickedBtn.parentElement;
+            parent.querySelectorAll('.pair-opt-btn').forEach(btn => {
+                btn.classList.remove('selected', 'selected-yes', 'selected-no');
+            });
+
+            // Add appropriate selected class
+            if (field === 'a_unsafe' || field === 'b_safe' || field === 'change_realistic') {
+                clickedBtn.classList.add(value === 'yes' ? 'selected-yes' : 'selected-no');
+            } else {
+                clickedBtn.classList.add('selected');
+            }
+
+            updatePairNextButton();
+        }
+
+        function restorePairButtonStates() {
+            // Q1: a_unsafe
+            if (pairCurrentAnnotation.a_unsafe) {
+                const btn = document.querySelector('.pair-opt-btn[data-field="a_unsafe"][data-value="' + pairCurrentAnnotation.a_unsafe + '"]');
+                if (btn) btn.classList.add(pairCurrentAnnotation.a_unsafe === 'yes' ? 'selected-yes' : 'selected-no');
+            }
+
+            // Q2: b_safe
+            if (pairCurrentAnnotation.b_safe) {
+                const btn = document.querySelector('.pair-opt-btn[data-field="b_safe"][data-value="' + pairCurrentAnnotation.b_safe + '"]');
+                if (btn) btn.classList.add(pairCurrentAnnotation.b_safe === 'yes' ? 'selected-yes' : 'selected-no');
+            }
+
+            // Q3: change_realistic
+            if (pairCurrentAnnotation.change_realistic) {
+                const btn = document.querySelector('.pair-opt-btn[data-field="change_realistic"][data-value="' + pairCurrentAnnotation.change_realistic + '"]');
+                if (btn) btn.classList.add(pairCurrentAnnotation.change_realistic === 'yes' ? 'selected-yes' : 'selected-no');
+            }
+
+            // Q4: verdict
+            if (pairCurrentAnnotation.verdict) {
+                const btn = document.querySelector('.pair-opt-btn[data-field="verdict"][data-value="' + pairCurrentAnnotation.verdict + '"]');
+                if (btn) btn.classList.add('selected');
+            }
+
+            // Restore notes if any
+            const notesEl = document.getElementById('pair-notes');
+            if (notesEl && pairCurrentAnnotation.notes) {
+                notesEl.value = pairCurrentAnnotation.notes;
+            }
+
+            updatePairNextButton();
+        }
+
+        function updatePairNextButton() {
+            const nextBtn = document.getElementById('pair-next-btn');
+            if (nextBtn) {
+                nextBtn.disabled = !isPairAnnotationComplete();
+            }
+        }
+
+        function isPairAnnotationComplete() {
+            const a = pairCurrentAnnotation;
+            return a.a_unsafe !== null &&
+                   a.b_safe !== null &&
+                   a.change_realistic !== null &&
+                   a.verdict !== null;
+        }
+
+        function submitPairAnnotation() {
+            if (!isPairAnnotationComplete()) {
+                alert('Please complete all required fields before proceeding.');
+                return;
+            }
+
+            const sample = pairSamples[pairIndex];
+
+            // Save annotation
+            pairAnnotations[sample.sample_id] = {
+                ...pairCurrentAnnotation,
+                sample_id: sample.sample_id,
+                record_id: sample.record_id,
+                annotator: state.annotator,
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            savePairAnnotations();
+
+            // Sync to Google Sheets
+            syncPairToSheet(sample.sample_id);
+
+            // Move to next sample
+            if (pairIndex < pairSamples.length - 1) {
+                pairIndex++;
+                renderPairReview();
+            } else {
+                // All done
+                document.getElementById('sample-content').innerHTML = `
+                    <div style="text-align: center; padding: 4rem;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">&#127881;</div>
+                        <h2 style="margin-bottom: 0.5rem;">All Done!</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 2rem;">You've completed all ${pairSamples.length} pair review samples.</p>
+                        <button class="btn btn-primary" onclick="downloadPairAnnotations()">Download Annotations</button>
+                    </div>
+                `;
+            }
+        }
+
+        function navigatePair(direction) {
+            const newIndex = pairIndex + direction;
+            if (newIndex >= 0 && newIndex < pairSamples.length) {
+                pairIndex = newIndex;
+                renderPairReview();
+            }
+        }
+
+        function clearPairAnnotation() {
+            if (!confirm('Clear all answers for this sample?')) return;
+
+            // Reset current annotation to empty
+            pairCurrentAnnotation = {
+                a_unsafe: null,
+                b_safe: null,
+                change_realistic: null,
+                verdict: null,
+                notes: ''
+            };
+
+            // Remove from saved annotations if it exists
+            const sample = pairSamples[pairIndex];
+            if (pairAnnotations[sample.sample_id]) {
+                delete pairAnnotations[sample.sample_id];
+                savePairAnnotations();
+            }
+
+            // Re-render to show cleared state
+            renderPairReview();
+        }
+
+        function jumpToPairSample() {
+            const input = document.getElementById('pair-jump-input');
+            const targetNum = parseInt(input.value);
+
+            // Validate input
+            if (!targetNum || targetNum < 1 || targetNum > pairSamples.length) {
+                alert(`Please enter a number between 1 and ${pairSamples.length}`);
+                return;
+            }
+
+            // Convert 1-based to 0-based index
+            pairIndex = targetNum - 1;
+            renderPairReview();
+
+            // Clear input
+            input.value = '';
+        }
+
+        function savePairAnnotations() {
+            if (!state.annotator) return;
+            const key = `riskbench_pair_annotations_${state.annotator}`;
+            localStorage.setItem(key, JSON.stringify(pairAnnotations));
+        }
+
+        function loadPairAnnotations() {
+            if (!state.annotator) return;
+            const key = `riskbench_pair_annotations_${state.annotator}`;
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                pairAnnotations = JSON.parse(saved);
+            }
+        }
+
+        function downloadPairAnnotations() {
+            const exportData = {
+                annotator: state.annotator,
+                task: 'pair_review',
+                exported_at: new Date().toISOString(),
+                total_annotations: Object.keys(pairAnnotations).length,
+                annotations: Object.values(pairAnnotations)
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pair_review_annotations_${state.annotator}_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function syncPairToSheet(sampleId) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_WEB_APP_URL')) {
+                return; // No sync configured
+            }
+
+            const annotation = pairAnnotations[sampleId];
+            if (!annotation) return;
+
+            const sample = pairSamples.find(s => s.sample_id === sampleId);
+
+            const payload = {
+                task: 'pair_review',
+                session_id: SESSION_ID,
+                annotator: state.annotator,
+                sample_id: sampleId,
+                record_id: sample?.record_id,
+                category: sample?.category,
+                subcategory: sample?.subcategory,
+                attack_type: sample?.attack_type,
+                source: sample?.source,
+                a_unsafe: annotation.a_unsafe,
+                b_safe: annotation.b_safe,
+                change_realistic: annotation.change_realistic,
+                verdict: annotation.verdict,
+                notes: annotation.notes,
+                timestamp: annotation.timestamp
+            };
+
+            // Send via image pixel (reliable cross-origin)
+            const params = new URLSearchParams(payload).toString();
+            const img = new Image();
+            img.src = `${GOOGLE_SCRIPT_URL}?${params}`;
         }
 
         // --- Progress Persistence ---
