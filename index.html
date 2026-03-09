@@ -1544,13 +1544,13 @@
 
         /* C6 Quality Assessment Styles - Compact Single Screen */
         .c6-container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 1rem 1.5rem;
             display: grid;
-            grid-template-columns: 1fr 380px;
+            grid-template-columns: 1fr 340px;
             grid-template-rows: auto 1fr auto;
-            gap: 1rem;
+            gap: 1.25rem;
             height: calc(100vh - 60px);
             box-sizing: border-box;
         }
@@ -1604,7 +1604,7 @@
         .c6-left-panel {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
             overflow-y: auto;
             background: #FAFBFC;
             border: 1px solid #E5E7EB;
@@ -1640,6 +1640,145 @@
             font-size: 0.9rem;
             line-height: 1.65;
             color: #1F2937;
+        }
+
+        /* Pair review: conversation step formatting */
+        .pair-step {
+            margin-bottom: 0.625rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            line-height: 1.6;
+        }
+        .pair-step:last-child { margin-bottom: 0; }
+        .pair-step-label {
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.2rem;
+        }
+        .pair-step-body {
+            color: #1F2937;
+            word-break: break-word;
+        }
+        .pair-step-user {
+            background: #EFF6FF;
+            border-left: 3px solid #3B82F6;
+        }
+        .pair-step-user .pair-step-label { color: #1D4ED8; }
+        .pair-step-agent-thought {
+            background: #F5F3FF;
+            border-left: 3px solid #8B5CF6;
+        }
+        .pair-step-agent-thought .pair-step-label { color: #6D28D9; }
+        .pair-step-agent-action {
+            background: #FFF7ED;
+            border-left: 3px solid #F59E0B;
+        }
+        .pair-step-agent-action .pair-step-label { color: #B45309; }
+        .pair-step-environment {
+            background: #F0FDF4;
+            border-left: 3px solid #22C55E;
+        }
+        .pair-step-environment .pair-step-label { color: #15803D; }
+        .pair-step-environment .pair-step-body {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.78rem;
+            color: #374151;
+        }
+        .pair-step-other {
+            background: #F9FAFB;
+            border-left: 3px solid #D1D5DB;
+        }
+        .pair-step-other .pair-step-label { color: #6B7280; }
+
+        /* --- Family Review --- */
+        .family-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 0 2rem;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0.75rem 2rem;
+            height: calc(100vh - 60px);
+            box-sizing: border-box;
+        }
+        .family-header {
+            grid-column: 1 / -1;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .family-header-inner {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+        .family-left {
+            overflow-y: auto;
+            padding: 1.25rem 0;
+        }
+        .family-right {
+            overflow-y: auto;
+            padding: 1.25rem 0;
+        }
+        .family-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 1.25rem;
+        }
+        .family-tab {
+            padding: 0.5rem 0.875rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #9CA3AF;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            cursor: pointer;
+            transition: color 0.15s, border-color 0.15s;
+            white-space: nowrap;
+        }
+        .family-tab:hover { color: #374151; }
+        .family-tab.active {
+            color: #111827;
+            border-bottom-color: #111827;
+            font-weight: 600;
+        }
+        .family-tab.completed { color: #059669; }
+        .family-tab.completed::after { content: ' \2713'; }
+        .family-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9CA3AF;
+            margin-bottom: 0.35rem;
+        }
+        .family-section {
+            margin-bottom: 1.25rem;
+        }
+        .family-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.3rem;
+        }
+        .family-section-body {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: #374151;
+        }
+        .family-footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid #E5E7EB;
         }
 
         .c6-right-panel {
@@ -2524,6 +2663,7 @@
                     <option value="c6_quality">Pipeline v1 Quality Check</option>
                     <option value="synthesized">Pipeline v2 (R-Judge)</option>
                     <option value="pair_review">Pair Review (Pipeline v2)</option>
+                    <option value="family_review">Family Review</option>
                 </select>
             </div>
 
@@ -2670,12 +2810,25 @@
                         </ol>
                     </div>
                 </div>
+
+                <div class="instruction-block hidden" id="instruction-family-review">
+                    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.7;">
+                        <div style="margin-bottom: 8px;"><strong style="color: #475569;">GOAL:</strong> Review families of paired scenarios — the original R-Judge seed on the left, its derived pairs on the right.</div>
+                        <div style="margin-bottom: 4px;"><strong style="color: #475569;">Steps:</strong></div>
+                        <ol style="margin: 0 0 0 1rem; padding: 0; font-size: 0.75rem; color: #64748B; line-height: 1.7;">
+                            <li>Read the original seed interaction (left panel)</li>
+                            <li>Use tabs to switch between the original pair and dimension variations</li>
+                            <li>For each tab, assess the A/B pair and answer questions</li>
+                            <li>Navigate between families when done</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </aside>
 
         <!-- Main Area -->
         <main class="main-content">
-            
+
             <!-- Annotation View -->
             <div id="annotation-view">
                 <div id="sample-content">
@@ -2763,6 +2916,13 @@
         let pairData = null;
         let pairAnnotations = {};
         let pairCurrentAnnotation = {};
+
+        // Family Review state
+        let familyList = [];           // Array of family objects
+        let familyIndex = 0;           // Current family index
+        let familyTabIndex = 0;        // Current tab (0 = original pair, 1+ = variations)
+        let familyAnnotations = {};    // Keyed by family_id -> pair_id -> annotation
+        let familyCurrentAnnotation = {};
 
         // Harm Type definitions for tooltips
         // Harm Type definitions - WHAT bad outcome occurs (from riskbench_c6_obscure.yaml)
@@ -3007,12 +3167,13 @@
             if (navReview) navReview.classList.toggle('active', taskType === 'review');
 
             // Update instruction blocks and filters
-            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review');
+            document.getElementById('instruction-comparison').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review' || taskType === 'family_review');
             document.getElementById('instruction-review').classList.toggle('hidden', taskType !== 'review');
             document.getElementById('instruction-c6').classList.toggle('hidden', taskType !== 'c6_quality');
             document.getElementById('instruction-synthesized').classList.toggle('hidden', taskType !== 'synthesized');
             document.getElementById('instruction-pair-review').classList.toggle('hidden', taskType !== 'pair_review');
-            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review');
+            document.getElementById('instruction-family-review').classList.toggle('hidden', taskType !== 'family_review');
+            document.getElementById('filter-section').classList.toggle('hidden', taskType === 'review' || taskType === 'c6_quality' || taskType === 'synthesized' || taskType === 'pair_review' || taskType === 'family_review');
             
             // Show annotation view, hide completion
             document.getElementById('completion-view').classList.add('hidden');
@@ -3040,6 +3201,12 @@
             // Handle Pair Review task
             if (taskType === 'pair_review') {
                 loadPairReviewData(specificFile);
+                return;
+            }
+
+            // Handle Family Review task
+            if (taskType === 'family_review') {
+                loadFamilyReviewData();
                 return;
             }
 
@@ -4460,6 +4627,52 @@
                 });
         }
 
+        function formatScenarioSteps(text) {
+            if (!text) return '<span style="color:#9CA3AF;">No scenario</span>';
+            // Normalize escaped newlines and real newlines
+            const normalized = text.replace(/\\n/g, '\n');
+            // Split on step boundaries: "Step N." at start of line
+            const stepRegex = /^(Step\s+\d+\.)\s*/gm;
+            const parts = normalized.split(stepRegex).filter(s => s.trim());
+
+            // If no step structure, return as plain formatted text
+            if (parts.length <= 1) {
+                return `<div class="pair-step pair-step-other"><div class="pair-step-body">${escapeHtml(normalized)}</div></div>`;
+            }
+
+            let html = '';
+            for (let i = 0; i < parts.length; i++) {
+                const part = parts[i].trim();
+                if (/^Step\s+\d+\.$/.test(part)) {
+                    // This is a step label; next part is the content
+                    const content = (parts[i + 1] || '').trim();
+                    i++;
+                    // Detect role from content
+                    let role = 'other';
+                    let label = part;
+                    let body = content;
+                    const roleMatch = content.match(/^\[([^\]]+)\]:\s*([\s\S]*)$/);
+                    if (roleMatch) {
+                        const tag = roleMatch[1].toUpperCase();
+                        label = `${part} ${roleMatch[1]}`;
+                        body = roleMatch[2].trim();
+                        if (tag === 'USER') role = 'user';
+                        else if (tag === 'AGENT THOUGHT') role = 'agent-thought';
+                        else if (tag === 'AGENT ACTION') role = 'agent-action';
+                        else if (tag === 'ENVIRONMENT') role = 'environment';
+                    }
+                    html += `<div class="pair-step pair-step-${role}"><div class="pair-step-label">${escapeHtml(label)}</div><div class="pair-step-body">${escapeHtml(body)}</div></div>`;
+                }
+            }
+            return html || `<div class="pair-step pair-step-other"><div class="pair-step-body">${escapeHtml(normalized)}</div></div>`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         function renderPairReview() {
             if (!pairSamples || pairSamples.length === 0) {
                 document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No samples available.</div>';
@@ -4490,66 +4703,69 @@
 
             // Dimension tags
             const dimTags = [];
-            if (sample.risk_severity_tag) dimTags.push(`<span style="font-size: 0.7rem; padding: 2px 8px; background: #FEF2F2; color: #991B1B; border-radius: 4px; font-weight: 500;">${sample.risk_severity_tag}</span>`);
-            if (sample.scenario_difficulty_tag) dimTags.push(`<span style="font-size: 0.7rem; padding: 2px 8px; background: #EFF6FF; color: #1E40AF; border-radius: 4px; font-weight: 500;">${sample.scenario_difficulty_tag}</span>`);
-            const dimTagsHtml = dimTags.length > 0 ? `<div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">${dimTags.join('')}</div>` : '';
+            if (sample.risk_severity_tag) dimTags.push(`<span class="c6-badge" style="background: #FEF2F2; color: #991B1B; font-size: 0.72rem; padding: 3px 10px;">${sample.risk_severity_tag}</span>`);
+            if (sample.scenario_difficulty_tag) dimTags.push(`<span class="c6-badge" style="background: #EFF6FF; color: #1E40AF; font-size: 0.72rem; padding: 3px 10px;">${sample.scenario_difficulty_tag}</span>`);
 
-            // Truncation info
-            const truncInfo = sample.truncation_type ? `Truncated at step ${sample.truncation_step || '?'} (${sample.truncation_type}) | Execution at step ${sample.execution_point_step || '?'} | Total ${sample.original_total_steps || '?'} steps` : '';
+            // Format scenario steps
+            const versionAHtml = formatScenarioSteps(sample.version_a?.scenario);
+            const versionBHtml = formatScenarioSteps(sample.version_b?.scenario);
+            const fullAHtml = formatScenarioSteps(sample.version_a?.full_scenario);
+            const fullBHtml = formatScenarioSteps(sample.version_b?.full_scenario);
 
             const html = `
                 <div class="c6-container">
                     <!-- Header -->
                     <div class="c6-header">
-                        <div class="c6-sample-num">Sample ${pairIndex + 1} of ${pairSamples.length}</div>
+                        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                            <div class="c6-sample-num">Sample ${pairIndex + 1} of ${pairSamples.length}</div>
+                            <span style="color: #D1D5DB;">|</span>
+                            <span class="c6-badge" style="background: #F3F4F6; color: #374151; font-size: 0.72rem; padding: 3px 10px;">${sample.category || ''}/${sample.subcategory || ''}</span>
+                            <span class="c6-badge" style="background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#E0E7FF'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#3730A3'}; font-size: 0.72rem; padding: 3px 10px;">${sample.attack_type || ''}</span>
+                            <span class="c6-badge" style="background: #F0FDF4; color: #166534; font-size: 0.72rem; padding: 3px 10px;">${sample.source || ''}</span>
+                            ${dimTags.join('')}
+                            <span style="font-size: 0.7rem; color: #9CA3AF;">ID: ${sample.record_id || sample.sample_id}</span>
+                            ${sample.truncation_step ? `<span style="font-size: 0.68rem; color: #9CA3AF;">Trunc: step ${sample.truncation_step} | Exec: step ${sample.execution_point_step || '?'} | Total: ${sample.original_total_steps || '?'}</span>` : ''}
+                        </div>
                     </div>
 
                     <!-- Left: Content -->
                     <div class="c6-left-panel">
-                        <!-- Metadata -->
-                        <div style="background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem;">
-                            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem;">
-                                <span style="font-size: 0.7rem; padding: 2px 8px; background: #F3F4F6; color: #374151; border-radius: 4px; font-weight: 500;">${sample.category || ''}/${sample.subcategory || ''}</span>
-                                <span style="font-size: 0.7rem; padding: 2px 8px; background: ${sample.attack_type === 'injection' ? '#FEE2E2' : '#E0E7FF'}; color: ${sample.attack_type === 'injection' ? '#991B1B' : '#3730A3'}; border-radius: 4px; font-weight: 500; text-transform: uppercase;">${sample.attack_type || ''}</span>
-                                <span style="font-size: 0.7rem; padding: 2px 8px; background: #F0FDF4; color: #166534; border-radius: 4px; font-weight: 500;">${sample.source || ''}</span>
-                                <span style="font-size: 0.65rem; color: #9CA3AF;">ID: ${sample.record_id || sample.sample_id}</span>
-                            </div>
-                            ${dimTagsHtml}
-                            ${truncInfo ? `<div style="font-size: 0.7rem; color: #6B7280; line-height: 1.5;">${truncInfo}</div>` : ''}
-                        </div>
-
                         <!-- Version A (Unsafe) -->
-                        <div class="c6-content-card" style="border-left: 3px solid #EF4444;">
-                            <div class="c6-content-label" style="color: #DC2626;">Version A (Unsafe)</div>
-                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6;">${(sample.version_a?.scenario || 'No scenario').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
-                            <div style="margin-top: 0.5rem;">
-                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-a" style="font-size: 0.75rem; cursor: pointer; background: none; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 10px; color: #6B7280;">Show full scenario</button>
-                                <div id="pair-full-a" class="pair-full-scenario" style="display: none; margin-top: 0.5rem; padding: 0.75rem; background: #F9FAFB; border-radius: 6px; font-size: 0.8rem; line-height: 1.6; color: #374151;">${(sample.version_a?.full_scenario || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                        <div class="c6-content-card" style="border-left: 4px solid #EF4444; border-radius: 10px;">
+                            <div class="c6-content-label" style="color: #DC2626; background: #FEF2F2; border-bottom-color: #FECACA; font-size: 0.7rem; padding: 0.6rem 1rem;">Version A — Unsafe</div>
+                            <div style="padding: 0.75rem 1rem;">
+                                ${versionAHtml}
                             </div>
-                            <div style="margin-top: 0.75rem; padding: 0.6rem; background: #F9FAFB; border-radius: 6px; border: 1px solid #E5E7EB;">
-                                <div style="font-size: 0.65rem; color: #9CA3AF; font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">Ground Truth</div>
-                                <div style="font-size: 0.8rem; color: #6B7280; line-height: 1.5;">${sample.version_a?.ground_truth || 'N/A'}</div>
+                            <div style="padding: 0 1rem 0.75rem;">
+                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-a" style="font-size: 0.72rem; cursor: pointer; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 5px 12px; color: #6B7280; transition: background 0.15s;">Show full scenario</button>
+                                <div id="pair-full-a" style="display: none; margin-top: 0.75rem; padding: 0.75rem; background: #FAFBFC; border-radius: 8px; border: 1px solid #E5E7EB;">${fullAHtml}</div>
+                            </div>
+                            <div style="margin: 0 1rem 0.75rem; padding: 0.65rem 0.75rem; background: #FFF5F5; border-radius: 8px; border: 1px solid #FEE2E2;">
+                                <div style="font-size: 0.65rem; color: #B91C1C; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;">Ground Truth (Risk)</div>
+                                <div style="font-size: 0.82rem; color: #374151; line-height: 1.55;">${escapeHtml(sample.version_a?.ground_truth || 'N/A')}</div>
                             </div>
                         </div>
 
                         <!-- Version B (Safe) -->
-                        <div class="c6-content-card" style="border-left: 3px solid #10B981;">
-                            <div class="c6-content-label" style="color: #059669;">Version B (Safe)</div>
-                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6;">${(sample.version_b?.scenario || 'No scenario').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
-                            <div style="margin-top: 0.5rem;">
-                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-b" style="font-size: 0.75rem; cursor: pointer; background: none; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 10px; color: #6B7280;">Show full scenario</button>
-                                <div id="pair-full-b" class="pair-full-scenario" style="display: none; margin-top: 0.5rem; padding: 0.75rem; background: #F9FAFB; border-radius: 6px; font-size: 0.8rem; line-height: 1.6; color: #374151;">${(sample.version_b?.full_scenario || '').replace(/\\n/g, '<br>').replace(/\n/g, '<br>')}</div>
+                        <div class="c6-content-card" style="border-left: 4px solid #10B981; border-radius: 10px;">
+                            <div class="c6-content-label" style="color: #059669; background: #ECFDF5; border-bottom-color: #A7F3D0; font-size: 0.7rem; padding: 0.6rem 1rem;">Version B — Safe</div>
+                            <div style="padding: 0.75rem 1rem;">
+                                ${versionBHtml}
                             </div>
-                            <div style="margin-top: 0.75rem; padding: 0.6rem; background: #F9FAFB; border-radius: 6px; border: 1px solid #E5E7EB;">
-                                <div style="font-size: 0.65rem; color: #9CA3AF; font-weight: 600; text-transform: uppercase; margin-bottom: 0.25rem;">Ground Truth</div>
-                                <div style="font-size: 0.8rem; color: #6B7280; line-height: 1.5;">${sample.version_b?.ground_truth || 'N/A'}</div>
+                            <div style="padding: 0 1rem 0.75rem;">
+                                <button class="c6-reveal-btn pair-reveal-btn" data-target="pair-full-b" style="font-size: 0.72rem; cursor: pointer; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 5px 12px; color: #6B7280; transition: background 0.15s;">Show full scenario</button>
+                                <div id="pair-full-b" style="display: none; margin-top: 0.75rem; padding: 0.75rem; background: #FAFBFC; border-radius: 8px; border: 1px solid #E5E7EB;">${fullBHtml}</div>
+                            </div>
+                            <div style="margin: 0 1rem 0.75rem; padding: 0.65rem 0.75rem; background: #F0FDF4; border-radius: 8px; border: 1px solid #BBF7D0;">
+                                <div style="font-size: 0.65rem; color: #15803D; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;">Ground Truth (Safe Action)</div>
+                                <div style="font-size: 0.82rem; color: #374151; line-height: 1.55;">${escapeHtml(sample.version_b?.ground_truth || 'N/A')}</div>
                             </div>
                         </div>
 
                         <!-- What Changed -->
-                        <div class="c6-content-card" style="border-left: 3px solid #8B5CF6;">
-                            <div class="c6-content-label" style="color: #7C3AED;">What Changed</div>
-                            <div class="c6-content-text" style="font-size: 0.85rem; line-height: 1.6; color: #4B5563;">${sample.what_changed || 'N/A'}</div>
+                        <div style="background: white; border: 1.5px solid #DDD6FE; border-left: 4px solid #8B5CF6; border-radius: 10px; padding: 0.75rem 1rem;">
+                            <div style="font-size: 0.7rem; font-weight: 700; color: #7C3AED; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">What Changed</div>
+                            <div style="font-size: 0.84rem; line-height: 1.6; color: #374151;">${escapeHtml(sample.what_changed || 'N/A')}</div>
                         </div>
                     </div>
 
@@ -4895,6 +5111,449 @@
             };
 
             // Send via image pixel (reliable cross-origin)
+            const params = new URLSearchParams(payload).toString();
+            const img = new Image();
+            img.src = `${GOOGLE_SCRIPT_URL}?${params}`;
+        }
+
+        // =============================================
+        // FAMILY REVIEW
+        // =============================================
+
+        function loadFamilyReviewData() {
+            fetch('data/family_review_samples.json')
+                .then(res => {
+                    if (!res.ok) throw new Error('Family review data not found.');
+                    return res.json();
+                })
+                .then(data => {
+                    const allFamilies = data.families || [];
+                    familyList = allFamilies.filter(f =>
+                        f.assigned_annotators && f.assigned_annotators.includes(state.annotator)
+                    );
+                    if (familyList.length === 0) familyList = allFamilies;
+                    familyIndex = 0;
+                    familyTabIndex = 0;
+                    loadFamilyAnnotations();
+                    renderFamilyReview();
+                })
+                .catch(err => {
+                    document.getElementById('sample-content').innerHTML = `<div style="text-align: center; padding: 3rem;"><h3>No Family Review Data</h3><p>${err.message}</p></div>`;
+                });
+        }
+
+        const DIMENSION_LABELS = {
+            'RS1_SCOPE_SCALE': 'Scope & Scale',
+            'RS2_TARGET': 'Target',
+            'RS3_DEPENDENCY': 'Dependency',
+            'RS4_TEMPORAL': 'Temporal',
+            'RS5_REVERSIBILITY': 'Reversibility',
+            'SD1_AMBIGUITY': 'Ambiguity',
+            'SD2_MULTI_STEP': 'Multi-step',
+            'SD3_OBFUSCATION': 'Obfuscation',
+            'SD4_AUTHORITY': 'Authority',
+        };
+
+        function dimLabel(code) {
+            if (!code) return 'Variation';
+            return DIMENSION_LABELS[code] || code.replace(/_/g, ' ');
+        }
+
+        function getFamilyTabs(family) {
+            const tabs = [{ label: 'Original', pair: family.original_pair }];
+            (family.variations || []).forEach(v => {
+                tabs.push({ label: dimLabel(v.dimension), pair: v });
+            });
+            return tabs;
+        }
+
+        function renderFamilyReview() {
+            if (!familyList || familyList.length === 0) {
+                document.getElementById('sample-content').innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-secondary);">No families available.</div>';
+                return;
+            }
+
+            const family = familyList[familyIndex];
+            const tabs = getFamilyTabs(family);
+            if (familyTabIndex >= tabs.length) familyTabIndex = 0;
+            const pair = tabs[familyTabIndex].pair;
+            const seed = family.seed;
+            const isVariation = familyTabIndex > 0;
+
+            // Progress
+            const totalPairs = familyList.reduce((n, f) => n + 1 + (f.variations || []).length, 0);
+            const completedPairs = countFamilyCompleted();
+            const progressPct = totalPairs > 0 ? Math.round((completedPairs / totalPairs) * 100) : 0;
+            document.getElementById('progress-fill').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').textContent = `${completedPairs} / ${totalPairs}`;
+
+            // Load existing annotation
+            const famAnns = familyAnnotations[family.family_id] || {};
+            const existing = famAnns[pair.pair_id];
+            familyCurrentAnnotation = existing
+                ? { ...existing }
+                : { a_unsafe: null, b_safe: null, dimension_correct: null, notes: '' };
+
+            // Tabs
+            const tabsHtml = tabs.map((t, i) => {
+                const active = i === familyTabIndex;
+                const done = famAnns[t.pair.pair_id];
+                let cls = 'family-tab';
+                if (active) cls += ' active';
+                else if (done) cls += ' completed';
+                return `<button class="${cls}" data-tab="${i}">${escapeHtml(t.label)}</button>`;
+            }).join('');
+
+            // Scenarios
+            const seedStepsHtml = formatScenarioSteps(seed.formatted_interaction);
+            const versionAHtml = formatScenarioSteps(pair.version_a_scenario);
+            const versionBHtml = formatScenarioSteps(pair.version_b_scenario);
+            const fullAHtml = formatScenarioSteps(pair.version_a_full_scenario);
+            const fullBHtml = formatScenarioSteps(pair.version_b_full_scenario);
+
+            const html = `
+                <div class="family-container">
+                    <div class="family-header">
+                        <div class="family-header-inner">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: #111827;">Family ${familyIndex + 1} of ${familyList.length}</span>
+                            <span style="color: #D1D5DB;">/</span>
+                            <span style="font-size: 0.85rem; color: #6B7280;">${escapeHtml(seed.category)} / ${escapeHtml(seed.subcategory)}</span>
+                        </div>
+                    </div>
+
+                    <!-- LEFT: Seed -->
+                    <div class="family-left">
+                        <div class="family-label">Seed #${escapeHtml(family.family_id)}</div>
+
+                        <div class="family-section">
+                            ${seedStepsHtml}
+                        </div>
+
+                        <div class="family-section">
+                            <div class="family-section-title">Ground Truth</div>
+                            <div class="family-section-body">${escapeHtml(seed.ground_truth_risk || 'N/A')}</div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Pair -->
+                    <div class="family-right">
+                        <div class="family-tabs">${tabsHtml}</div>
+
+                        ${isVariation ? `<div class="family-section"><div class="family-section-title">Dimension: ${escapeHtml(dimLabel(pair.dimension))}</div></div>` : ''}
+
+                        <div class="family-section">
+                            <div class="family-section-title">What Changed</div>
+                            <div class="family-section-body">${escapeHtml(pair.what_changed || 'N/A')}</div>
+                        </div>
+
+                        <div class="family-section">
+                            <div class="family-section-title">Version A (Unsafe)</div>
+                            <div class="family-section-body">
+                                ${versionAHtml}
+                                <div style="margin-top: 0.5rem;">
+                                    <button class="fam-reveal-btn" data-target="fam-full-a" style="font-size: 0.8rem; cursor: pointer; background: none; border: none; color: #9CA3AF; padding: 0; text-decoration: underline;">Show full scenario</button>
+                                    <div id="fam-full-a" style="display: none; margin-top: 0.5rem;">${fullAHtml}</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #6B7280;"><em>GT:</em> ${escapeHtml(pair.version_a_ground_truth || 'N/A')}</div>
+                        </div>
+
+                        <div class="family-section">
+                            <div class="family-section-title">Version B (Safe)</div>
+                            <div class="family-section-body">
+                                ${versionBHtml}
+                                <div style="margin-top: 0.5rem;">
+                                    <button class="fam-reveal-btn" data-target="fam-full-b" style="font-size: 0.8rem; cursor: pointer; background: none; border: none; color: #9CA3AF; padding: 0; text-decoration: underline;">Show full scenario</button>
+                                    <div id="fam-full-b" style="display: none; margin-top: 0.5rem;">${fullBHtml}</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #6B7280;"><em>GT:</em> ${escapeHtml(pair.version_b_ground_truth || 'N/A')}</div>
+                        </div>
+
+                        <!-- Assessment -->
+                        <div style="margin-top: 0.25rem; padding-top: 1rem; border-top: 1px solid #E5E7EB;">
+                            <div class="family-label" style="margin-bottom: 0.75rem;">Assessment</div>
+
+                            <div style="margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #374151; margin-bottom: 0.35rem;">Is A actually unsafe?</div>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="a_unsafe" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="a_unsafe" data-value="no">No</button>
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="a_unsafe" data-value="unclear">Unclear</button>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #374151; margin-bottom: 0.35rem;">Is B actually safe?</div>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="b_safe" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="b_safe" data-value="no">No</button>
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="b_safe" data-value="unclear">Unclear</button>
+                                </div>
+                            </div>
+
+                            ${isVariation ? `
+                            <div style="margin-bottom: 0.75rem;">
+                                <div style="font-size: 0.85rem; color: #374151; margin-bottom: 0.35rem;">Dimension correct?</div>
+                                <div class="c6-options">
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="dimension_correct" data-value="yes">Yes</button>
+                                    <button type="button" class="c6-opt-btn fam-opt-btn" data-field="dimension_correct" data-value="no">No</button>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <textarea class="c6-notes-textarea" id="fam-notes" placeholder="Notes (optional)">${familyCurrentAnnotation.notes || ''}</textarea>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
+                                <button id="fam-clear-btn" style="background: none; border: none; color: #9CA3AF; font-size: 0.8rem; cursor: pointer;">Clear</button>
+                                <button id="fam-save-btn" class="c6-nav-btn primary" style="padding: 0.5rem 1.5rem;">Save &amp; Next Tab</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="family-footer">
+                        <button class="c6-nav-btn secondary" id="fam-prev-btn" ${familyIndex === 0 ? 'disabled' : ''}>← Previous</button>
+                        <span style="font-size: 0.85rem; color: #6B7280;">${familyIndex + 1} of ${familyList.length}</span>
+                        <button class="c6-nav-btn secondary" id="fam-next-btn" ${familyIndex === familyList.length - 1 ? 'disabled' : ''}>Next →</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('sample-content').innerHTML = html;
+            attachFamilyEventListeners();
+            restoreFamilyButtonStates();
+        }
+
+        function attachFamilyEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.family-tab').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    familyTabIndex = parseInt(this.dataset.tab);
+                    renderFamilyReview();
+                });
+            });
+
+            // Option buttons
+            document.querySelectorAll('.fam-opt-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const field = this.dataset.field;
+                    const value = this.dataset.value;
+                    familyCurrentAnnotation[field] = value;
+
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.fam-opt-btn').forEach(b => {
+                        b.classList.remove('selected', 'selected-yes', 'selected-no');
+                    });
+                    if (field === 'a_unsafe' || field === 'b_safe') {
+                        if (value === 'yes') this.classList.add(field === 'a_unsafe' ? 'selected-no' : 'selected-yes');
+                        else if (value === 'no') this.classList.add(field === 'a_unsafe' ? 'selected-yes' : 'selected-no');
+                        else this.classList.add('selected');
+                    } else if (field === 'dimension_correct') {
+                        this.classList.add(value === 'yes' ? 'selected-yes' : 'selected-no');
+                    } else {
+                        this.classList.add('selected');
+                    }
+                    updateFamilySaveButton();
+                });
+            });
+
+            // Notes
+            const notesEl = document.getElementById('fam-notes');
+            if (notesEl) {
+                notesEl.addEventListener('input', function() {
+                    familyCurrentAnnotation.notes = this.value;
+                });
+            }
+
+            // Reveal buttons
+            document.querySelectorAll('.fam-reveal-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = document.getElementById(this.dataset.target);
+                    if (target) {
+                        const isHidden = target.style.display === 'none';
+                        target.style.display = isHidden ? 'block' : 'none';
+                        this.textContent = isHidden ? 'Hide full scenario' : 'Show full scenario';
+                    }
+                });
+            });
+
+            // Clear
+            document.getElementById('fam-clear-btn')?.addEventListener('click', clearFamilyAnnotation);
+
+            // Save tab
+            document.getElementById('fam-save-btn')?.addEventListener('click', submitFamilyTab);
+
+            // Navigation
+            document.getElementById('fam-prev-btn')?.addEventListener('click', () => navigateFamily(-1));
+            document.getElementById('fam-next-btn')?.addEventListener('click', () => navigateFamily(1));
+        }
+
+        function restoreFamilyButtonStates() {
+            const a = familyCurrentAnnotation;
+            if (a.a_unsafe) {
+                const btn = document.querySelector('.fam-opt-btn[data-field="a_unsafe"][data-value="' + a.a_unsafe + '"]');
+                if (btn) {
+                    if (a.a_unsafe === 'yes') btn.classList.add('selected-no');
+                    else if (a.a_unsafe === 'no') btn.classList.add('selected-yes');
+                    else btn.classList.add('selected');
+                }
+            }
+            if (a.b_safe) {
+                const btn = document.querySelector('.fam-opt-btn[data-field="b_safe"][data-value="' + a.b_safe + '"]');
+                if (btn) {
+                    if (a.b_safe === 'yes') btn.classList.add('selected-yes');
+                    else if (a.b_safe === 'no') btn.classList.add('selected-no');
+                    else btn.classList.add('selected');
+                }
+            }
+            if (a.dimension_correct) {
+                const btn = document.querySelector('.fam-opt-btn[data-field="dimension_correct"][data-value="' + a.dimension_correct + '"]');
+                if (btn) btn.classList.add(a.dimension_correct === 'yes' ? 'selected-yes' : 'selected-no');
+            }
+            const notesEl = document.getElementById('fam-notes');
+            if (notesEl && a.notes) notesEl.value = a.notes;
+            updateFamilySaveButton();
+        }
+
+        function updateFamilySaveButton() {
+            const saveBtn = document.getElementById('fam-save-btn');
+            if (saveBtn) {
+                saveBtn.disabled = !isFamilyTabComplete();
+            }
+        }
+
+        function isFamilyTabComplete() {
+            const a = familyCurrentAnnotation;
+            const isVariation = familyTabIndex > 0;
+            const baseComplete = a.a_unsafe !== null && a.b_safe !== null;
+            if (isVariation) return baseComplete && a.dimension_correct !== null;
+            return baseComplete;
+        }
+
+        function submitFamilyTab() {
+            if (!isFamilyTabComplete()) return;
+
+            const family = familyList[familyIndex];
+            const tabs = getFamilyTabs(family);
+            const pair = tabs[familyTabIndex].pair;
+
+            if (!familyAnnotations[family.family_id]) {
+                familyAnnotations[family.family_id] = {};
+            }
+            familyAnnotations[family.family_id][pair.pair_id] = {
+                ...familyCurrentAnnotation,
+                pair_id: pair.pair_id,
+                family_id: family.family_id,
+                annotator: state.annotator,
+                timestamp: new Date().toISOString()
+            };
+
+            saveFamilyAnnotations();
+            syncFamilyToSheet(family.family_id, pair.pair_id);
+
+            // Auto-advance to next unannotated tab, or stay
+            const famAnns = familyAnnotations[family.family_id] || {};
+            let nextTab = -1;
+            for (let i = 0; i < tabs.length; i++) {
+                if (!famAnns[tabs[i].pair.pair_id]) {
+                    nextTab = i;
+                    break;
+                }
+            }
+            if (nextTab >= 0 && nextTab !== familyTabIndex) {
+                familyTabIndex = nextTab;
+            }
+            renderFamilyReview();
+        }
+
+        function clearFamilyAnnotation() {
+            if (!confirm('Clear answers for this tab?')) return;
+            familyCurrentAnnotation = { a_unsafe: null, b_safe: null, dimension_correct: null, notes: '' };
+
+            const family = familyList[familyIndex];
+            const tabs = getFamilyTabs(family);
+            const pair = tabs[familyTabIndex].pair;
+            if (familyAnnotations[family.family_id]?.[pair.pair_id]) {
+                delete familyAnnotations[family.family_id][pair.pair_id];
+                saveFamilyAnnotations();
+            }
+            renderFamilyReview();
+        }
+
+        function navigateFamily(direction) {
+            const newIndex = familyIndex + direction;
+            if (newIndex >= 0 && newIndex < familyList.length) {
+                familyIndex = newIndex;
+                familyTabIndex = 0;
+                renderFamilyReview();
+            }
+        }
+
+        function countFamilyCompleted() {
+            let count = 0;
+            for (const famId in familyAnnotations) {
+                count += Object.keys(familyAnnotations[famId]).length;
+            }
+            return count;
+        }
+
+        function saveFamilyAnnotations() {
+            if (!state.annotator) return;
+            const key = `riskbench_family_annotations_${state.annotator}`;
+            localStorage.setItem(key, JSON.stringify(familyAnnotations));
+        }
+
+        function loadFamilyAnnotations() {
+            if (!state.annotator) return;
+            const key = `riskbench_family_annotations_${state.annotator}`;
+            const saved = localStorage.getItem(key);
+            if (saved) {
+                familyAnnotations = JSON.parse(saved);
+            }
+        }
+
+        function downloadFamilyAnnotations() {
+            const allAnns = [];
+            for (const famId in familyAnnotations) {
+                for (const pairId in familyAnnotations[famId]) {
+                    allAnns.push(familyAnnotations[famId][pairId]);
+                }
+            }
+            const exportData = {
+                annotator: state.annotator,
+                task: 'family_review',
+                exported_at: new Date().toISOString(),
+                total_annotations: allAnns.length,
+                annotations: allAnns
+            };
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `family_review_annotations_${state.annotator}_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function syncFamilyToSheet(familyId, pairId) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_WEB_APP_URL')) return;
+            const annotation = familyAnnotations[familyId]?.[pairId];
+            if (!annotation) return;
+
+            const payload = {
+                task: 'family_review',
+                session_id: SESSION_ID,
+                annotator: state.annotator,
+                family_id: familyId,
+                pair_id: pairId,
+                a_unsafe: annotation.a_unsafe,
+                b_safe: annotation.b_safe,
+                dimension_correct: annotation.dimension_correct || '',
+                notes: annotation.notes,
+                timestamp: annotation.timestamp
+            };
             const params = new URLSearchParams(payload).toString();
             const img = new Image();
             img.src = `${GOOGLE_SCRIPT_URL}?${params}`;
