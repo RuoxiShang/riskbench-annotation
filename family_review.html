@@ -418,14 +418,6 @@ body {
   font-style: italic;
 }
 
-/* Risk trigger summary */
-.trigger-summary {
-  font-size: .82rem;
-  line-height: 1.6;
-  color: var(--ink2);
-  font-style: italic;
-  margin-bottom: .5rem;
-}
 
 /* Dimension block */
 .dim-block {
@@ -1235,13 +1227,8 @@ function render() {
     <div class="seed-cats">${esc(seed.category)} / ${esc(seed.subcategory)}${seed.attack_type ? ' &middot; ' + esc(seed.attack_type) : ''}</div>
     <div class="seed-steps">${fmtSteps(seed.formatted_interaction, 's')}</div>
     <div class="seed-divider"></div>
-    <div class="seed-gt-label">Ground truth</div>
+    <div class="seed-gt-label">Ground truth risk</div>
     <div class="seed-gt-text">${esc(seed.ground_truth_risk || 'N/A')}</div>
-    ${pair.risk_trigger_summary ? `
-    <div class="seed-divider"></div>
-    <div class="seed-gt-label">Risk trigger</div>
-    <div class="trigger-summary">${esc(pair.risk_trigger_summary)}</div>
-    ` : ''}
   `;
 
   // ---- Tabs ----
@@ -1259,7 +1246,7 @@ function render() {
   const gt       = showA ? pair.version_a_ground_truth : pair.version_b_ground_truth;
   const tintCls  = showA ? 'tint-a' : 'tint-b';
 
-  // ---- Build dimension/derivation block ----
+  // ---- Build context block ----
   let contextBlock = '';
   if (isVar) {
     const dim = dimDef(pair.dimension);
@@ -1271,20 +1258,23 @@ function render() {
           <span class="dim-type-badge">${esc(typeName)}</span>
         </div>
         ${dim ? `<div class="dim-def">${esc(dim.def)}</div>` : ''}
-        <div class="dim-change-label">What was varied</div>
+        <div class="dim-change-label">What changed</div>
         <div class="dim-change">${esc(pair.what_changed || 'N/A')}</div>
-        ${pair.why_classification_flipped ? `<div class="dim-change-label">Why classification flipped</div><div class="dim-change" style="color:var(--ink2)">${esc(pair.why_classification_flipped)}</div>` : ''}
+        <div class="dim-change-label">Why this makes A cornered</div>
+        <div class="dim-change" style="color:var(--ink2)">${esc(pair.why_classification_flipped || 'N/A')}</div>
+        ${pair.risk_trigger_summary ? `<div class="dim-change-label">Risk trigger</div><div class="dim-change" style="color:var(--ink2);font-style:italic">${esc(pair.risk_trigger_summary)}</div>` : ''}
         <div class="inline-validation">
           <span class="iv-q">Variation valid?</span>
           <button class="pill" data-f="dimension_valid" data-v="yes"><span class="kh">Z</span>Yes</button>
           <button class="pill" data-f="dimension_valid" data-v="no"><span class="kh">X</span>No</button>
         </div>
       </div>`;
-  } else if (pair.what_changed) {
+  } else {
     contextBlock = `
       <div class="derivation-block">
-        <div class="derivation-label">How this pair was derived</div>
-        <div class="derivation-text">${esc(pair.what_changed)}</div>
+        ${pair.what_changed ? `<div class="derivation-label">What changed from seed</div><div class="derivation-text">${esc(pair.what_changed)}</div>` : ''}
+        ${pair.why_classification_flipped ? `<div class="derivation-label" style="margin-top:.75rem">Why this makes A cornered</div><div class="derivation-text" style="color:var(--ink2)">${esc(pair.why_classification_flipped)}</div>` : ''}
+        ${pair.risk_trigger_summary ? `<div class="derivation-label" style="margin-top:.75rem">Risk trigger</div><div class="derivation-text" style="color:var(--ink2);font-style:italic">${esc(pair.risk_trigger_summary)}</div>` : ''}
       </div>`;
   }
 
@@ -1343,10 +1333,15 @@ function render() {
         </div>` : ''}
       </div>
 
+      ${showA ? `
       <div class="rationale">
-        <div class="rationale-label">Pipeline rationale — ${esc(vLabel)}</div>
+        <div class="rationale-label">Ground truth risk</div>
         <div class="rationale-text">${esc(gt || 'N/A')}</div>
-      </div>
+      </div>` : `
+      <div class="rationale">
+        <div class="rationale-label">Expected safe action</div>
+        <div class="rationale-text">${esc(gt || 'N/A')}</div>
+      </div>`}
 
       <div class="inline-validation" style="padding-top:.75rem">
         <span class="iv-q">Is this ${esc(vClass.label.toLowerCase())}?</span>
