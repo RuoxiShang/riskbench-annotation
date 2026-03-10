@@ -595,6 +595,11 @@ body {
 .assess-save:hover { opacity: .85; }
 .assess-save:disabled { opacity: .2; cursor: not-allowed; }
 .assess-save.saved { background: var(--green); }
+.save-status {
+  font-size: .72rem;
+  color: var(--ink3);
+  white-space: nowrap;
+}
 
 .assess-clear {
   background: none; border: none;
@@ -1044,6 +1049,7 @@ let ti = 0;           // tab index
 let vi = 'a';         // version toggle: 'a' or 'b'
 let anns = {};        // { familyId: { pairId: {...} } }
 let cur = blank();
+let curPairId = null;  // track which pair cur belongs to
 
 function blank() {
   return {
@@ -1205,6 +1211,9 @@ function fmtSteps(text, prefix, opts) {
 // ====================================================
 function render() {
   if (!families.length) return;
+  // Capture notes before re-rendering (textarea will be destroyed)
+  const notesEl = document.getElementById('notes');
+  if (notesEl && curPairId) cur.notes = notesEl.value;
   const fam = families[fi];
   const tabs = getTabs(fam);
   if (ti >= tabs.length) ti = 0;
@@ -1216,9 +1225,12 @@ function render() {
   const done = doneCount(), total = totalPairs();
   document.getElementById('progress-fill').style.width = (total ? Math.round(done/total*100) : 0) + '%';
 
-  // Load existing annotation
+  // Load existing annotation — only reload when pair changes
   const famAnns = anns[fam.family_id] || {};
-  cur = famAnns[pair.pair_id] ? { ...famAnns[pair.pair_id] } : blank();
+  if (curPairId !== pair.pair_id) {
+    cur = famAnns[pair.pair_id] ? { ...famAnns[pair.pair_id] } : blank();
+    curPairId = pair.pair_id;
+  }
 
   // ---- Seed panel ----
   document.getElementById('seed-panel').innerHTML = `
@@ -1288,7 +1300,9 @@ function render() {
   document.getElementById('work-inner').innerHTML = `
     <div class="topbar">
       <div class="topbar-left">
+        <button class="topbar-btn" id="btn-prev-fam" ${fi === 0 ? 'disabled style="opacity:.3;cursor:default"' : ''}>←</button>
         <span class="topbar-family">Family ${fi+1} of ${families.length}</span>
+        <button class="topbar-btn" id="btn-next-fam" ${fi === families.length - 1 ? 'disabled style="opacity:.3;cursor:default"' : ''}>→</button>
         <span style="color:var(--ink3);font-size:.8rem">${done} / ${total} done</span>
       </div>
       <div class="topbar-right">
@@ -1352,9 +1366,10 @@ function render() {
     </div>
   `;
 
-  // ---- Assessment bar (slim: notes + save only) ----
+  // ---- Assessment bar ----
   document.getElementById('assess-bar').innerHTML = `
     <div class="assess-inner">
+      <span class="save-status" id="save-status"></span>
       <textarea class="assess-notes" id="notes" placeholder="Notes (N)...">${esc(cur.notes||'')}</textarea>
       <button class="assess-save" id="btn-save" disabled>Save ↵</button>
       <button class="assess-clear" id="btn-clear">Clear</button>
@@ -1372,7 +1387,7 @@ function render() {
 // ====================================================
 function attachEvents() {
   document.querySelectorAll('#tab-bar .pair-tab').forEach(b => {
-    b.onclick = () => { ti = +b.dataset.i; vi = 'a'; render(); };
+    b.onclick = () => { ti = +b.dataset.i; vi = 'a'; curPairId = null; render(); };
   });
 
   document.querySelectorAll('.v-toggle').forEach(b => {
@@ -1395,6 +1410,8 @@ function attachEvents() {
   document.getElementById('btn-save')?.addEventListener('click', save);
   document.getElementById('btn-clear')?.addEventListener('click', clearCur);
   document.getElementById('btn-shortcuts')?.addEventListener('click', () => document.getElementById('modal-bg').classList.toggle('visible'));
+  document.getElementById('btn-prev-fam')?.addEventListener('click', () => navFamily(-1));
+  document.getElementById('btn-next-fam')?.addEventListener('click', () => navFamily(1));
   document.getElementById('btn-tutorial')?.addEventListener('click', startTutorial);
   document.getElementById('btn-ref')?.addEventListener('click', () => document.getElementById('ref-panel').classList.toggle('visible'));
   document.getElementById('btn-export')?.addEventListener('click', exportAnns);
@@ -1432,9 +1449,16 @@ function updateSaveBtn() {
   const btn = document.getElementById('btn-save');
   if (!btn) return;
   const isVar = ti > 0;
-  // Required: both version validations answered
-  const ok = cur.a_cornered && cur.b_safe_proceed && (!isVar || cur.dimension_valid);
-  btn.disabled = !ok;
+  const missing = [];
+  if (!cur.a_cornered) missing.push('A');
+  if (!cur.b_safe_proceed) missing.push('B');
+  if (isVar && !cur.dimension_valid) missing.push('Dim');
+  btn.disabled = missing.length > 0;
+  const status = document.getElementById('save-status');
+  if (status) {
+    status.textContent = missing.length ? `Need: ${missing.join(', ')}` : '✓ Ready';
+    status.style.color = missing.length ? 'var(--ink3)' : 'var(--green)';
+  }
 }
 
 // ====================================================
@@ -1464,13 +1488,14 @@ function save() {
   for (let i = 0; i < tabs.length; i++) {
     if (!famAnns[tabs[i].pair.pair_id]) { next = i; break; }
   }
-  if (next >= 0 && next !== ti) setTimeout(() => { ti = next; vi = 'a'; render(); }, 550);
-  else setTimeout(render, 550);
+  if (next >= 0 && next !== ti) setTimeout(() => { ti = next; vi = 'a'; curPairId = null; render(); }, 550);
+  else setTimeout(() => { curPairId = null; render(); }, 550);
 }
 
 function clearCur() {
   if (!confirm('Clear answers for this tab?')) return;
   cur = blank();
+  curPairId = null;  // force reload on next render
   const fam = families[fi], pair = getTabs(fam)[ti].pair;
   if (anns[fam.family_id]?.[pair.pair_id]) { delete anns[fam.family_id][pair.pair_id]; saveAnns(); }
   render();
@@ -1478,7 +1503,7 @@ function clearCur() {
 
 function navFamily(d) {
   const n = fi + d;
-  if (n >= 0 && n < families.length) { fi = n; ti = 0; vi = 'a'; render(); }
+  if (n >= 0 && n < families.length) { fi = n; ti = 0; vi = 'a'; curPairId = null; render(); }
 }
 
 function logout() {
@@ -1536,8 +1561,8 @@ document.addEventListener('keydown', e => {
     case 'z': case 'Z': selectOpt('dimension_valid','yes'); break;
     case 'x': case 'X': selectOpt('dimension_valid','no'); break;
     case 'Enter': if (!document.getElementById('btn-save')?.disabled) save(); break;
-    case '[': e.shiftKey ? navFamily(-1) : (ti > 0 && (ti--, vi='a', render())); break;
-    case ']': e.shiftKey ? navFamily(1) : (ti < getTabs(families[fi]).length-1 && (ti++, vi='a', render())); break;
+    case '[': e.shiftKey ? navFamily(-1) : (ti > 0 && (curPairId=null, ti--, vi='a', render())); break;
+    case ']': e.shiftKey ? navFamily(1) : (ti < getTabs(families[fi]).length-1 && (curPairId=null, ti++, vi='a', render())); break;
     case 'a': case 'A': if (vi !== 'a') { vi = 'a'; render(); } break;
     case 'b': case 'B': if (vi !== 'b') { vi = 'b'; render(); } break;
     case 'Tab': e.preventDefault(); vi = vi === 'a' ? 'b' : 'a'; render(); break;
