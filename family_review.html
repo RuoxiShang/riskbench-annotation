@@ -519,18 +519,34 @@ body {
   margin-top: .75rem;
 }
 
-/* Expand full scenario */
-.expand-link {
-  font: inherit; font-size: .8rem;
+/* Decision point divider */
+.decision-divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.25rem 0 1rem;
+  font-size: .72rem;
+  font-weight: 600;
   color: var(--ink3);
-  background: none; border: none;
-  cursor: pointer; transition: color .15s;
-  padding: 0; margin-top: .5rem;
-  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
-.expand-link:hover { color: var(--accent); }
-.expand-content { display: none; margin-top: .75rem; }
-.expand-content.open { display: block; }
+.decision-divider::before,
+.decision-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1.5px dashed var(--border2);
+}
+/* Steps after truncation are dimmed */
+.post-decision .step { opacity: .5; }
+.post-decision .step:hover { opacity: .85; }
+
+/* Validation section — visually distinct from scenario */
+.validation-section {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border2);
+}
 
 /* ================================================== */
 /*  Assessment — sticky bottom                        */
@@ -1093,7 +1109,7 @@ function startApp() {
 }
 
 function loadData() {
-  fetch('data/family_review_samples.json')
+  fetch('data/family_review_samples.json?v=' + Date.now())
     .then(r => { if (!r.ok) throw new Error('Data not found'); return r.json(); })
     .then(data => {
       const all = data.families || [];
@@ -1152,13 +1168,11 @@ function fmtSteps(text, prefix, opts) {
   if (!text) return `<div class="${prefix === 's' ? 's-turn' : 'turn'}"><div class="${prefix === 's' ? 's-body' : 'body'}" style="color:var(--ink3)">No scenario</div></div>`;
   const norm = text.replace(/\\n/g, '\n');
   const re = /^(Step\s+(\d+)\.)\s*/gm;
-  const parts = []; let m2;
-  let last = 0;
   const raw = norm;
   re.lastIndex = 0;
-  // Split into structured step objects
   const stepEntries = [];
   const stepStarts = [];
+  let m2;
   while ((m2 = re.exec(raw)) !== null) {
     stepStarts.push({ idx: m2.index, full: m2[1], num: parseInt(m2[2]), end: m2.index + m2[0].length });
   }
@@ -1172,8 +1186,7 @@ function fmtSteps(text, prefix, opts) {
     return `<div class="${prefix === 's' ? 's-turn' : 'turn'}"><div class="${prefix === 's' ? 's-body' : 'body'}">${esc(norm)}</div></div>`;
   }
 
-  let html = '';
-  for (const step of stepEntries) {
+  function renderStep(step) {
     let roleText = step.header, body = step.content, tag = '';
     const rm = step.content.match(/^\[([^\]]+)\]:\s*([\s\S]*)$/);
     if (rm) {
@@ -1181,28 +1194,34 @@ function fmtSteps(text, prefix, opts) {
       roleText = `${step.header}  ${rm[1]}`;
       body = rm[2].trim();
     }
-
-    // Determine role class
     let roleCls = '';
     if (tag.includes('THOUGHT')) roleCls = 'role-thought';
     else if (tag === 'AGENT ACTION') roleCls = 'role-action';
     else if (tag === 'ENVIRONMENT') roleCls = 'role-env';
     else if (tag === 'USER') roleCls = 'role-user';
 
-    // Step tag markers
     let tagHtml = '';
-    if (opts.triggerStep && step.num === opts.triggerStep) {
-      tagHtml += '<span class="step-tag tag-trigger">risk trigger</span>';
-    }
-    if (opts.executionStep && step.num === opts.executionStep) {
-      tagHtml += '<span class="step-tag tag-execution">execution point</span>';
-    }
+    if (opts.triggerStep && step.num === opts.triggerStep) tagHtml += '<span class="step-tag tag-trigger">risk trigger</span>';
+    if (opts.executionStep && step.num === opts.executionStep) tagHtml += '<span class="step-tag tag-execution">execution point</span>';
 
     const turnCls = prefix === 's' ? `s-turn ${roleCls}` : `turn ${roleCls}`;
     const roleElCls = prefix === 's' ? 's-role' : 'role';
     const bodyElCls = prefix === 's' ? 's-body' : 'body';
-    html += `<div class="${turnCls}"><div class="${roleElCls}">${esc(roleText)}${tagHtml}</div><div class="${bodyElCls}">${esc(body)}</div></div>`;
+    return `<div class="${turnCls}"><div class="${roleElCls}">${esc(roleText)}${tagHtml}</div><div class="${bodyElCls}">${esc(body)}</div></div>`;
   }
+
+  // If splitAt is set, return { before, after } instead of a single string
+  if (opts.splitAt) {
+    let before = '', after = '';
+    for (const step of stepEntries) {
+      if (step.num <= opts.splitAt) before += renderStep(step);
+      else after += renderStep(step);
+    }
+    return { before, after };
+  }
+
+  let html = '';
+  for (const step of stepEntries) html += renderStep(step);
   return html;
 }
 
@@ -1260,6 +1279,8 @@ function render() {
 
   // ---- Build context block ----
   let contextBlock = '';
+  // Build variation validation block (shown after scenario, not in context)
+  let variationValidationBlock = '';
   if (isVar) {
     const dim = dimDef(pair.dimension);
     const typeName = dim?.type === 'RS' ? 'Risk Severity' : 'Scenario Difficulty';
@@ -1270,11 +1291,10 @@ function render() {
           <span class="dim-type-badge">${esc(typeName)}</span>
         </div>
         ${dim ? `<div class="dim-def">${esc(dim.def)}</div>` : ''}
-        <div class="dim-change-label">What changed</div>
-        <div class="dim-change">${esc(pair.what_changed || 'N/A')}</div>
-        <div class="dim-change-label">Why this makes A cornered</div>
-        <div class="dim-change" style="color:var(--ink2)">${esc(pair.why_classification_flipped || 'N/A')}</div>
-        ${pair.risk_trigger_summary ? `<div class="dim-change-label">Risk trigger</div><div class="dim-change" style="color:var(--ink2);font-style:italic">${esc(pair.risk_trigger_summary)}</div>` : ''}
+      </div>`;
+    variationValidationBlock = `
+      <div class="dim-block" style="margin-top:1rem">
+        ${pair.dimension_variation_description ? `<div class="dim-change-label">How this varies from the seed</div><div class="dim-change">${esc(pair.dimension_variation_description)}</div>` : ''}
         <div class="inline-validation">
           <span class="iv-q">Variation valid?</span>
           <button class="pill" data-f="dimension_valid" data-v="yes"><span class="kh">Z</span>Yes</button>
@@ -1285,8 +1305,6 @@ function render() {
     contextBlock = `
       <div class="derivation-block">
         ${pair.what_changed ? `<div class="derivation-label">What changed from seed</div><div class="derivation-text">${esc(pair.what_changed)}</div>` : ''}
-        ${pair.why_classification_flipped ? `<div class="derivation-label" style="margin-top:.75rem">Why this makes A cornered</div><div class="derivation-text" style="color:var(--ink2)">${esc(pair.why_classification_flipped)}</div>` : ''}
-        ${pair.risk_trigger_summary ? `<div class="derivation-label" style="margin-top:.75rem">Risk trigger</div><div class="derivation-text" style="color:var(--ink2);font-style:italic">${esc(pair.risk_trigger_summary)}</div>` : ''}
       </div>`;
   }
 
@@ -1325,13 +1343,24 @@ function render() {
     <div class="version-def">${esc(vClass.label)}: ${esc(vClass.def)}</div>
 
     <div class="reading-area ${tintCls}" id="reading-area">
-      ${fmtSteps(scenario, 'v')}
-      ${pair.truncation_step ? `<div class="truncation-note">Truncated at step ${pair.truncation_step} of ${pair.original_total_steps || '?'} — this is the decision point</div>` : ''}
-      <button class="expand-link" id="expand-full">Show full scenario →</button>
-      <div class="expand-content" id="full-scenario">
-        ${fmtSteps(full, 'v', { triggerStep: pair.truncation_step, executionStep: pair.execution_point_step })}
+      ${(() => {
+        const split = fmtSteps(full, 'v', {
+          triggerStep: pair.truncation_step,
+          executionStep: pair.execution_point_step,
+          splitAt: pair.truncation_step
+        });
+        if (split.before !== undefined) {
+          return split.before
+            + (split.after ? `<div class="decision-divider">agent's response</div><div class="post-decision">${split.after}</div>` : '');
+        }
+        return split; // fallback if no splitAt
+      })()}
+
+      ${variationValidationBlock}
+
+      <div class="validation-section">
         ${pair.truncation_step || pair.execution_point_step ? `
-        <div class="step-tag-validations">
+        <div class="step-tag-validations" style="margin-top:0;padding-top:0;border-top:none">
           ${pair.truncation_step ? `
           <div class="inline-validation">
             <span class="iv-q"><span class="step-tag tag-trigger">risk trigger</span> step ${pair.truncation_step} correct?</span>
@@ -1345,23 +1374,23 @@ function render() {
             <button class="pill" data-f="execution_correct" data-v="no">No</button>
           </div>` : ''}
         </div>` : ''}
-      </div>
 
-      ${showA ? `
-      <div class="rationale">
-        <div class="rationale-label">Ground truth risk</div>
-        <div class="rationale-text">${esc(gt || 'N/A')}</div>
-      </div>` : `
-      <div class="rationale">
-        <div class="rationale-label">Expected safe action</div>
-        <div class="rationale-text">${esc(gt || 'N/A')}</div>
-      </div>`}
+        ${showA ? `
+        <div class="rationale">
+          <div class="rationale-label">Ground truth risk</div>
+          <div class="rationale-text">${esc(gt || 'N/A')}</div>
+        </div>` : `
+        <div class="rationale">
+          <div class="rationale-label">Expected safe action</div>
+          <div class="rationale-text">${esc(gt || 'N/A')}</div>
+        </div>`}
 
-      <div class="inline-validation" style="padding-top:.75rem">
-        <span class="iv-q">Is this ${esc(vClass.label.toLowerCase())}?</span>
-        <button class="pill" data-f="${vField}" data-v="yes"><span class="kh">${vKeys[0]}</span>Yes</button>
-        <button class="pill" data-f="${vField}" data-v="no"><span class="kh">${vKeys[1]}</span>No</button>
-        <button class="pill" data-f="${vField}" data-v="unclear"><span class="kh">${vKeys[2]}</span>?</button>
+        <div class="inline-validation" style="padding-top:.75rem">
+          <span class="iv-q">Is this ${esc(vClass.label.toLowerCase())}?</span>
+          <button class="pill" data-f="${vField}" data-v="yes"><span class="kh">${vKeys[0]}</span>Yes</button>
+          <button class="pill" data-f="${vField}" data-v="no"><span class="kh">${vKeys[1]}</span>No</button>
+          <button class="pill" data-f="${vField}" data-v="unclear"><span class="kh">${vKeys[2]}</span>?</button>
+        </div>
       </div>
     </div>
   `;
@@ -1398,11 +1427,6 @@ function attachEvents() {
     b.onclick = () => selectOpt(b.dataset.f, b.dataset.v);
   });
 
-  document.getElementById('expand-full')?.addEventListener('click', function() {
-    const el = document.getElementById('full-scenario');
-    const open = el.classList.toggle('open');
-    this.textContent = open ? '← Hide full scenario' : 'Show full scenario →';
-  });
 
   const notes = document.getElementById('notes');
   if (notes) notes.oninput = () => { cur.notes = notes.value; };
@@ -1588,8 +1612,7 @@ const TUT_STEPS = [
   { sel: '#tab-bar', text: 'Each tab is one pair to annotate — the original plus its dimension variations. A green dot means done.', pos: 'below' },
   { sel: '.dim-block, .derivation-block', text: 'For variations, this shows which dimension was changed and how. Validate whether the change makes sense.', pos: 'below' },
   { sel: '.version-switch', text: 'Toggle between Version A (Cornered — agent should refuse) and Version B (Safe-Proceed — agent can proceed safely).', pos: 'below' },
-  { sel: '.reading-area', text: 'Read the scenario, then see the pipeline rationale and answer the validation question at the bottom of this area.', pos: 'below' },
-  { sel: '.expand-link', text: 'Expand to see all steps. Risk trigger and execution point steps are marked — you can validate those tags too.', pos: 'below' },
+  { sel: '.reading-area', text: 'Read the full scenario. Compare it side-by-side with the seed on the left. Risk trigger and execution point steps are marked — validate those tags, then check the ground truth and classification.', pos: 'below' },
   { sel: '.assess-bar', text: 'Add any notes here. Save when all required questions are answered. Press Enter as a shortcut.', pos: 'above' },
   { sel: '#btn-ref', text: 'Press R anytime to open the reference panel with all dimension definitions and classification criteria.', pos: 'below' },
 ];

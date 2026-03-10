@@ -128,6 +128,7 @@ def _build_pair(record, raw_by_id, is_variation):
         "version_b_ground_truth": record.get("version_b_ground_truth", ""),
         "what_changed": record.get("what_changed", ""),
         "why_classification_flipped": record.get("why_classification_flipped", ""),
+        "dimension_variation_description": record.get("dimension_variation_description", ""),
         "category": record.get("category", ""),
         "subcategory": record.get("subcategory", ""),
         "attack_type": record.get("attack_type", ""),
