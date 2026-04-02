@@ -547,7 +547,6 @@ function setIdeal(el) {
   });
   saveState();
   updateStatus();
-  syncSheet();
 }
 
 function setActionType(el) {
@@ -563,7 +562,6 @@ function setActionType(el) {
   saveState();
   updateDots();
   updateStatus();
-  syncSheet();
 }
 
 function setSafety(el) {
@@ -575,14 +573,12 @@ function setSafety(el) {
   saveState();
   updateDots();
   updateStatus();
-  syncSheet();
 }
 
 function saveSomethingElse(val) {
   const a = getAnnotation();
   a.actions[ai].somethingElse = val;
   saveState();
-  syncSheet();
 }
 
 function updateDots() {
@@ -604,19 +600,16 @@ function goAction(dir) {
   render();
 }
 
-let _notesTimer = null;
 function saveNotes() {
   const a = getAnnotation();
   a.notes = document.getElementById('notes').value;
   saveState();
-  // Debounce sheet sync for notes (don't beacon every keystroke)
-  clearTimeout(_notesTimer);
-  _notesTimer = setTimeout(syncSheet, 1500);
 }
 
 function go(dir) {
   const next = si + dir;
   if (next < 0 || next >= DATA.scenarios.length) return;
+  syncScenario(si); // sync current scenario before navigating away
   si = next;
   ai = 0;
   render();
@@ -650,35 +643,42 @@ function updateStatus() {
 // ============================================================
 //  SYNC TO GOOGLE SHEETS
 // ============================================================
-function syncSheet() {
+// Syncs one row per action for the given scenario (called on scenario nav)
+function syncScenario(scenarioIdx) {
   if (!GSHEET || !annotator) return;
-  const s = DATA.scenarios[si];
-  const a = getAnnotation();
-  const ad = a.actions[ai] || {};
-  const p = new URLSearchParams({
-    task: 'data_review',
-    session_id: SID,
-    annotator,
-    scenario_id: s.scenario_id,
-    scenario_idx: si + 1,
-    category: s.category || '',
-    truncation_type: s.truncation_type || '',
-    ideal: Array.isArray(a.ideal) ? a.ideal.join(',') : (a.ideal || ''),
-    action_idx: ai + 1,
-    action_type: ad.actionType || '',
-    action_something_else: ad.somethingElse || '',
-    safety: ad.safety || '',
-    notes: a.notes || '',
-    completed: isComplete(s.scenario_id) ? 'yes' : 'no',
-    timestamp: new Date().toISOString(),
-  }).toString();
-  new Image().src = `${GSHEET}?${p}`;
+  const s = DATA.scenarios[scenarioIdx];
+  const a = annotations[s.scenario_id];
+  if (!a) return;
+  const ideal = Array.isArray(a.ideal) ? a.ideal.join(',') : (a.ideal || '');
+  const ts = new Date().toISOString();
+  for (let i = 0; i < s.actions.length; i++) {
+    const ad = a.actions[i] || {};
+    if (!ad.actionType && !ad.safety) continue; // skip untouched actions
+    const p = new URLSearchParams({
+      task: 'data_review',
+      session_id: SID,
+      annotator,
+      scenario_id: s.scenario_id,
+      category: s.category || '',
+      truncation_type: s.truncation_type || '',
+      ideal,
+      action_idx: i + 1,
+      action_type: ad.actionType || '',
+      action_something_else: ad.somethingElse || '',
+      safety: ad.safety || '',
+      notes: a.notes || '',
+      completed: isComplete(s.scenario_id) ? 'yes' : 'no',
+      timestamp: ts,
+    }).toString();
+    new Image().src = `${GSHEET}?${p}`;
+  }
 }
 
 // ============================================================
 //  EXPORT
 // ============================================================
 function exportData() {
+  syncScenario(si); // sync current scenario before export
   const out = {
     annotator,
     exported_at: new Date().toISOString(),
