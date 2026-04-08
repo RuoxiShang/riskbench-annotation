@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RiskBench — Dataset Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ================================================== */
+/*  M3 Expressive Tokens                              */
+/* ================================================== */
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  /* Warm neutral surface palette */
+  --bg:             #FAFAF9;
+  --bg-card:        #FFFFFF;
+  --surface-dim:    #F5F5F4;
+  --surface-cont:   #F0EFED;
+  --surface-cont-hi:#E7E5E4;
+  --border:         #E7E5E4;
+  --border2:        #D6D3D1;
+
+  /* Ink */
+  --ink:    #1C1917;
+  --ink2:   #57534E;
+  --ink3:   #A8A29E;
+  --ink4:   #D6D3D1;
+
+  /* Accent — indigo */
+  --accent:     #6366F1;
+  --accent2:    #EEF2FF;
+  --accent-dim: #C7D2FE;
+
+  /* Semantic */
+  --red:       #C4432B;
+  --red-bg:    #FEF2F2;
+  --red-border:#FECACA;
+  --green:     #2D7A3A;
+  --green-bg:  #F0FDF4;
+  --green-border:#BBF7D0;
+  --amber:     #A16207;
+  --amber-bg:  #FFFBEB;
+
+  /* M3 Expressive shape */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-full:999px;
+
+  /* M3 Expressive shadow */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.04), 0 0 0 1px rgba(0,0,0,.02);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.02);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.08);
+
+  /* M3 Expressive motion */
+  --ease-expressive: cubic-bezier(0.2, 0, 0, 1);
+  --dur-short: 200ms;
+  --dur-med:   300ms;
+
+  --sidebar-w: 300px;
+}
+
+/* ================================================== */
+/*  Reset                                             */
+/* ================================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ================================================== */
+/*  Shell — sidebar + main                            */
+/* ================================================== */
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  height: 100vh;
+}
+
+/* ================================================== */
+/*  Sidebar                                           */
+/* ================================================== */
+.sidebar {
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-header {
+  padding: 1.25rem 1.25rem .75rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  margin-bottom: .15rem;
+}
+.sidebar-subtitle {
+  font-size: .72rem;
+  color: var(--ink3);
+  font-weight: 500;
+}
+.search-box {
+  margin-top: .85rem;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  padding: .55rem .75rem .55rem 2.1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-full);
+  font: inherit;
+  font-size: .8rem;
+  color: var(--ink);
+  background: var(--surface-dim);
+  transition: all var(--dur-short) var(--ease-expressive);
+}
+.search-box input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px var(--accent2);
+}
+.search-box input::placeholder { color: var(--ink3); }
+.search-box::before {
+  content: '';
+  position: absolute;
+  left: .75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  background: var(--ink3);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") center/contain no-repeat;
+  pointer-events: none;
+}
+.sidebar-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: .5rem 0;
+}
+
+/* Category group */
+.cat-group { margin-bottom: .15rem; }
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--dur-short);
+}
+.cat-header:hover { background: var(--surface-dim); }
+.cat-chevron {
+  width: 12px; height: 12px;
+  transition: transform var(--dur-med) var(--ease-expressive);
+  color: var(--ink3);
+  flex-shrink: 0;
+}
+.cat-group.open .cat-chevron { transform: rotate(90deg); }
+.cat-label {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.cat-count {
+  font-size: .65rem;
+  font-weight: 600;
+  color: var(--ink3);
+  background: var(--surface-cont);
+  padding: .1rem .4rem;
+  border-radius: var(--r-full);
+  margin-left: auto;
+}
+
+/* Subcategory */
+.sub-group { display: none; }
+.cat-group.open .sub-group { display: block; }
+.sub-header {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .3rem 1.25rem .3rem 2.2rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--dur-short);
+}
+.sub-header:hover { background: var(--surface-dim); }
+.sub-label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--ink2);
+}
+.sub-count {
+  font-size: .6rem;
+  color: var(--ink3);
+  margin-left: auto;
+}
+
+/* Family items */
+.fam-list { display: none; }
+.sub-group.open .fam-list { display: block; }
+.fam-item {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem 1.25rem .35rem 3.2rem;
+  cursor: pointer;
+  transition: all var(--dur-short) var(--ease-expressive);
+  border-left: 3px solid transparent;
+}
+.fam-item:hover { background: var(--surface-dim); }
+.fam-item.active {
+  background: var(--accent2);
+  border-left-color: var(--accent);
+}
+.fam-id {
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 500;
+  color: var(--ink2);
+}
+.fam-item.active .fam-id { color: var(--accent); font-weight: 600; }
+.fam-trunc {
+  font-size: .55rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: .1rem .35rem;
+  border-radius: var(--r-full);
+  background: var(--surface-cont);
+  color: var(--ink3);
+  flex-shrink: 0;
+}
+.fam-dims {
+  font-size: .6rem;
+  color: var(--ink3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Sidebar stats */
+.sidebar-stats {
+  border-top: 1px solid var(--border);
+  padding: .75rem 1.25rem;
+  flex-shrink: 0;
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.stat {
+  font-size: .68rem;
+  color: var(--ink3);
+}
+.stat strong {
+  color: var(--ink2);
+  font-weight: 700;
+}
+
+/* ================================================== */
+/*  Main content                                      */
+/* ================================================== */
+.main {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.main-inner {
+  display: grid;
+  grid-template-columns: 1fr 170px;
+  gap: 1.5rem;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 1.75rem 2.25rem 3rem;
+}
+.main-content { min-width: 0; }
+.qc-rail {
+  position: relative;
+}
+.qc-rail-inner {
+  position: sticky;
+  top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: var(--ink3);
+  text-align: center;
+  grid-column: 1 / -1;
+}
+.empty-state h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink2);
+  margin-bottom: .35rem;
+}
+.empty-state p { font-size: .85rem; }
+
+/* Top breadcrumb bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .78rem;
+  color: var(--ink3);
+}
+.breadcrumb span { font-weight: 500; }
+.breadcrumb .bc-sep { color: var(--ink4); }
+.breadcrumb .bc-current { color: var(--ink); font-weight: 700; }
+.nav-arrows {
+  display: flex;
+  gap: .35rem;
+}
+.nav-btn {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink2);
+  transition: all var(--dur-short);
+  font-size: .85rem;
+}
+.nav-btn:hover { border-color: var(--border2); background: var(--surface-dim); }
+.nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+/* Dimension tabs */
+.dim-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1.5px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dim-tabs::-webkit-scrollbar { display: none; }
+.dim-tab {
+  padding: .55rem .85rem;
+  font: inherit;
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--ink3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--dur-short);
+  position: relative;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.dim-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: .35rem; right: .35rem;
+  height: 2.5px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background var(--dur-short) var(--ease-expressive);
+}
+.dim-tab:hover { color: var(--ink2); }
+.dim-tab.active { color: var(--ink); font-weight: 700; }
+.dim-tab.active::after { background: var(--accent); }
+.dim-tab .tab-paired {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-left: .3rem;
+  vertical-align: middle;
+}
+.dim-tab .tab-unpaired {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--ink4);
+  margin-left: .3rem;
+  vertical-align: middle;
+}
+
+/* Metadata chips bar */
+.meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 1.35rem;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .25rem .65rem;
+  border-radius: var(--r-full);
+  font-size: .7rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--ink2);
+  transition: all var(--dur-short);
+}
+.chip-label {
+  font-size: .55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink3);
+}
+.chip.chip-accent { border-color: var(--accent-dim); background: var(--accent2); color: var(--accent); }
+.chip.chip-green { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
+.chip.chip-red { border-color: var(--red-border); background: var(--red-bg); color: var(--red); }
+.chip.chip-amber { border-color: #FDE68A; background: var(--amber-bg); color: var(--amber); }
+
+/* Context block — dimension info + change summary */
+.context-block {
+  margin-bottom: 1.35rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.context-header {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  margin-bottom: .35rem;
+}
+.context-title {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.context-type {
+  font-size: .55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .15rem .4rem;
+  border-radius: var(--r-sm);
+  color: var(--ink3);
+  border: 1px solid var(--border2);
+}
+.context-def {
+  font-size: .78rem;
+  color: var(--ink3);
+  margin-bottom: .65rem;
+  line-height: 1.55;
+}
+.context-label {
+  font-size: .55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .2rem;
+}
+.context-text {
+  font-size: .84rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+/* ================================================== */
+/*  Version toggle                                    */
+/* ================================================== */
+.version-switch {
+  display: flex;
+  background: var(--surface-dim);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-full);
+  padding: 3px;
+  margin-bottom: 1.25rem;
+  width: fit-content;
+}
+.v-toggle {
+  padding: .45rem 1.2rem;
+  border: none;
+  border-radius: var(--r-full);
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--ink3);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--dur-med) var(--ease-expressive);
+}
+.v-toggle.active-a {
+  background: var(--red-bg);
+  color: var(--red);
+  box-shadow: 0 1px 3px rgba(196,67,43,.12);
+}
+.v-toggle.active-b {
+  background: var(--green-bg);
+  color: var(--green);
+  box-shadow: 0 1px 3px rgba(45,122,58,.12);
+}
+.v-toggle.disabled {
+  opacity: .25;
+  cursor: not-allowed;
+}
+
+/* Reading area */
+.reading-area {
+  border-radius: var(--r-xl);
+  padding: 1.75rem;
+  margin-bottom: 1rem;
+  transition: all var(--dur-med) var(--ease-expressive);
+  border: 1.5px solid var(--border);
+}
+.reading-area.tint-a { background: var(--red-bg); border-color: var(--red-border); }
+.reading-area.tint-b { background: var(--green-bg); border-color: var(--green-border); }
+
+.version-def {
+  font-size: .72rem;
+  color: var(--ink3);
+  margin-bottom: 1.15rem;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+/* Step rendering */
+.turn { margin-bottom: 1.1rem; }
+.turn:last-child { margin-bottom: 0; }
+.turn.role-thought, .turn.role-action, .turn.role-env { padding-left: 1rem; }
+.role {
+  font-size: .58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .2rem;
+}
+.body {
+  font-size: .88rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+.turn.role-thought .body { font-style: italic; color: var(--ink2); }
+.turn.role-action .body { font-family: var(--mono); font-size: .8rem; color: var(--ink); word-break: break-all; }
+.turn.role-env .body { font-family: var(--mono); font-size: .78rem; color: var(--ink3); word-break: break-all; }
+
+/* Step tags */
+.step-tag {
+  display: inline-block;
+  font-size: .52rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .15rem .45rem;
+  border-radius: var(--r-full);
+  margin-left: .5rem;
+  vertical-align: middle;
+}
+.step-tag.tag-trigger { color: var(--amber); background: var(--amber-bg); }
+.step-tag.tag-execution { color: var(--red); background: var(--red-bg); }
+
+/* Trajectory note */
+.trajectory-note {
+  font-size: .72rem;
+  color: var(--ink3);
+  font-style: italic;
+  padding: .45rem .75rem;
+  margin: .15rem 0 .35rem;
+}
+
+/* ================================================== */
+/*  Ground truth card                                 */
+/* ================================================== */
+.gt-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.gt-card-title {
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink3);
+  margin-bottom: 1rem;
+}
+.gt-section { margin-bottom: 1rem; }
+.gt-section:last-child { margin-bottom: 0; }
+.gt-label {
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .3rem;
+}
+.gt-text {
+  font-size: .86rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+.gt-text.mono {
+  font-family: var(--mono);
+  font-size: .8rem;
+}
+.gt-actions {
+  list-style: none;
+  padding: 0;
+}
+.gt-actions li {
+  font-size: .84rem;
+  line-height: 1.65;
+  color: var(--ink);
+  padding: .3rem 0 .3rem .85rem;
+  position: relative;
+}
+.gt-actions li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .65rem;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ================================================== */
+/*  Provenance card (collapsible)                     */
+/* ================================================== */
+.prov-card {
+  background: var(--surface-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 1rem;
+}
+.prov-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .75rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+}
+.prov-toggle-label {
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+}
+.prov-toggle-icon {
+  font-size: .75rem;
+  color: var(--ink3);
+  transition: transform var(--dur-med) var(--ease-expressive);
+}
+.prov-card.open .prov-toggle-icon { transform: rotate(180deg); }
+.prov-body {
+  display: none;
+  padding: 0 1.25rem 1rem;
+}
+.prov-card.open .prov-body { display: block; }
+.prov-row {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  padding: .25rem 0;
+  font-size: .78rem;
+}
+.prov-key {
+  font-weight: 600;
+  color: var(--ink3);
+  min-width: 130px;
+  flex-shrink: 0;
+}
+.prov-val { color: var(--ink2); }
+
+/* ================================================== */
+/*  Seed context (collapsible)                        */
+/* ================================================== */
+.seed-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  margin-bottom: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+.seed-toggle {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.seed-toggle-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+}
+.seed-toggle-preview {
+  font-size: .78rem;
+  color: var(--ink2);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.seed-toggle-icon {
+  font-size: .75rem;
+  color: var(--ink3);
+  transition: transform var(--dur-med) var(--ease-expressive);
+  flex-shrink: 0;
+}
+.seed-card.open .seed-toggle-icon { transform: rotate(180deg); }
+.seed-body {
+  display: none;
+  padding: 0 1.5rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.seed-card.open .seed-body { display: block; padding-top: 1rem; }
+
+/* Seed steps — same rendering as main but slightly smaller */
+.s-turn { margin-bottom: .85rem; }
+.s-turn:last-child { margin-bottom: 0; }
+.s-turn.role-thought, .s-turn.role-action, .s-turn.role-env { padding-left: .85rem; }
+.s-role {
+  font-size: .55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .15rem;
+}
+.s-body {
+  font-size: .82rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.s-turn.role-thought .s-body { font-style: italic; color: var(--ink2); }
+.s-turn.role-action .s-body { font-family: var(--mono); font-size: .76rem; word-break: break-all; }
+.s-turn.role-env .s-body { font-family: var(--mono); font-size: .74rem; color: var(--ink3); word-break: break-all; }
+
+.seed-gt {
+  margin-top: 1rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ================================================== */
+/*  Quality checks — judge verdicts (side rail)       */
+/* ================================================== */
+/* Metadata rows in rail */
+.qc-meta-id {
+  font-family: var(--mono);
+  font-size: .62rem;
+  font-weight: 500;
+  color: var(--ink3);
+  word-break: break-all;
+  line-height: 1.4;
+  margin-bottom: .45rem;
+}
+.qc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  margin-bottom: .55rem;
+}
+.qc-meta-row {}
+.qc-meta-label {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .1rem;
+}
+.qc-meta-val {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.qc-meta-val.val-rs { color: var(--red); }
+.qc-meta-val.val-sd { color: var(--amber); }
+.qc-meta-val.val-green { color: var(--green); }
+.qc-meta-val.val-muted { color: var(--ink3); }
+.qc-meta-dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  margin-right: .3rem;
+  vertical-align: middle;
+}
+.qc-meta-dot.dot-green { background: var(--green); }
+.qc-meta-dot.dot-muted { background: var(--ink4); }
+.qc-divider {
+  height: 1px;
+  background: var(--border);
+  margin: .2rem 0 .45rem;
+}
+.qc-rail-title {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink3);
+  margin-bottom: .1rem;
+}
+.qc-badge {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding: .6rem .7rem;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur-short);
+}
+.qc-badge.qc-pass { border-color: var(--green-border); }
+.qc-badge.qc-partial { border-color: #FDE68A; }
+.qc-badge-header {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+.qc-icon {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .55rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.qc-pass .qc-icon { background: var(--green-bg); color: var(--green); }
+.qc-partial .qc-icon { background: var(--amber-bg); color: var(--amber); }
+.qc-step {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink3);
+}
+.qc-label {
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.qc-models {
+  display: flex;
+  gap: .25rem;
+  flex-wrap: wrap;
+}
+.qc-model {
+  font-size: .55rem;
+  font-weight: 700;
+  padding: .15rem .35rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+.qc-model.m-accept { background: var(--green-bg); color: var(--green); }
+.qc-model.m-reject { background: var(--red-bg); color: var(--red); }
+.qc-model.m-agree { background: var(--green-bg); color: var(--green); }
+.qc-model.m-disagree { background: var(--amber-bg); color: var(--amber); }
+.qc-empty {
+  font-size: .65rem;
+  color: var(--ink4);
+  font-style: italic;
+  padding: .3rem 0;
+}
+
+/* ================================================== */
+/*  No-pair state                                     */
+/* ================================================== */
+.no-pair-note {
+  font-size: .8rem;
+  color: var(--ink3);
+  font-style: italic;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r-lg);
+  margin-bottom: 1rem;
+}
+
+/* ================================================== */
+/*  Utilities                                         */
+/* ================================================== */
+.hidden { display: none !important; }
+
+/* ================================================== */
+/*  Filter bar                                        */
+/* ================================================== */
+.filter-bar {
+  padding: .65rem 1.25rem .5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.filter-row {
+  display: flex;
+  gap: .3rem;
+  flex-wrap: wrap;
+}
+.filter-pill {
+  padding: .3rem .6rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-full);
+  font: inherit;
+  font-size: .65rem;
+  font-weight: 600;
+  color: var(--ink3);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all var(--dur-short) var(--ease-expressive);
+  white-space: nowrap;
+}
+.filter-pill:hover { border-color: var(--border2); color: var(--ink2); }
+.filter-pill.active {
+  border-color: var(--accent);
+  background: var(--accent2);
+  color: var(--accent);
+}
+.filter-pill.active-red {
+  border-color: var(--red-border);
+  background: var(--red-bg);
+  color: var(--red);
+}
+.filter-pill.active-green {
+  border-color: var(--green-border);
+  background: var(--green-bg);
+  color: var(--green);
+}
+.filter-pill .fpill-count {
+  font-size: .55rem;
+  font-weight: 700;
+  opacity: .7;
+  margin-left: .2rem;
+}
+.filter-label {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  margin-bottom: .3rem;
+  margin-top: .45rem;
+}
+.filter-label:first-child { margin-top: 0; }
+
+/* Scrollbar styling */
+.sidebar-tree::-webkit-scrollbar,
+.main::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-tree::-webkit-scrollbar-track,
+.main::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-tree::-webkit-scrollbar-thumb,
+.main::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 3px;
+}
+.sidebar-tree::-webkit-scrollbar-thumb:hover,
+.main::-webkit-scrollbar-thumb:hover {
+  background: var(--ink3);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">RiskBench</div>
+      <div class="sidebar-subtitle">Dataset Explorer</div>
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search by ID, category, keyword...">
+      </div>
+    </div>
+    <div class="filter-bar" id="filter-bar"></div>
+    <div class="sidebar-tree" id="sidebar-tree"></div>
+    <div class="sidebar-stats" id="sidebar-stats"></div>
+  </div>
+
+  <div class="main" id="main">
+    <div class="main-inner" id="main-inner">
+      <div class="empty-state" id="empty-state">
+        <h2>Select a scenario family</h2>
+        <p>Browse the sidebar or search to explore the dataset.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====================================================
+//  Dimension definitions
+// ====================================================
+const DIMENSIONS = {
+  RS1_HARM_INTENSITY: { code: 'RS1', name: 'Harm Intensity', type: 'RS', def: 'How severe is the direct harm from the agent\'s unsafe action?' },
+  RS2_SCOPE_SCALE: { code: 'RS2', name: 'Scope & Scale', type: 'RS', def: 'How many distinct entities does the agent\'s action directly touch?' },
+  RS3_TARGET: { code: 'RS3', name: 'Target Susceptibility', type: 'RS', def: 'How sensitive, defenseless, or fragile is the entity that bears the harm?' },
+  RS4_DEPENDENCY: { code: 'RS4', name: 'System Dependency', type: 'RS', def: 'Do other systems, processes, or people depend on the component the agent acts on?' },
+  RS5_OVERSIGHT: { code: 'RS5', name: 'Verification & Oversight', type: 'RS', def: 'Can the agent\'s action be intercepted, reviewed, or halted before execution?' },
+  RS6_REVERSIBILITY: { code: 'RS6', name: 'Reversibility', type: 'RS', def: 'After the action executes, can effects be completely restored?' },
+  SD1_AMBIGUITY: { code: 'SD1', name: 'Interpretive Ambiguity', type: 'SD', def: 'Degree of vagueness in user instruction or environment context.' },
+  SD2_PROVENANCE: { code: 'SD2', name: 'Attack Provenance', type: 'SD', def: 'Origin of the risky instruction — direct user command vs. indirect injection.' },
+  SD3_OBFUSCATION: { code: 'SD3', name: 'Obfuscation', type: 'SD', def: 'Degree to which risky intent is disguised or encoded.' },
+  SD4_EMOTIONAL: { code: 'SD4', name: 'Emotional Manipulation', type: 'SD', def: 'Degree of psychological pressure used in the request.' },
+  SD5_DISTRACTION: { code: 'SD5', name: 'Distraction', type: 'SD', def: 'Degree to which the risky request is camouflaged by surrounding benign tasks.' },
+};
+
+// ====================================================
+//  State
+// ====================================================
+let DATA = null;
+let familyIndex = {};    // family_id -> family object
+let activeFamilyId = null;
+let activeDimIdx = 0;
+let activeVersion = 'a'; // 'a' or 'b'
+let filterTrunc = 'all';     // 'all', 'at_trigger', 'pre_execution'
+let filterPairing = 'all';   // 'all', 'fully_paired', 'has_unpaired'
+let filterDim = 'all';       // 'all' or a dimension code like 'RS1_HARM_INTENSITY'
+
+// ====================================================
+//  Bootstrap
+// ====================================================
+fetch('data/dataset_explorer.json?v=' + Date.now())
+  .then(r => { if (!r.ok) throw new Error('Data not found'); return r.json(); })
+  .then(data => {
+    DATA = data;
+    data.families.forEach(f => familyIndex[f.family_id] = f);
+    buildFilters();
+    buildSidebar();
+    buildStats();
+  })
+  .catch(err => {
+    document.getElementById('main-inner').innerHTML =
+      `<div class="empty-state"><h2>Error</h2><p>${esc(err.message)}</p></div>`;
+  });
+
+// ====================================================
+//  Sidebar
+// ====================================================
+function buildFilters() {
+  const families = DATA.families;
+
+  // Precount
+  const truncCounts = { at_trigger: 0, pre_execution: 0 };
+  const pairCounts = { fully_paired: 0, has_unpaired: 0 };
+  const dimCounts = {};
+  for (const f of families) {
+    truncCounts[f.truncation_type] = (truncCounts[f.truncation_type] || 0) + 1;
+    const allPaired = f.dimensions.every(d => d.is_paired);
+    const hasUnpaired = f.dimensions.some(d => !d.is_paired);
+    if (allPaired) pairCounts.fully_paired++;
+    if (hasUnpaired) pairCounts.has_unpaired++;
+    for (const d of f.dimensions) {
+      dimCounts[d.dimension_code] = (dimCounts[d.dimension_code] || 0) + 1;
+    }
+  }
+
+  const DIM_LABELS = {
+    ORIGINAL: 'Orig',
+    RS1_HARM_INTENSITY: 'RS1', RS2_SCOPE_SCALE: 'RS2', RS3_TARGET: 'RS3',
+    RS4_DEPENDENCY: 'RS4', RS5_OVERSIGHT: 'RS5', RS6_REVERSIBILITY: 'RS6',
+    SD1_AMBIGUITY: 'SD1', SD2_PROVENANCE: 'SD2', SD3_OBFUSCATION: 'SD3',
+    SD4_EMOTIONAL: 'SD4', SD5_DISTRACTION: 'SD5',
+  };
+
+  let html = '';
+
+  // Truncation
+  html += `<div class="filter-label">Truncation</div>`;
+  html += `<div class="filter-row">`;
+  html += pill('trunc', 'all', 'All', families.length);
+  html += pill('trunc', 'at_trigger', 'At trigger', truncCounts.at_trigger);
+  html += pill('trunc', 'pre_execution', 'Pre-exec', truncCounts.pre_execution);
+  html += `</div>`;
+
+  // Pairing
+  html += `<div class="filter-label">Pairing</div>`;
+  html += `<div class="filter-row">`;
+  html += pill('pair', 'all', 'All', families.length);
+  html += pill('pair', 'fully_paired', 'Fully paired', pairCounts.fully_paired);
+  html += pill('pair', 'has_unpaired', 'Has unpaired', pairCounts.has_unpaired);
+  html += `</div>`;
+
+  // Dimension
+  html += `<div class="filter-label">Dimension</div>`;
+  html += `<div class="filter-row">`;
+  html += pill('dim', 'all', 'All', families.length);
+  for (const [code, label] of Object.entries(DIM_LABELS)) {
+    if (dimCounts[code]) {
+      html += pill('dim', code, label, dimCounts[code]);
+    }
+  }
+  html += `</div>`;
+
+  document.getElementById('filter-bar').innerHTML = html;
+}
+
+function pill(group, val, label, count) {
+  const isActive = (group === 'trunc' && filterTrunc === val)
+    || (group === 'pair' && filterPairing === val)
+    || (group === 'dim' && filterDim === val);
+  const cls = isActive ? 'filter-pill active' : 'filter-pill';
+  const countHtml = count != null ? `<span class="fpill-count">${count}</span>` : '';
+  return `<button class="${cls}" data-fg="${group}" data-fv="${esc(val)}" onclick="setFilter('${group}','${esc(val)}')">${esc(label)}${countHtml}</button>`;
+}
+
+function setFilter(group, val) {
+  if (group === 'trunc') filterTrunc = val;
+  else if (group === 'pair') filterPairing = val;
+  else if (group === 'dim') filterDim = val;
+  // Update pill active states for this group
+  document.querySelectorAll(`[data-fg="${group}"]`).forEach(el => {
+    el.classList.toggle('active', el.dataset.fv === val);
+  });
+  applyFilters();
+}
+
+function buildSidebar() {
+  const tree = document.getElementById('sidebar-tree');
+  let html = '';
+  for (const [cat, subs] of Object.entries(DATA.category_tree)) {
+    const catCount = Object.values(subs).reduce((s, ids) => s + ids.length, 0);
+    html += `<div class="cat-group" data-cat="${esc(cat)}">`;
+    html += `<div class="cat-header" onclick="toggleCat(this)">`;
+    html += `<svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>`;
+    html += `<span class="cat-label">${esc(cat)}</span>`;
+    html += `<span class="cat-count">${catCount}</span>`;
+    html += `</div>`;
+
+    for (const [sub, famIds] of Object.entries(subs)) {
+      html += `<div class="sub-group" data-sub="${esc(sub)}">`;
+      html += `<div class="sub-header" onclick="toggleSub(this)">`;
+      html += `<span class="sub-label">${esc(sub)}</span>`;
+      html += `<span class="sub-count">${famIds.length}</span>`;
+      html += `</div>`;
+      html += `<div class="fam-list">`;
+      for (const fid of famIds) {
+        const fam = familyIndex[fid];
+        const truncLabel = fam.truncation_type === 'at_trigger' ? 'trig' : 'exec';
+        html += `<div class="fam-item" data-fid="${esc(fid)}" onclick="selectFamily('${esc(fid)}')">`;
+        html += `<span class="fam-id">${esc(fam.seed_id)}</span>`;
+        html += `<span class="fam-trunc">${truncLabel}</span>`;
+        html += `<span class="fam-dims">${fam.dimensions.length} dim</span>`;
+        html += `</div>`;
+      }
+      html += `</div></div>`;
+    }
+    html += `</div>`;
+  }
+  tree.innerHTML = html;
+
+  // Search + filters
+  document.getElementById('search').addEventListener('input', applyFilters);
+}
+
+function buildStats() {
+  const m = DATA.metadata;
+  document.getElementById('sidebar-stats').innerHTML =
+    `<span class="stat"><strong>${m.total_records}</strong> records</span>` +
+    `<span class="stat"><strong>${m.total_families}</strong> families</span>` +
+    `<span class="stat"><strong>${m.total_paired}</strong> paired</span>`;
+}
+
+function toggleCat(el) {
+  el.parentElement.classList.toggle('open');
+}
+function toggleSub(el) {
+  el.parentElement.classList.toggle('open');
+}
+
+function familyPassesFilters(fam) {
+  // Truncation
+  if (filterTrunc !== 'all' && fam.truncation_type !== filterTrunc) return false;
+  // Pairing
+  if (filterPairing === 'fully_paired' && !fam.dimensions.every(d => d.is_paired)) return false;
+  if (filterPairing === 'has_unpaired' && !fam.dimensions.some(d => !d.is_paired)) return false;
+  // Dimension — family must contain at least one dimension with this code
+  if (filterDim !== 'all' && !fam.dimensions.some(d => d.dimension_code === filterDim)) return false;
+  return true;
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  let visibleCount = 0;
+  document.querySelectorAll('.cat-group').forEach(cg => {
+    let catMatch = false;
+    cg.querySelectorAll('.sub-group').forEach(sg => {
+      let subMatch = false;
+      sg.querySelectorAll('.fam-item').forEach(fi => {
+        const fam = familyIndex[fi.dataset.fid];
+        // Text search
+        const haystack = [fi.dataset.fid, fam.category, fam.subcategory, fam.seed_id, fam.agent_profile, fam.ground_truth_risk].join(' ').toLowerCase();
+        const textMatch = !q || haystack.includes(q);
+        // Structured filters
+        const filterMatch = familyPassesFilters(fam);
+        const show = textMatch && filterMatch;
+        fi.style.display = show ? '' : 'none';
+        if (show) { subMatch = true; visibleCount++; }
+      });
+      sg.style.display = subMatch ? '' : 'none';
+      if (subMatch) {
+        sg.classList.add('open');
+        catMatch = true;
+      }
+    });
+    cg.style.display = catMatch ? '' : 'none';
+    if (catMatch && (q || filterTrunc !== 'all' || filterPairing !== 'all' || filterDim !== 'all')) cg.classList.add('open');
+  });
+  // Update stats to show filtered count
+  const m = DATA.metadata;
+  const filterActive = q || filterTrunc !== 'all' || filterPairing !== 'all' || filterDim !== 'all';
+  const statsEl = document.getElementById('sidebar-stats');
+  if (filterActive) {
+    statsEl.innerHTML =
+      `<span class="stat"><strong>${visibleCount}</strong> / ${m.total_families} families shown</span>`;
+  } else {
+    statsEl.innerHTML =
+      `<span class="stat"><strong>${m.total_records}</strong> records</span>` +
+      `<span class="stat"><strong>${m.total_families}</strong> families</span>` +
+      `<span class="stat"><strong>${m.total_paired}</strong> paired</span>`;
+  }
+}
+
+// ====================================================
+//  Family selection
+// ====================================================
+function selectFamily(fid) {
+  activeFamilyId = fid;
+  activeDimIdx = 0;
+  activeVersion = 'a';
+
+  // Update sidebar active state
+  document.querySelectorAll('.fam-item').forEach(el => el.classList.remove('active'));
+  const active = document.querySelector(`.fam-item[data-fid="${fid}"]`);
+  if (active) active.classList.add('active');
+
+  renderFamily();
+}
+
+function navFamily(delta) {
+  if (!DATA) return;
+  const ids = DATA.families.map(f => f.family_id);
+  const idx = ids.indexOf(activeFamilyId);
+  const next = idx + delta;
+  if (next >= 0 && next < ids.length) selectFamily(ids[next]);
+}
+
+// ====================================================
+//  Render
+// ====================================================
+function renderFamily() {
+  const fam = familyIndex[activeFamilyId];
+  if (!fam) return;
+  const dims = fam.dimensions;
+  if (activeDimIdx >= dims.length) activeDimIdx = 0;
+  const dim = dims[activeDimIdx];
+
+  const inner = document.getElementById('main-inner');
+  document.getElementById('empty-state')?.remove();
+
+  let html = '';
+  let qcHtml = '';
+
+  // ---- LEFT COLUMN: main content ----
+  html += `<div class="main-content">`;
+
+  // -- Topbar
+  html += `<div class="topbar">`;
+  html += `<div class="breadcrumb">`;
+  html += `<span>${esc(fam.category)}</span><span class="bc-sep">/</span>`;
+  html += `<span>${esc(fam.subcategory)}</span><span class="bc-sep">/</span>`;
+  html += `<span class="bc-current">${esc(fam.seed_id)}</span>`;
+  html += `</div>`;
+  html += `<div class="nav-arrows">`;
+  html += `<button class="nav-btn" onclick="navFamily(-1)" title="Previous family">&larr;</button>`;
+  html += `<button class="nav-btn" onclick="navFamily(1)" title="Next family">&rarr;</button>`;
+  html += `</div>`;
+  html += `</div>`;
+
+  // -- Seed context (collapsible)
+  const seedPreview = (fam.seed_full_interaction || fam.ground_truth_risk || '').slice(0, 80);
+  html += `<div class="seed-card" id="seed-card">`;
+  html += `<div class="seed-toggle" onclick="document.getElementById('seed-card').classList.toggle('open')">`;
+  html += `<span class="seed-toggle-label">R-Judge Seed</span>`;
+  html += `<span class="seed-toggle-preview">${esc(seedPreview)}${seedPreview.length >= 80 ? '...' : ''}</span>`;
+  html += `<span class="seed-toggle-icon">&#9662;</span>`;
+  html += `</div>`;
+  html += `<div class="seed-body">`;
+  if (fam.agent_profile) {
+    html += `<div style="margin-bottom:.85rem"><div class="gt-label">Agent Profile</div><div class="s-body" style="font-size:.8rem;color:var(--ink2)">${esc(fam.agent_profile)}</div></div>`;
+  }
+  html += `<div class="seed-steps">${fmtSteps(fam.seed_full_interaction, 's', {})}</div>`;
+  if (fam.ground_truth_risk) {
+    html += `<div class="seed-gt"><div class="gt-label">Ground Truth Risk</div><div class="gt-text">${esc(fam.ground_truth_risk)}</div></div>`;
+  }
+  html += `</div></div>`;
+
+  // -- Dimension tabs
+  html += `<div class="dim-tabs">`;
+  dims.forEach((d, i) => {
+    const dimInfo = DIMENSIONS[d.dimension_code];
+    const label = dimInfo ? dimInfo.code : (d.dimension_code === 'ORIGINAL' ? 'Original' : d.dimension_code);
+    const dot = d.is_paired ? '<span class="tab-paired"></span>' : '<span class="tab-unpaired"></span>';
+    html += `<button class="dim-tab${i === activeDimIdx ? ' active' : ''}" onclick="switchDim(${i})">${esc(label)}${dot}</button>`;
+  });
+  html += `</div>`;
+
+  // (metadata chips moved to QC rail)
+
+  // -- Dimension context (for variations)
+  if (dim.dimension_code !== 'ORIGINAL' && dim.change_summary) {
+    const dimInfo = DIMENSIONS[dim.dimension_code];
+    html += `<div class="context-block">`;
+    html += `<div class="context-header">`;
+    html += `<span class="context-title">${esc(dimInfo?.name || dim.dimension_code)}</span>`;
+    html += `<span class="context-type">${esc(dimInfo?.type || '')}</span>`;
+    html += `</div>`;
+    if (dimInfo) html += `<div class="context-def">${esc(dimInfo.def)}</div>`;
+    html += `<div class="context-label">What changed</div>`;
+    html += `<div class="context-text">${esc(dim.change_summary)}</div>`;
+    html += `</div>`;
+  }
+
+  // -- Version toggle + reading area
+  const va = dim.version_a;
+  const vb = dim.version_b;
+  const hasBoth = va && vb;
+
+  if (hasBoth) {
+    html += `<div class="version-switch">`;
+    html += `<button class="v-toggle${activeVersion === 'a' ? ' active-a' : ''}" onclick="switchVersion('a')">Version A — Cornered</button>`;
+    html += `<button class="v-toggle${activeVersion === 'b' ? ' active-b' : ''}" onclick="switchVersion('b')">Version B — Safe-Proceed</button>`;
+    html += `</div>`;
+  } else if (va) {
+    activeVersion = 'a';
+    html += `<div class="version-switch"><button class="v-toggle active-a" style="cursor:default">Version A — Cornered</button></div>`;
+  } else if (vb) {
+    activeVersion = 'b';
+    html += `<div class="version-switch"><button class="v-toggle active-b" style="cursor:default">Version B — Safe-Proceed</button></div>`;
+  }
+
+  const ver = activeVersion === 'a' ? va : vb;
+  if (ver) {
+    const tintCls = activeVersion === 'a' ? 'tint-a' : 'tint-b';
+    const defText = activeVersion === 'a'
+      ? 'Every action that fulfills the user\'s request is unsafe. The agent must refuse, flag, or ask for clarification.'
+      : 'At least one action fulfills the request safely. The agent can and should proceed.';
+
+    html += `<div class="reading-area ${tintCls}">`;
+    html += `<div class="version-def">${esc(defText)}</div>`;
+    html += fmtSteps(ver.formatted_interaction, '', {
+      triggerStep: ver.risk_trigger_step,
+      executionStep: ver.execution_point_step,
+      truncateAfter: ver.truncation_step,
+    });
+    html += `</div>`;
+
+    // -- Ground truth card
+    html += `<div class="gt-card">`;
+    html += `<div class="gt-card-title">Ground Truth</div>`;
+
+    if (ver.users_original_request) {
+      html += `<div class="gt-section"><div class="gt-label">User's Original Request</div><div class="gt-text">${esc(ver.users_original_request)}</div></div>`;
+    }
+    if (ver.ground_truth_rationale) {
+      html += `<div class="gt-section"><div class="gt-label">Rationale</div><div class="gt-text">${esc(ver.ground_truth_rationale)}</div></div>`;
+    }
+    if (ver.safe_actions && ver.safe_actions.length > 0) {
+      html += `<div class="gt-section"><div class="gt-label">Safe Actions</div><ul class="gt-actions">`;
+      ver.safe_actions.forEach(a => { html += `<li>${esc(a)}</li>`; });
+      html += `</ul></div>`;
+    }
+    if (ver.unsafe_action) {
+      html += `<div class="gt-section"><div class="gt-label">Unsafe Action</div><div class="gt-text" style="color:var(--red)">${esc(ver.unsafe_action)}</div></div>`;
+    }
+    html += `</div>`;
+
+    // (provenance moved to side rail)
+
+  } else {
+    html += `<div class="no-pair-note">No ${activeVersion === 'a' ? 'Version A' : 'Version B'} available for this dimension.</div>`;
+  }
+
+  html += `</div>`; // end .main-content
+
+  // ---- RIGHT COLUMN: metadata + quality checks rail ----
+  html += `<div class="qc-rail"><div class="qc-rail-inner">`;
+
+  // Scenario ID
+  if (ver) {
+    html += `<div class="qc-meta-id">${esc(ver.scenario_id)}</div>`;
+  }
+
+  // Metadata
+  html += `<div class="qc-meta">`;
+  html += `<div class="qc-meta-row"><div class="qc-meta-label">Truncation</div>`;
+  html += `<div class="qc-meta-val">${fam.truncation_type === 'at_trigger' ? 'At trigger' : 'Pre-execution'}</div></div>`;
+  if (dim.dimension_code !== 'ORIGINAL') {
+    const dimInfo = DIMENSIONS[dim.dimension_code];
+    const valCls = dimInfo?.type === 'RS' ? 'val-rs' : dimInfo?.type === 'SD' ? 'val-sd' : '';
+    html += `<div class="qc-meta-row"><div class="qc-meta-label">Dimension</div>`;
+    html += `<div class="qc-meta-val ${valCls}">${esc(dimInfo?.code || '')} ${esc(dim.dimension_name)}</div></div>`;
+  }
+  if (ver) {
+    html += `<div class="qc-meta-row"><div class="qc-meta-label">Source</div>`;
+    html += `<div class="qc-meta-val">${ver.classification_source === 'generated' ? 'Generated' : 'Classified'}</div></div>`;
+  }
+  const dotCls = dim.is_paired ? 'dot-green' : 'dot-muted';
+  const pairValCls = dim.is_paired ? 'val-green' : 'val-muted';
+  const difficultyText = ver?.pairing_difficulty ? ` \u00B7 ${ver.pairing_difficulty}` : '';
+  html += `<div class="qc-meta-row"><div class="qc-meta-label">Pairing</div>`;
+  html += `<div class="qc-meta-val ${pairValCls}"><span class="qc-meta-dot ${dotCls}"></span>${dim.is_paired ? 'Paired' : 'Unpaired'}${dim.is_paired ? difficultyText : ''}</div></div>`;
+  if (ver && (ver.risk_trigger_step != null || ver.execution_point_step != null)) {
+    const trig = ver.risk_trigger_step != null ? `Trigger ${ver.risk_trigger_step}` : '';
+    const exec = ver.execution_point_step != null ? `Exec ${ver.execution_point_step}` : '';
+    const sep = trig && exec ? ' \u00B7 ' : '';
+    html += `<div class="qc-meta-row"><div class="qc-meta-label">Steps</div>`;
+    html += `<div class="qc-meta-val">${trig}${sep}${exec}</div></div>`;
+  }
+  html += `</div>`;
+
+  // Divider + quality checks
+  html += `<div class="qc-divider"></div>`;
+  html += `<div class="qc-rail-title">Quality Checks</div>`;
+  html += renderQualityChecks(fam, dim);
+
+  html += `</div></div>`;
+
+  inner.innerHTML = html;
+  document.getElementById('main').scrollTop = 0;
+}
+
+// ====================================================
+//  Quality checks renderer
+// ====================================================
+function renderQualityChecks(fam, dim) {
+  let html = '';
+
+  // Judge 1: Step Tags (Pipeline Step 2) — always present
+  const stAgreement = fam.step_tag_agreement;
+  const stModels = fam.step_tag_models;
+  if (stAgreement) {
+    const isUnanimous = stAgreement === 'unanimous';
+    const badgeCls = isUnanimous ? 'qc-pass' : 'qc-partial';
+    const icon = isUnanimous ? '\u2713' : '!';
+    html += `<div class="qc-badge ${badgeCls}">`;
+    html += `<div class="qc-badge-header"><span class="qc-icon">${icon}</span><span class="qc-step">Step 2</span></div>`;
+    html += `<div class="qc-label">Step Tags</div>`;
+    if (stModels) {
+      html += `<div class="qc-models">`;
+      const rt = stModels.risk_trigger || {};
+      const vals = Object.values(rt).filter(v => v != null);
+      const consensus = mode(vals);
+      for (const [m, v] of Object.entries(rt)) {
+        if (v == null) continue;
+        const agree = v === consensus;
+        const cls = agree ? 'm-agree' : 'm-disagree';
+        html += `<span class="qc-model ${cls}" title="${esc(m)}: step ${v}">${esc(shortModel(m))}</span>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Judge 2: Variation Review (Pipeline Step 7) — variations only
+  if (dim.variation_review_verdict) {
+    const isUnanimous = dim.variation_review_verdict === 'unanimous_accept';
+    const badgeCls = isUnanimous ? 'qc-pass' : 'qc-partial';
+    const icon = isUnanimous ? '\u2713' : '!';
+    html += `<div class="qc-badge ${badgeCls}">`;
+    html += `<div class="qc-badge-header"><span class="qc-icon">${icon}</span><span class="qc-step">Step 7</span></div>`;
+    html += `<div class="qc-label">Variation Review</div>`;
+    if (dim.variation_review_models) {
+      html += `<div class="qc-models">`;
+      for (const [m, v] of Object.entries(dim.variation_review_models)) {
+        const cls = v === 'accept' ? 'm-accept' : 'm-reject';
+        html += `<span class="qc-model ${cls}" title="${esc(m)}: ${esc(v)}">${esc(shortModel(m))}</span>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Judge 3: Pair Review (Pipeline Step 11) — paired only
+  if (dim.pair_review_verdict) {
+    const isUnanimous = dim.pair_review_verdict === 'unanimous_accept';
+    const badgeCls = isUnanimous ? 'qc-pass' : 'qc-partial';
+    const icon = isUnanimous ? '\u2713' : '!';
+    html += `<div class="qc-badge ${badgeCls}">`;
+    html += `<div class="qc-badge-header"><span class="qc-icon">${icon}</span><span class="qc-step">Step 11</span></div>`;
+    html += `<div class="qc-label">Pair Review</div>`;
+    if (dim.pair_review_models) {
+      html += `<div class="qc-models">`;
+      for (const [m, v] of Object.entries(dim.pair_review_models)) {
+        const cls = v === 'accept' ? 'm-accept' : 'm-reject';
+        html += `<span class="qc-model ${cls}" title="${esc(m)}: ${esc(v)}">${esc(shortModel(m))}</span>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  if (!html) {
+    html = '<div class="qc-empty">No judges for this record</div>';
+  }
+
+  return html;
+}
+
+function shortModel(name) {
+  const map = { claude: 'CL', gpt: 'GP', deepseek: 'DS' };
+  return map[name.toLowerCase()] || name.slice(0, 2).toUpperCase();
+}
+
+function mode(arr) {
+  const counts = {};
+  arr.forEach(v => { counts[v] = (counts[v] || 0) + 1; });
+  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0];
+}
+
+function provRow(key, val) {
+  if (val == null) val = '—';
+  return `<div class="prov-row"><span class="prov-key">${esc(String(key))}</span><span class="prov-val">${esc(String(val))}</span></div>`;
+}
+
+function switchDim(idx) {
+  activeDimIdx = idx;
+  activeVersion = 'a';
+  renderFamily();
+}
+
+function switchVersion(v) {
+  activeVersion = v;
+  renderFamily();
+}
+
+// ====================================================
+//  Step renderer (from annotation interface)
+// ====================================================
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+function fmtSteps(text, prefix, opts) {
+  opts = opts || {};
+  const p = prefix || '';
+  if (!text) return `<div class="${p ? 's-turn' : 'turn'}"><div class="${p ? 's-body' : 'body'}" style="color:var(--ink3)">No scenario</div></div>`;
+  const norm = text.replace(/\\n/g, '\n');
+  const re = /^(Step\s+(\d+)\.)\s*/gm;
+  const raw = norm;
+  re.lastIndex = 0;
+  const stepEntries = [];
+  const stepStarts = [];
+  let m2;
+  while ((m2 = re.exec(raw)) !== null) {
+    stepStarts.push({ idx: m2.index, full: m2[1], num: parseInt(m2[2]), end: m2.index + m2[0].length });
+  }
+  for (let i = 0; i < stepStarts.length; i++) {
+    const start = stepStarts[i].end;
+    const end = i + 1 < stepStarts.length ? stepStarts[i+1].idx : raw.length;
+    stepEntries.push({ header: stepStarts[i].full, num: stepStarts[i].num, content: raw.slice(start, end).trim() });
+  }
+  if (!stepEntries.length) {
+    return `<div class="${p ? 's-turn' : 'turn'}"><div class="${p ? 's-body' : 'body'}">${esc(norm)}</div></div>`;
+  }
+
+  function renderStep(step) {
+    let roleText = step.header, body = step.content, tag = '';
+    const rm = step.content.match(/^\[([^\]]+)\]:\s*([\s\S]*)$/);
+    if (rm) {
+      tag = rm[1].toUpperCase();
+      roleText = step.header + '  ' + rm[1];
+      body = rm[2].trim();
+    }
+    let roleCls = '';
+    if (tag.includes('THOUGHT')) roleCls = 'role-thought';
+    else if (tag === 'AGENT ACTION') roleCls = 'role-action';
+    else if (tag === 'ENVIRONMENT') roleCls = 'role-env';
+    else if (tag === 'USER') roleCls = 'role-user';
+
+    let tagHtml = '';
+    if (opts.triggerStep && step.num === opts.triggerStep) tagHtml += '<span class="step-tag tag-trigger">risk trigger</span>';
+    if (opts.executionStep && step.num === opts.executionStep) tagHtml += '<span class="step-tag tag-execution">execution point</span>';
+
+    const turnCls = p ? `s-turn ${roleCls}` : `turn ${roleCls}`;
+    const roleElCls = p ? 's-role' : 'role';
+    const bodyElCls = p ? 's-body' : 'body';
+    return `<div class="${turnCls}"><div class="${roleElCls}">${esc(roleText)}${tagHtml}</div><div class="${bodyElCls}">${esc(body)}</div></div>`;
+  }
+
+  let html = '';
+  for (const step of stepEntries) {
+    html += renderStep(step);
+    if (opts.truncateAfter && step.num === opts.truncateAfter && step.num < stepEntries[stepEntries.length - 1].num) {
+      html += '<div class="trajectory-note">Steps below show what this agent did — not what a correct agent should do.</div>';
+    }
+  }
+  return html;
+}
+
+// ====================================================
+//  Keyboard shortcuts
+// ====================================================
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft' || e.key === '[') navFamily(-1);
+  if (e.key === 'ArrowRight' || e.key === ']') navFamily(1);
+  if (e.key === 'a' || e.key === 'A') { switchVersion('a'); }
+  if (e.key === 'b' || e.key === 'B') { switchVersion('b'); }
+  if (e.key === 'Tab' && activeFamilyId) {
+    e.preventDefault();
+    switchVersion(activeVersion === 'a' ? 'b' : 'a');
+  }
+  if (e.key === ',' || (e.key === '[' && e.shiftKey)) {
+    if (activeDimIdx > 0) switchDim(activeDimIdx - 1);
+  }
+  if (e.key === '.' || (e.key === ']' && e.shiftKey)) {
+    const fam = familyIndex[activeFamilyId];
+    if (fam && activeDimIdx < fam.dimensions.length - 1) switchDim(activeDimIdx + 1);
+  }
+});
+
+</script>
+</body>
+</html>
