@@ -16,9 +16,9 @@ import math
 from collections import Counter, defaultdict
 from pathlib import Path
 
-DATA_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final" / "final_dataset.jsonl"
-SEEDS_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final" / "01_all_scenarios.jsonl"
-STEP_TAGS_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final" / "02_step_tags_merged.jsonl"
+DATA_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final_v2_0331" / "final_dataset.jsonl"
+SEEDS_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final_v2_0331" / "01_all_scenarios.jsonl"
+STEP_TAGS_FILE = Path(__file__).resolve().parent.parent / "pipeline_v2" / "data" / "pipeline_final_v2_0331" / "02_step_tags_merged.jsonl"
 OUTPUT_FILE = Path(__file__).resolve().parent / "data" / "dataset_explorer.json"
 
 # Dimension ordering for tabs
