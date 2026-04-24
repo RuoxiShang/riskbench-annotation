@@ -350,10 +350,7 @@ details.fold[open] summary::before { transform: rotate(90deg); }
   <div class="login-card">
     <div class="login-title">Final Human Review</div>
     <div class="login-sub">Select your name to begin. Progress is saved automatically.</div>
-    <div class="login-tag">Core reviewers</div>
-    <div class="login-grid" id="login-grid-core"></div>
-    <div class="login-tag">Optional / bonus</div>
-    <div class="login-grid" id="login-grid-bonus"></div>
+    <div class="login-grid" id="login-grid"></div>
     <button class="login-go" id="login-go" onclick="startReview()">Begin</button>
   </div>
 </div>
@@ -583,10 +580,9 @@ function curItem() { return DATA.items[String(myRowIds[si])]; }
 // ============================================================
 let selectedName = null;
 function initLogin() {
-  const core = document.getElementById('login-grid-core');
-  const bonus = document.getElementById('login-grid-bonus');
-  DATA.meta.core_annotators.forEach(name => core.appendChild(makeNameBtn(name)));
-  DATA.meta.bonus_annotators.forEach(name => bonus.appendChild(makeNameBtn(name)));
+  const grid = document.getElementById('login-grid');
+  const all = [...DATA.meta.core_annotators, ...DATA.meta.bonus_annotators];
+  all.forEach(name => grid.appendChild(makeNameBtn(name)));
 }
 function makeNameBtn(name) {
   const btn = document.createElement('button');
