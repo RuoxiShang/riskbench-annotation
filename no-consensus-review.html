@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RiskBench — No-Consensus Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  --bg: #FAFAF9; --card: #FFFFFF; --border: #E7E5E4; --border2: #D6D3D1;
+  --ink: #1C1917; --ink2: #57534E; --ink3: #A8A29E;
+  --blue: #2563EB; --blue-bg: #EFF6FF;
+  --red: #C4432B; --red-bg: #FDF6F5;
+  --green: #2D7A3A; --green-bg: #F5FBF6;
+  --amber: #A16207; --amber-bg: #FFFBEB;
+  --purple: #7C3AED; --purple-bg: #F5F3FF;
+  --r: 8px;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 15px; }
+body { font-family: var(--font); background: var(--bg); color: var(--ink);
+  -webkit-font-smoothing: antialiased; }
+
+/* Layout */
+.app { display:flex; height:100vh; overflow:hidden; }
+
+/* Sidebar */
+.sidebar { width:300px; flex-shrink:0; background:var(--card); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; overflow:hidden; }
+.sidebar-header { padding:1.25rem 1rem .75rem; border-bottom:1px solid var(--border); }
+.sidebar-header h1 { font-size:.95rem; font-weight:700; margin-bottom:.15rem; }
+.sidebar-header .sub { font-size:.72rem; color:var(--ink3); }
+
+.sidebar-filters { padding:.75rem 1rem; border-bottom:1px solid var(--border); }
+.filter-row { display:flex; gap:.4rem; margin-bottom:.4rem; }
+.filter-row:last-child { margin-bottom:0; }
+.filter-select { flex:1; font:inherit; font-size:.72rem; padding:.35rem .5rem;
+  border:1.5px solid var(--border); border-radius:5px; background:var(--card);
+  color:var(--ink2); cursor:pointer; }
+
+.sidebar-clusters { flex:1; overflow-y:auto; padding:.5rem 0; }
+.cluster-item { padding:.5rem 1rem; cursor:pointer; transition:background .1s;
+  border-left:3px solid transparent; }
+.cluster-item:hover { background:#F5F5F4; }
+.cluster-item.active { background:var(--blue-bg); border-left-color:var(--blue); }
+.cluster-name { font-size:.78rem; font-weight:600; margin-bottom:.1rem; }
+.cluster-count { font-size:.65rem; color:var(--ink3); }
+
+.sidebar-stats { padding:.75rem 1rem; border-top:1px solid var(--border);
+  font-size:.72rem; color:var(--ink3); }
+
+/* Main */
+.main { flex:1; overflow-y:auto; padding:1.5rem 2rem; }
+.main-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+.main-title { font-size:1rem; font-weight:700; }
+.main-count { font-size:.75rem; color:var(--ink3); }
+
+/* Card list */
+.scenario-card { background:var(--card); border:1px solid var(--border); border-radius:10px;
+  margin-bottom:1rem; overflow:hidden; }
+.scenario-card.expanded .card-expand-body { display:block; }
+
+.card-summary { padding:.85rem 1.1rem; cursor:pointer; display:flex; gap:.75rem;
+  align-items:flex-start; transition:background .1s; }
+.card-summary:hover { background:#FAFAF9; }
+.card-expand-icon { font-size:.7rem; color:var(--ink3); margin-top:.2rem; transition:transform .15s;
+  flex-shrink:0; width:1rem; }
+.scenario-card.expanded .card-expand-icon { transform:rotate(90deg); }
+.card-summary-content { flex:1; min-width:0; }
+.card-summary-top { display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; margin-bottom:.3rem; }
+.card-summary-request { font-size:.8rem; color:var(--ink2); line-height:1.45;
+  overflow:hidden; text-overflow:ellipsis; display:-webkit-box;
+  -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.card-summary-votes { display:flex; gap:.75rem; margin-top:.35rem; }
+
+/* Pills */
+.pill { display:inline-block; font-size:.6rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.04em; padding:.15rem .45rem; border-radius:4px; white-space:nowrap; }
+.pill-blue { background:var(--blue-bg); color:var(--blue); }
+.pill-red { background:var(--red-bg); color:var(--red); }
+.pill-green { background:var(--green-bg); color:var(--green); }
+.pill-amber { background:var(--amber-bg); color:var(--amber); }
+.pill-purple { background:var(--purple-bg); color:var(--purple); }
+.pill-gray { background:#F3F4F6; color:var(--ink3); }
+
+/* Vote chips */
+.vote-group { display:flex; align-items:center; gap:.25rem; }
+.vote-label { font-size:.6rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.03em; color:var(--ink3); }
+.vote-chip { font-size:.65rem; font-weight:600; padding:.1rem .35rem; border-radius:3px;
+  font-family:var(--mono); }
+.vote-safe { background:var(--green-bg); color:var(--green); }
+.vote-unsafe { background:var(--red-bg); color:var(--red); }
+.vote-action { background:var(--blue-bg); color:var(--blue); }
+.vote-detect { background:var(--amber-bg); color:var(--amber); }
+
+/* Expanded body */
+.card-expand-body { display:none; border-top:1px solid var(--border); }
+
+.expand-section { padding:1rem 1.25rem; border-bottom:1px solid var(--border); }
+.expand-section:last-child { border-bottom:none; }
+.section-title { font-size:.65rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--ink3); margin-bottom:.5rem; }
+
+/* Trajectory */
+.trace { background:#F9FAFB; border:1px solid var(--border); border-radius:var(--r);
+  padding:.75rem 1rem; font-size:.78rem; line-height:1.55; max-height:300px;
+  overflow-y:auto; }
+.turn { margin-bottom:.5rem; }
+.turn:last-child { margin-bottom:0; }
+.turn .role { font-size:.6rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.03em; color:var(--ink3); margin-bottom:.1rem; }
+.turn.role-user .role { color:var(--blue); }
+.turn.role-thought .role { color:var(--amber); }
+.turn.role-thought .body { font-style:italic; color:var(--ink2); }
+.turn.role-action .body,
+.turn.role-env .body { font-family:var(--mono); font-size:.72rem; word-break:break-word; }
+.turn.role-env .body { color:var(--ink3); }
+
+/* Agent response */
+.agent-box { background:#F9FAFB; border:1px solid var(--border); border-radius:var(--r);
+  padding:.75rem 1rem; }
+.agent-thought-text { font-size:.78rem; line-height:1.55; font-style:italic;
+  color:var(--ink2); margin-bottom:.65rem; border-left:2px solid var(--amber);
+  padding-left:.65rem; white-space:pre-wrap; }
+.agent-action-text { font-size:.78rem; line-height:1.55; font-family:var(--mono);
+  color:var(--ink); white-space:pre-wrap; border-left:2px solid var(--blue);
+  padding-left:.65rem; }
+
+/* Ground truth */
+.gt-text { font-size:.78rem; color:var(--ink2); line-height:1.55;
+  border-left:2px solid var(--amber); padding-left:.75rem; }
+.gt-actions { margin-top:.5rem; }
+.gt-action-item { font-size:.75rem; line-height:1.5; color:var(--ink2);
+  padding:.2rem 0; padding-left:.5rem; border-left:2px solid var(--green); margin-bottom:.25rem; }
+.gt-unsafe-item { font-size:.75rem; line-height:1.5; color:var(--ink2);
+  padding:.2rem 0; padding-left:.5rem; border-left:2px solid var(--red); margin-bottom:.25rem; }
+
+/* Judge cards */
+.judges-grid { display:grid; grid-template-columns:1fr 1fr; gap:.65rem; }
+@media (max-width:1200px) { .judges-grid { grid-template-columns:1fr; } }
+.judge-card { border:1px solid var(--border); border-radius:var(--r); padding:.75rem .85rem;
+  background:var(--card); }
+.judge-header { display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:.5rem; }
+.judge-model { font-size:.72rem; font-weight:600; color:var(--ink2); }
+.judge-verdicts { display:flex; gap:.3rem; }
+.judge-section { margin-bottom:.5rem; }
+.judge-section:last-child { margin-bottom:0; }
+.judge-section-label { font-size:.6rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.04em; color:var(--ink3); margin-bottom:.2rem; }
+.judge-section-text { font-size:.72rem; color:var(--ink2); line-height:1.5; }
+
+/* Issue tags */
+.issue-tag { display:inline-block; font-size:.6rem; font-weight:600; padding:.15rem .4rem;
+  border-radius:3px; border:1px solid; margin-right:.25rem; }
+.issue-safety_split { background:#FEF2F2; color:#B91C1C; border-color:#FECACA; }
+.issue-execute_vs_refuse { background:#FEF3C7; color:#92400E; border-color:#FDE68A; }
+.issue-a0_a0w_boundary { background:#DBEAFE; color:#1E40AF; border-color:#BFDBFE; }
+.issue-detection_only { background:#F3F4F6; color:#6B7280; border-color:#E5E7EB; }
+.issue-over_refusal { background:#EDE9FE; color:#6D28D9; border-color:#DDD6FE; }
+.issue-info_gathering_safety { background:#FFEDD5; color:#C2410C; border-color:#FED7AA; }
+.issue-safety_3v1_safe { background:#FEF2F2; color:#DC2626; border-color:#FECACA; }
+.issue-safety_3v1_unsafe { background:#FEF2F2; color:#DC2626; border-color:#FECACA; }
+.issue-other { background:#F3F4F6; color:#9CA3AF; border-color:#E5E7EB; }
+
+/* Fold */
+details.fold { margin-top:.35rem; }
+details.fold summary { font-size:.72rem; color:var(--blue); cursor:pointer;
+  font-weight:500; list-style:none; }
+details.fold summary:hover { text-decoration:underline; }
+details.fold summary::-webkit-details-marker { display:none; }
+.fold-body { margin-top:.4rem; }
+
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h1>No-Consensus Review</h1>
+    <div class="sub">303 scenarios where judges disagreed</div>
+  </div>
+  <div class="sidebar-filters">
+    <div class="filter-row">
+      <select class="filter-select" id="filter-version" onchange="applyFilters()">
+        <option value="">All versions</option>
+        <option value="version_a">Version A</option>
+        <option value="version_b">Version B</option>
+      </select>
+      <select class="filter-select" id="filter-category" onchange="applyFilters()">
+        <option value="">All categories</option>
+      </select>
+    </div>
+    <div class="filter-row">
+      <select class="filter-select" id="filter-disagree" onchange="applyFilters()">
+        <option value="">All disagreement types</option>
+        <option value="safety">Safety disagreement</option>
+        <option value="action">Action disagreement</option>
+        <option value="detection">Detection disagreement</option>
+      </select>
+    </div>
+  </div>
+  <div class="sidebar-clusters" id="cluster-list"></div>
+  <div class="sidebar-stats" id="sidebar-stats"></div>
+</div>
+
+<!-- Main -->
+<div class="main" id="main">
+  <div class="main-header">
+    <div class="main-title" id="main-title">All Issues</div>
+    <div class="main-count" id="main-count"></div>
+  </div>
+  <div id="card-list"></div>
+</div>
+
+</div>
+
+<script>
+let DATA = [];
+let filtered = [];
+let activeCluster = null;
+
+const CLUSTERS = {
+  all:                    { name: 'All Issues',                    desc: 'Every no-consensus case' },
+  safety_split:           { name: 'Safety 2-2 Split',             desc: 'Judges split evenly on safe/unsafe' },
+  safety_3v1_safe:        { name: 'Safety 3v1 (lean safe)',       desc: '3 say safe, 1 says unsafe' },
+  safety_3v1_unsafe:      { name: 'Safety 3v1 (lean unsafe)',     desc: '3 say unsafe, 1 says safe' },
+  execute_vs_refuse:      { name: 'Execute vs Refuse',            desc: 'A0/A0W vs A4/A5 — did the agent act or not?' },
+  a0_a0w_boundary:        { name: 'A0 / A0W Boundary',           desc: 'Execution vs execution-with-warning' },
+  info_gathering_safety:  { name: 'Info Gathering Safety',        desc: 'A3 on version_a — does exploring advance risk?' },
+  over_refusal:           { name: 'Over-Refusal (Version B)',     desc: 'Agent refused despite safe path existing' },
+  detection_only:         { name: 'Detection-Only Disagreement',  desc: 'Action + safety agree, detection level differs' },
+  other:                  { name: 'Other',                        desc: 'Uncategorized disagreements' },
+};
+
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function parseTrace(text) {
+  if (!text) return '';
+  const lines = text.split('\n');
+  let html = '';
+  let currentRole = '', currentBody = '';
+
+  function flush() {
+    if (!currentRole) return;
+    let cls = 'role-env';
+    const rl = currentRole.toLowerCase();
+    if (rl.includes('user')) cls = 'role-user';
+    else if (rl.includes('thought')) cls = 'role-thought';
+    else if (rl.includes('action')) cls = 'role-action';
+    html += `<div class="turn ${cls}"><div class="role">${escHtml(currentRole)}</div><div class="body">${escHtml(currentBody.trim())}</div></div>`;
+  }
+
+  for (const line of lines) {
+    const m = line.match(/^Step\s+\d+\.\s*\[([^\]]+)\]:\s*(.*)/);
+    if (m) {
+      flush();
+      currentRole = m[1];
+      currentBody = m[2] || '';
+    } else {
+      currentBody += '\n' + line;
+    }
+  }
+  flush();
+  return html;
+}
+
+function voteChip(val, type) {
+  if (!val || val === 'None') return `<span class="vote-chip" style="background:#F3F4F6;color:var(--ink3)">?</span>`;
+  let cls = 'vote-action';
+  if (type === 'safety') cls = val === 'SAFE' ? 'vote-safe' : 'vote-unsafe';
+  else if (type === 'detection') cls = 'vote-detect';
+  return `<span class="vote-chip ${cls}">${escHtml(String(val))}</span>`;
+}
+
+function renderCard(item, idx) {
+  const issues = item.issues.map(i =>
+    `<span class="issue-tag issue-${i}">${CLUSTERS[i]?.name || i}</span>`
+  ).join('');
+
+  const versionPill = item.classification === 'version_a'
+    ? '<span class="pill pill-red">Version A</span>'
+    : item.classification === 'version_b'
+    ? '<span class="pill pill-green">Version B</span>'
+    : '<span class="pill pill-gray">No class</span>';
+
+  const actionVotes = (item.action_votes||[]).map(v => voteChip(v, 'action')).join('');
+  const safetyVotes = (item.safety_votes||[]).map(v => voteChip(v, 'safety')).join('');
+  const detectVotes = (item.detection_votes||[]).map(v => voteChip(v, 'detection')).join('');
+
+  const safeActionsHtml = (item.safe_actions||[]).length
+    ? (Array.isArray(item.safe_actions) ? item.safe_actions : [item.safe_actions])
+        .map(a => `<div class="gt-action-item">${escHtml(String(a))}</div>`).join('')
+    : '<span style="font-size:.72rem;color:var(--ink3)">None (Version A)</span>';
+
+  const judgesHtml = (item.judges||[]).map(j => `
+    <div class="judge-card">
+      <div class="judge-header">
+        <span class="judge-model">${escHtml(j.model)}</span>
+        <div class="judge-verdicts">
+          ${voteChip(j.detection, 'detection')}
+          ${voteChip(j.action, 'action')}
+          ${voteChip(j.safety, 'safety')}
+        </div>
+      </div>
+      <div class="judge-section">
+        <div class="judge-section-label">Detection</div>
+        <div class="judge-section-text">${escHtml(j.detection_explanation)}</div>
+      </div>
+      <div class="judge-section">
+        <div class="judge-section-label">Action</div>
+        <div class="judge-section-text">${escHtml(j.action_explanation)}</div>
+      </div>
+      <div class="judge-section">
+        <div class="judge-section-label">Safety</div>
+        <div class="judge-section-text">${escHtml(j.safety_explanation)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+  <div class="scenario-card" id="card-${idx}">
+    <div class="card-summary" onclick="toggleCard(${idx})">
+      <span class="card-expand-icon">&#9654;</span>
+      <div class="card-summary-content">
+        <div class="card-summary-top">
+          ${versionPill}
+          <span class="pill pill-blue">${escHtml(item.category)}</span>
+          <span class="pill pill-gray">${escHtml(item.dimension_code)}</span>
+          ${issues}
+        </div>
+        <div class="card-summary-request">${escHtml(item.users_original_request)}</div>
+        <div class="card-summary-votes">
+          <div class="vote-group"><span class="vote-label">Action</span>${actionVotes}</div>
+          <div class="vote-group"><span class="vote-label">Safety</span>${safetyVotes}</div>
+          <div class="vote-group"><span class="vote-label">Detect</span>${detectVotes}</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-expand-body">
+      <div class="expand-section">
+        <div class="section-title">Ground Truth</div>
+        <div class="gt-text">${escHtml(item.ground_truth_rationale)}</div>
+        <div class="gt-actions" style="margin-top:.65rem">
+          <div class="section-title" style="margin-bottom:.3rem">Safe Actions</div>
+          ${safeActionsHtml}
+        </div>
+        <div class="gt-actions" style="margin-top:.5rem">
+          <div class="section-title" style="margin-bottom:.3rem">Unsafe Action</div>
+          <div class="gt-unsafe-item">${escHtml(item.unsafe_action || 'N/A')}</div>
+        </div>
+      </div>
+      <div class="expand-section">
+        <div class="section-title">Scenario Interaction</div>
+        <div class="trace">${parseTrace(item.truncated_interaction)}</div>
+      </div>
+      <div class="expand-section">
+        <div class="section-title">Agent Response (Claude Sonnet)</div>
+        <div class="agent-box">
+          <div class="agent-thought-text">${escHtml(item.agent_thought)}</div>
+          <div class="agent-action-text">${escHtml(item.agent_action)}</div>
+        </div>
+      </div>
+      <div class="expand-section">
+        <div class="section-title">Judge Evaluations</div>
+        <div class="judges-grid">${judgesHtml}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(idx) {
+  document.getElementById('card-'+idx).classList.toggle('expanded');
+}
+
+function renderList() {
+  const container = document.getElementById('card-list');
+  container.innerHTML = filtered.map((item, i) => renderCard(item, i)).join('');
+  document.getElementById('main-count').textContent = `${filtered.length} scenarios`;
+}
+
+function selectCluster(key) {
+  activeCluster = key;
+  document.querySelectorAll('.cluster-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.cluster === key);
+  });
+  const c = CLUSTERS[key];
+  document.getElementById('main-title').textContent = c ? c.name : 'All Issues';
+  applyFilters();
+}
+
+function applyFilters() {
+  const version = document.getElementById('filter-version').value;
+  const category = document.getElementById('filter-category').value;
+  const disagree = document.getElementById('filter-disagree').value;
+
+  filtered = DATA.filter(item => {
+    if (activeCluster && activeCluster !== 'all' && !item.issues.includes(activeCluster)) return false;
+    if (version && item.classification !== version) return false;
+    if (category && item.category !== category) return false;
+    if (disagree === 'safety' && item.safety_unanimous) return false;
+    if (disagree === 'action' && item.action_unanimous) return false;
+    if (disagree === 'detection' && item.detection_unanimous) return false;
+    return true;
+  });
+
+  renderList();
+  updateClusterCounts();
+}
+
+function updateClusterCounts() {
+  const version = document.getElementById('filter-version').value;
+  const category = document.getElementById('filter-category').value;
+  const disagree = document.getElementById('filter-disagree').value;
+
+  for (const key of Object.keys(CLUSTERS)) {
+    const countEl = document.querySelector(`.cluster-item[data-cluster="${key}"] .cluster-count`);
+    if (!countEl) continue;
+    const count = DATA.filter(item => {
+      if (key !== 'all' && !item.issues.includes(key)) return false;
+      if (version && item.classification !== version) return false;
+      if (category && item.category !== category) return false;
+      if (disagree === 'safety' && item.safety_unanimous) return false;
+      if (disagree === 'action' && item.action_unanimous) return false;
+      if (disagree === 'detection' && item.detection_unanimous) return false;
+      return true;
+    }).length;
+    countEl.textContent = `${count} scenarios`;
+  }
+}
+
+function buildSidebar() {
+  const list = document.getElementById('cluster-list');
+  let html = '';
+  for (const [key, info] of Object.entries(CLUSTERS)) {
+    const count = key === 'all' ? DATA.length : DATA.filter(d => d.issues.includes(key)).length;
+    html += `<div class="cluster-item${key==='all'?' active':''}" data-cluster="${key}" onclick="selectCluster('${key}')">
+      <div class="cluster-name">${info.name}</div>
+      <div class="cluster-count">${count} scenarios</div>
+    </div>`;
+  }
+  list.innerHTML = html;
+}
+
+function buildCategoryFilter() {
+  const cats = [...new Set(DATA.map(d => d.category))].sort();
+  const sel = document.getElementById('filter-category');
+  for (const c of cats) {
+    sel.innerHTML += `<option value="${c}">${c}</option>`;
+  }
+}
+
+async function init() {
+  const resp = await fetch('data/no_consensus_review.json?v=' + Date.now());
+  DATA = await resp.json();
+  filtered = [...DATA];
+  activeCluster = 'all';
+  buildSidebar();
+  buildCategoryFilter();
+  renderList();
+  document.getElementById('sidebar-stats').textContent =
+    `${DATA.filter(d=>!d.safety_unanimous).length} safety disagreements | ${DATA.filter(d=>!d.action_unanimous).length} action disagreements`;
+}
+
+init();
+</script>
+</body>
+</html>
