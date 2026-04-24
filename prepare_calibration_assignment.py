@@ -16,11 +16,12 @@ final-human-review.html as `const DATA = {...}`.
 import argparse
 import json
 import random
+import zlib
 from collections import Counter, defaultdict
 from pathlib import Path
 
-CORE = ["Anna", "Orfeas", "Yu", "Christina", "Ani", "Shang Hong"]
-BONUS = ["Manos", "Chryssa", "Rico"]
+CORE = ["Anna", "Orfeas", "Yu", "Christina", "Ani", "Rico"]
+BONUS = ["Manos", "Chryssa", "Shang Hong"]
 SEED = 42
 BONUS_SIZE = 50
 
@@ -222,7 +223,7 @@ def main():
     ordered_assignments = {}
     for name, rids in {**core_assignments, **bonus_assignments}.items():
         items = [by_rid[r] for r in rids]
-        ordered = order_items(items, SEED + hash(name) % 10000)
+        ordered = order_items(items, SEED + zlib.crc32(name.encode('utf-8')))
         ordered_assignments[name] = [it["row_id"] for it in ordered]
 
     print("\nPer-annotator load:")
