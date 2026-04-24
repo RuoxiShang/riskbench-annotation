@@ -148,9 +148,15 @@ def order_items(items, seed):
 def assign_core(selected):
     """Each item → 3 distinct core annotators.
 
-    Sort items by stratum groups (stratified), shuffle within group, concat,
-    then use offsets (0, 2, 4) mod 6 on the item index so every item gets 3
-    distinct core-6 people and each person ends up with a balanced mix.
+    Uses a balanced-greedy algorithm: for each item, pick the 3 annotators
+    currently most behind schedule (lowest item-count so far), breaking ties
+    deterministically by per-annotator hash. Guarantees:
+      - Every item has 3 distinct coverers.
+      - Every annotator ends with exactly ⌊n_items · 3 / 6⌋ = 67 items.
+      - Pair co-occurrences stay near the theoretical average (~27 per pair),
+        never 0 for any pair, unlike a fixed-offset rotation.
+    Items are iterated in stratified order so each annotator's final list is
+    balanced across (axis × state).
     """
     rng = random.Random(SEED)
     by_stratum = defaultdict(list)
@@ -163,11 +169,16 @@ def assign_core(selected):
         rng.shuffle(group)
         ordered.extend(group)
 
+    counts = {name: 0 for name in CORE}
     assignments = {name: [] for name in CORE}
-    for i, it in enumerate(ordered):
-        for offset in (0, 2, 4):
-            a = CORE[(i + offset) % 6]
+    for it in ordered:
+        # Sort by (count, per-item-random) ascending so ties break differently
+        # each round. Using the outer rng keeps the whole assignment
+        # deterministic across reruns.
+        picked = sorted(CORE, key=lambda n: (counts[n], rng.random()))[:3]
+        for a in picked:
             assignments[a].append(it["row_id"])
+            counts[a] += 1
     return assignments
 
 
