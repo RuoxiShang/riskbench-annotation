@@ -552,6 +552,7 @@ let myRowIds = [];
 let si = 0;
 let labels = {};          // { row_id: {label, confidence, notes} }
 let axesSeen = {};        // { axis: true } — for auto-expand rubric on first hit
+let lastSynced = {};      // { row_id: {label, confidence, notes} last beaconed }
 
 function storageKey() { return `rb_review_${annotator}`; }
 function loadState() {
@@ -561,12 +562,13 @@ function loadState() {
       const parsed = JSON.parse(r);
       labels = parsed.labels || {};
       axesSeen = parsed.axesSeen || {};
+      lastSynced = parsed.lastSynced || {};
       si = parsed.si || 0;
     }
-  } catch(e) { labels = {}; axesSeen = {}; si = 0; }
+  } catch(e) { labels = {}; axesSeen = {}; lastSynced = {}; si = 0; }
 }
 function saveState() {
-  localStorage.setItem(storageKey(), JSON.stringify({labels, axesSeen, si}));
+  localStorage.setItem(storageKey(), JSON.stringify({labels, axesSeen, lastSynced, si}));
 }
 
 function getLabel(rid) {
@@ -887,7 +889,22 @@ function saveNotes() {
 function syncIfComplete() {
   if (myRowIds.length === 0) return;
   const rid = myRowIds[si];
-  if (isComplete(rid)) syncSheet();
+  if (!isComplete(rid)) return;
+  // Skip if nothing actually changed since the last beacon for this row.
+  const cur = labels[rid];
+  const prev = lastSynced[rid] || {};
+  if (cur.label === prev.label
+      && cur.confidence === prev.confidence
+      && (cur.notes || '') === (prev.notes || '')) {
+    return;
+  }
+  syncSheet();
+  lastSynced[rid] = {
+    label: cur.label,
+    confidence: cur.confidence,
+    notes: cur.notes || '',
+  };
+  saveState();
 }
 
 function go(dir) {
