@@ -185,15 +185,8 @@ body {
   background: var(--card); }
 .col-rubric .overline { margin-bottom: .85rem; }
 
-/* Toggle state — rubric hidden, annotation column takes the freed space */
-.wrap.rubric-hidden .col-rubric { display: none; }
-.wrap.rubric-hidden .split { grid-template-columns: minmax(0, 1fr) 360px; }
-@media (max-width: 1360px) {
-  .wrap.rubric-hidden .split { grid-template-columns: minmax(0, 1fr) 400px; }
-}
-@media (max-width: 1000px) {
-  .wrap.rubric-hidden .split { grid-template-columns: 1fr; }
-}
+/* Toggle state — fold just the rubric body, keep the header + panel in place */
+.wrap.rubric-hidden .col-rubric .rubric { display: none; }
 
 /* Rubric-column header: title + Hide button on the same row */
 .rubric-header { display: flex; justify-content: space-between; align-items: baseline;
@@ -416,7 +409,6 @@ details.fold[open] summary::before { transform: rotate(90deg); }
         <span class="sep">·</span>
         <span id="done-count">0</span> complete
       </div>
-      <button class="toggle-btn" id="rubric-show-btn" onclick="toggleRubric()" style="display:none">Show rubric</button>
       <button class="export-btn" onclick="exportData()">Export JSON</button>
     </div>
   </div>
@@ -1026,10 +1018,8 @@ function applyRubricState() {
   const hidden = localStorage.getItem(RUBRIC_HIDDEN_KEY) === '1';
   const wrap = document.getElementById('main');
   wrap.classList.toggle('rubric-hidden', hidden);
-  const hideBtn = document.getElementById('rubric-hide-btn');
-  const showBtn = document.getElementById('rubric-show-btn');
-  if (showBtn) showBtn.style.display = hidden ? '' : 'none';
-  if (hideBtn) hideBtn.style.display = hidden ? 'none' : '';
+  const btn = document.getElementById('rubric-hide-btn');
+  if (btn) btn.textContent = hidden ? 'Show' : 'Hide';
 }
 function toggleRubric() {
   const cur = localStorage.getItem(RUBRIC_HIDDEN_KEY) === '1';
