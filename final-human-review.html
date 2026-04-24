@@ -744,6 +744,7 @@ function clearNavHint() {
 
 function jumpTo(idx) {
   if (idx < 0 || idx >= myRowIds.length || idx === si) return;
+  syncIfComplete();
   si = idx;
   saveState();
   render();
@@ -859,33 +860,40 @@ function axisDescriptions(axis) {
 // ============================================================
 //  INTERACTIONS
 // ============================================================
+// We sync once per item, triggered when the user navigates away (prev / next
+// / nav-grid jump) and only if the item is fully annotated (label +
+// confidence). Individual clicks and keystrokes do NOT sync — they only
+// update local state. This avoids the per-keystroke row explosion in the
+// sheet.
 function setLabel(v) {
   const it = curItem();
   getLabel(it.row_id).label = v;
   saveState();
   render();
-  syncSheet();
 }
 function setConfidence(c) {
   const it = curItem();
   getLabel(it.row_id).confidence = c;
   saveState();
   render();
-  syncSheet();
 }
-let _notesTimer = null;
 function saveNotes() {
   const it = curItem();
   getLabel(it.row_id).notes = document.getElementById('notes').value;
   saveState();
-  clearTimeout(_notesTimer);
-  _notesTimer = setTimeout(syncSheet, 1500);
   updateStatus();
+}
+
+function syncIfComplete() {
+  if (myRowIds.length === 0) return;
+  const rid = myRowIds[si];
+  if (isComplete(rid)) syncSheet();
 }
 
 function go(dir) {
   const next = si + dir;
   if (next < 0 || next >= myRowIds.length) return;
+  syncIfComplete();
   si = next;
   saveState();
   render();
