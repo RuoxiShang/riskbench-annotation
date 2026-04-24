@@ -93,7 +93,7 @@ body {
 /* ===================================================================== */
 /*  Outer layout                                                         */
 /* ===================================================================== */
-.wrap { max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem 0; }
+.wrap { max-width:1480px; margin:0 auto; padding:1.25rem 1.5rem 0; }
 
 /* Top rail — progress + nav + header */
 .rail { margin-bottom: 1rem; }
@@ -171,18 +171,34 @@ body {
 .pills { display:flex; gap:.7rem; flex-wrap:wrap; align-items:center; }
 
 /* ===================================================================== */
-/*  Two-column split                                                     */
+/*  Three-column split: context · annotation · rubric                    */
 /* ===================================================================== */
-.split { display:grid; grid-template-columns: minmax(0, 1fr) var(--sidebar-w); }
+.split { display:grid; grid-template-columns: minmax(0, 1fr) 320px 360px; }
 .col-main { padding:1.5rem 1.75rem; min-width: 0; border-right:1px solid var(--border); }
-.col-side { padding:1.5rem 1.5rem;
+.col-side { padding:1.5rem 1.25rem;
+  position: sticky; top: 1rem; align-self: start;
+  max-height: calc(100vh - 5rem); overflow-y: auto;
+  background: var(--card); border-right: 1px solid var(--border); }
+.col-rubric { padding:1.5rem 1.25rem;
   position: sticky; top: 1rem; align-self: start;
   max-height: calc(100vh - 5rem); overflow-y: auto;
   background: var(--card); }
+.col-rubric .overline { margin-bottom: .85rem; }
+
+/* Medium screens: collapse annotation + rubric into one right column. */
+@media (max-width: 1360px) {
+  .split { grid-template-columns: minmax(0, 1fr) 400px; }
+  .col-rubric { grid-column: 2; position: static; max-height: none; overflow: visible;
+    border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .col-side { border-right: none; }
+}
+/* Narrow: single-column stack. */
 @media (max-width: 1000px) {
   .split { grid-template-columns: 1fr; }
   .col-main { border-right:none; border-bottom:1px solid var(--border); }
-  .col-side { position:static; max-height: none; overflow: visible; }
+  .col-side { position:static; max-height: none; overflow: visible;
+    border-right: none; border-bottom: 1px solid var(--border); }
+  .col-rubric { grid-column: auto; }
 }
 
 /* Section & overline */
@@ -415,18 +431,18 @@ details.fold[open] summary::before { transform: rotate(90deg); }
           <textarea class="notes-input" id="notes" placeholder="Anything ambiguous? Multiple plausible labels? Schema issue (multi-action)?" oninput="saveNotes()"></textarea>
         </div>
         <hr class="side-divider">
-        <div class="side-block">
-          <details class="fold" id="rubric-fold">
-            <summary id="rubric-summary">Rubric reference</summary>
-            <div class="fold-body rubric" id="rubric-body"></div>
-          </details>
-        </div>
         <div class="side-block" id="rationale-section">
           <details class="fold" id="rationale-fold">
             <summary>Ground-truth rationale</summary>
             <div class="fold-body"><div class="rationale" id="rationale-body"></div></div>
           </details>
         </div>
+      </aside>
+
+      <!-- Right column: rubric, always visible -->
+      <aside class="col-rubric">
+        <div class="overline" id="rubric-title">Rubric reference</div>
+        <div class="rubric" id="rubric-body"></div>
       </aside>
     </div>
   </div>
@@ -836,19 +852,11 @@ function render() {
   // Target section
   document.getElementById('target-section').innerHTML = targetSectionHtml(it);
 
-  // Rubric (right side)
-  document.getElementById('rubric-summary').textContent = RUBRIC_TITLES[axis];
+  // Rubric — always-visible right column, axis-tinted
+  document.getElementById('rubric-title').textContent = RUBRIC_TITLES[axis];
   const rubricBody = document.getElementById('rubric-body');
-  rubricBody.className = `fold-body rubric axis-${axis}`;
+  rubricBody.className = `rubric axis-${axis}`;
   rubricBody.innerHTML = RUBRICS[axis];
-  const rubricFold = document.getElementById('rubric-fold');
-  if (!axesSeen[axis]) {
-    rubricFold.open = true;
-    axesSeen[axis] = true;
-    saveState();
-  } else {
-    rubricFold.open = false;
-  }
 
   // Ground-truth rationale (right side) — always shown; default open state
   // varies by axis. Safety requires it, so it's open by default. Detection
