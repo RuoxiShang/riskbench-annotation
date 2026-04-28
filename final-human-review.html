@@ -813,6 +813,7 @@ let si = 0;
 let labels = {};          // { row_id: {label, confidence, notes} }
 let axesSeen = {};        // { axis: true } — for auto-expand rubric on first hit
 let lastSynced = {};      // { row_id: {label, confidence, notes} last beaconed }
+let pendingSyncImages = []; // Keep pixel beacons alive until the browser finishes them.
 
 function storageKey() { return `rb_review_${annotator}`; }
 function loadState() {
@@ -1135,12 +1136,14 @@ function setLabel(v) {
   const it = curItem();
   getLabel(it.row_id).label = v;
   saveState();
+  syncIfComplete();
   render();
 }
 function setConfidence(c) {
   const it = curItem();
   getLabel(it.row_id).confidence = c;
   saveState();
+  syncIfComplete();
   render();
 }
 function saveNotes() {
@@ -1150,7 +1153,7 @@ function saveNotes() {
   updateStatus();
 }
 
-function syncIfComplete() {
+function syncIfComplete(options = {}) {
   if (myRowIds.length === 0) return;
   const rid = myRowIds[si];
   if (!isComplete(rid)) return;
@@ -1162,7 +1165,7 @@ function syncIfComplete() {
       && (cur.notes || '') === (prev.notes || '')) {
     return;
   }
-  syncSheet();
+  if (!syncSheet(options)) return;
   lastSynced[rid] = {
     label: cur.label,
     confidence: cur.confidence,
@@ -1229,12 +1232,12 @@ function setRubricVersion(v) {
 // ============================================================
 //  GOOGLE SHEETS SYNC
 // ============================================================
-function syncSheet() {
+function buildSyncPayload() {
   if (!GSHEET || !annotator) return;
   const it = curItem();
   const lab = getLabel(it.row_id);
   const s = it.primary_stratum || {};
-  const p = new URLSearchParams({
+  return {
     task: 'final_human_review',
     ui_version: UI_VERSION,
     session_id: SID,
@@ -1252,14 +1255,35 @@ function syncSheet() {
     notes: lab.notes || '',
     completed: isComplete(it.row_id) ? 'yes' : 'no',
     timestamp: new Date().toISOString(),
-  }).toString();
-  new Image().src = `${GSHEET}?${p}`;
+  };
+}
+
+function syncSheet(options = {}) {
+  const payload = buildSyncPayload();
+  if (!payload) return false;
+
+  // Use sendBeacon when the page is being hidden/unloaded; the Apps Script
+  // accepts JSON POST bodies. Normal in-page sync still uses the pixel method.
+  if (options.beacon && navigator.sendBeacon) {
+    const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' });
+    if (navigator.sendBeacon(GSHEET, blob)) return true;
+  }
+
+  const p = new URLSearchParams(payload).toString();
+  const img = new Image();
+  pendingSyncImages.push(img);
+  img.onload = img.onerror = () => {
+    pendingSyncImages = pendingSyncImages.filter(x => x !== img);
+  };
+  img.src = `${GSHEET}?${p}`;
+  return true;
 }
 
 // ============================================================
 //  EXPORT
 // ============================================================
 function exportData() {
+  syncIfComplete({ beacon: true });
   const out = {
     annotator,
     exported_at: new Date().toISOString(),
@@ -1300,6 +1324,13 @@ document.addEventListener('keydown', e => {
   // Numbers 1-3 → confidence (1 Unsure · 2 Leaning · 3 Confident)
   const n = parseInt(e.key);
   if (n >= 1 && n <= 3) setConfidence(n);
+});
+
+window.addEventListener('pagehide', () => {
+  syncIfComplete({ beacon: true });
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') syncIfComplete({ beacon: true });
 });
 
 // ============================================================
