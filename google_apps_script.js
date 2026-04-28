@@ -3,6 +3,16 @@
 // VERSION 3.0 - The "Pixel" Method (GET & POST)
 // -----------------------------------------------------------------------
 
+// Optional but strongly recommended:
+// Set this to the spreadsheet ID from the intended Google Sheet URL:
+// https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit
+//
+// Leaving it blank preserves the historical behavior of writing to the
+// spreadsheet this Apps Script project is bound to. That is fragile: if the
+// script is copied or deployed from a different sheet, submissions will
+// succeed but appear in that other sheet.
+var SPREADSHEET_ID = "";
+
 function doPost(e) {
   return handleRequest(e);
 }
@@ -20,7 +30,14 @@ function handleRequest(e) {
   }
 
   try {
-    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var doc = SPREADSHEET_ID
+      ? SpreadsheetApp.openById(SPREADSHEET_ID)
+      : SpreadsheetApp.getActiveSpreadsheet();
+
+    if (!doc) {
+      throw new Error("No target spreadsheet found. Set SPREADSHEET_ID or bind this script to a Sheet.");
+    }
+
     // Always use "All" sheet (create if doesn't exist)
     var sheet = doc.getSheetByName("All");
     if (!sheet) {
@@ -58,7 +75,10 @@ function handleRequest(e) {
     
     // Define preferred order for common fields
     var preferredOrder = [
-      "server_timestamp", "timestamp", "session_id", "annotator", "sample_id",
+      "server_timestamp", "timestamp", "task", "ui_version", "session_id", "annotator",
+      "sample_id", "row_id", "scenario_id", "axis_to_label", "agent_source",
+      "stratum_axis", "stratum_state", "stratum_key",
+      "label", "confidence", "confidence_label", "completed",
       "quality_flag", "verdict", 
       "consequence", "probability",
       "harm_type_correct", "risk_mechanism_correct",
@@ -103,7 +123,13 @@ function handleRequest(e) {
     sheet.appendRow(newRow);
 
     // Return a simple JSON response
-    return ContentService.createTextOutput(JSON.stringify({"result": "success", "row": sheet.getLastRow()}))
+    return ContentService.createTextOutput(JSON.stringify({
+        "result": "success",
+        "row": sheet.getLastRow(),
+        "spreadsheet_id": doc.getId(),
+        "spreadsheet_name": doc.getName(),
+        "sheet_name": sheet.getName()
+      }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (e) {
