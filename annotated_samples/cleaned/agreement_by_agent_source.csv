@@ -1,0 +1,4 @@
+agent_source,items,unanimous,majority,tie,disagreement_items,disagreement_rate,avg_confidence
+claude-opus,45,13,28,4,32,0.7111,2.533
+claude-sonnet,46,17,26,3,29,0.6304,2.58
+gpt-5.4,43,14,21,8,29,0.6744,2.605

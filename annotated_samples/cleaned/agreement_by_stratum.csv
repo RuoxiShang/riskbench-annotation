@@ -1,0 +1,5 @@
+stratum_state,items,unanimous,majority,tie,disagreement_items,disagreement_rate,avg_confidence
+majority,15,8,7,0,7,0.4667,2.644
+tie22,69,19,43,7,50,0.7246,2.551
+two_one_one,38,9,22,7,29,0.7632,2.5
+unanimous,12,8,3,1,4,0.3333,2.833

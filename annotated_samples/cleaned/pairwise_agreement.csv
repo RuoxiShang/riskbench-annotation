@@ -1,0 +1,16 @@
+annotator_a,annotator_b,overlap_items,completed_overlap,same_label,different_label,agreement_rate
+Anna,Orfeas,23,23,8,15,0.3478
+Anna,Yu,29,29,15,14,0.5172
+Anna,Christina,24,24,15,9,0.625
+Anna,Ani,31,31,18,13,0.5806
+Anna,Rico,27,27,15,12,0.5556
+Orfeas,Yu,27,27,14,13,0.5185
+Orfeas,Christina,32,32,18,14,0.5625
+Orfeas,Ani,23,23,13,10,0.5652
+Orfeas,Rico,29,29,12,17,0.4138
+Yu,Christina,28,28,14,14,0.5
+Yu,Ani,27,27,13,14,0.4815
+Yu,Rico,23,23,7,16,0.3043
+Christina,Ani,24,24,14,10,0.5833
+Christina,Rico,26,26,14,12,0.5385
+Ani,Rico,29,29,17,12,0.5862

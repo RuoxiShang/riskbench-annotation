@@ -1,0 +1,4 @@
+axis_to_label,items,unanimous,majority,tie,disagreement_items,disagreement_rate,avg_confidence
+action,52,21,25,6,31,0.5962,2.558
+detection,66,15,42,9,51,0.7727,2.571
+safety,16,8,8,0,8,0.5,2.625

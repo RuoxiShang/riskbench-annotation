@@ -1,0 +1,129 @@
+{
+  "raw_rows": 757,
+  "cleaned_latest_expected_rows": 258,
+  "removed_duplicate_or_noise_rows": 499,
+  "unique_latest_all_keys": 261,
+  "unknown_latest_rows_excluded": [
+    [
+      "Codex",
+      "0"
+    ],
+    [
+      "Codex Probe",
+      "0"
+    ],
+    [
+      "Codex Deployment Check",
+      "0"
+    ]
+  ],
+  "completion_by_annotator": {
+    "Anna": {
+      "expected": 67,
+      "completed": 67,
+      "missing": 0
+    },
+    "Orfeas": {
+      "expected": 67,
+      "completed": 22,
+      "missing": 45
+    },
+    "Yu": {
+      "expected": 67,
+      "completed": 15,
+      "missing": 52
+    },
+    "Christina": {
+      "expected": 67,
+      "completed": 67,
+      "missing": 0
+    },
+    "Ani": {
+      "expected": 67,
+      "completed": 22,
+      "missing": 45
+    },
+    "Rico": {
+      "expected": 67,
+      "completed": 65,
+      "missing": 2
+    },
+    "Manos": {
+      "expected": 50,
+      "completed": 0,
+      "missing": 50
+    },
+    "Chryssa": {
+      "expected": 50,
+      "completed": 0,
+      "missing": 50
+    },
+    "Shang Hong": {
+      "expected": 50,
+      "completed": 0,
+      "missing": 50
+    }
+  },
+  "submission_count_histogram_by_item": {
+    "0": 2,
+    "1": 38,
+    "2": 62,
+    "3": 32
+  },
+  "consensus_status_all_134_items": {
+    "single_label": 38,
+    "unanimous": 54,
+    "majority": 15,
+    "tie": 25,
+    "no_labels": 2
+  },
+  "consensus_status_items_with_2plus_labels": {
+    "unanimous": 54,
+    "majority": 15,
+    "tie": 25
+  },
+  "consensus_status_items_with_3plus_labels": {
+    "majority": 15,
+    "unanimous": 15,
+    "tie": 2
+  },
+  "consensus_by_axis_all_items": {
+    "detection": {
+      "single_label": 21,
+      "unanimous": 26,
+      "tie": 12,
+      "majority": 6,
+      "no_labels": 1
+    },
+    "action": {
+      "unanimous": 20,
+      "tie": 12,
+      "single_label": 17,
+      "majority": 2,
+      "no_labels": 1
+    },
+    "safety": {
+      "majority": 7,
+      "unanimous": 8,
+      "tie": 1
+    }
+  },
+  "submission_count_by_axis": {
+    "detection": {
+      "0": 1,
+      "1": 21,
+      "2": 32,
+      "3": 12
+    },
+    "action": {
+      "0": 1,
+      "1": 17,
+      "2": 27,
+      "3": 7
+    },
+    "safety": {
+      "2": 3,
+      "3": 13
+    }
+  }
+}
