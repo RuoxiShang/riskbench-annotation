@@ -256,6 +256,8 @@ button { cursor: pointer; }
 .item-row.majority .dot { background: #F59E0B; }
 .item-row.unanimous .dot { background: #16A34A; }
 .item-row.corrected .dot { box-shadow: 0 0 0 2px #111827 inset, 0 0 0 2px #fff; }
+.item-row.dropped:not(.sel) { opacity: .55; }
+.item-row.dropped:not(.sel) .rid { text-decoration: line-through; text-decoration-color: var(--ink3); }
 .item-row .main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .item-row .main .top { display: flex; align-items: baseline; gap: .4rem; min-width: 0; }
 .item-row .rid { font-family: var(--mono); font-size: .74rem; font-weight: 700; white-space: nowrap; }
@@ -762,6 +764,11 @@ kbd {
   color: var(--warn);
   border-color: #FCD34D;
 }
+.final-badge.dropped {
+  background: var(--ink2);
+  color: #fff;
+  border-color: var(--ink2);
+}
 .final-badge .badge-label { font-family: var(--mono); font-size: .85rem; letter-spacing: 0; }
 .decision-status { font-size: .66rem; color: var(--ink3); }
 .decision-meta-line { font-size: .73rem; color: var(--ink3); margin-top: -.15rem; }
@@ -879,6 +886,12 @@ kbd {
   background: var(--ink);
   color: #fff;
   border-color: var(--ink);
+}
+.lchip.dropped {
+  background: var(--ink2);
+  color: #fff;
+  border-color: var(--ink2);
+  letter-spacing: .04em;
 }
 .item-row.sel .lchip { background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.25); }
 .item-row.sel .lchip.final { background: #fff; color: var(--ink); border-color: #fff; }
@@ -1142,6 +1155,7 @@ kbd {
               <div class="checks" id="issue-tags"></div>
               <div class="quick-row" style="margin-top:.65rem">
                 <button class="btn ghost" onclick="clearCalibration()">Clear final label</button>
+                <button class="btn ghost" id="btn-drop" onclick="toggleDropped()">Drop this row</button>
               </div>
               <span id="calibration-status" style="display:none"></span>
               <span id="calibration-summary-line" style="display:none"></span>
@@ -1188,6 +1202,7 @@ kbd {
       <div class="cs-row"><span class="keys"><kbd>H</kbd></span><span>Use human consensus</span></div>
       <div class="cs-row"><span class="keys"><kbd>J</kbd></span><span>Use judge plurality</span></div>
       <div class="cs-row"><span class="keys"><kbd>K</kbd></span><span>Clear final label</span></div>
+      <div class="cs-row"><span class="keys"><kbd>X</kbd></span><span>Drop / undrop this row</span></div>
       <div class="cs-row"><span class="keys"><kbd>←</kbd> <kbd>→</kbd></span><span>Prev / Next item</span></div>
       <div class="cs-row"><span class="keys"><kbd>Enter</kbd></span><span>Jump to next undecided</span></div>
       <div class="cs-row"><span class="keys"><kbd>/</kbd></span><span>Focus search</span></div>
@@ -1247,8 +1262,9 @@ const FILTER_DEFS = [
   ]],
   ['calibrated', 'Calibrated', [
     ['all', 'All'],
-    ['todo', 'Needs label'],
-    ['done', 'Done'],
+    ['todo', 'Needs decision'],
+    ['done', 'Calibrated'],
+    ['dropped', 'Dropped'],
   ]],
   ['stratum', 'Stratum', [
     ['all', 'All'],
@@ -1312,10 +1328,13 @@ function csvEsc(s) {
 function itemId(item) { return String(item.row_id); }
 function getCal(item) {
   const id = itemId(item);
-  if (!calibrated[id]) calibrated[id] = { label: '', rationale: '', issue_tags: [], updated_at: '' };
+  if (!calibrated[id]) calibrated[id] = { label: '', rationale: '', issue_tags: [], dropped: false, updated_at: '' };
+  if (calibrated[id].dropped === undefined) calibrated[id].dropped = false;
   return calibrated[id];
 }
-function isDone(item) { return !!getCal(item).label; }
+function isLabeled(item) { return !!getCal(item).label; }
+function isDropped(item) { return !!getCal(item).dropped; }
+function isDone(item) { return isLabeled(item) || isDropped(item); }
 function getCorrection(item, annotator) {
   const row = corrections[itemId(item)] || {};
   return row[annotator] || { label: '', note: '', updated_at: '' };
@@ -1541,8 +1560,9 @@ function matchesFilters(item) {
   }
   if (filters.axis !== 'all' && item.axis_to_label !== filters.axis) return false;
   if (filters.stratum !== 'all' && item.stratum_state !== filters.stratum) return false;
-  if (filters.calibrated === 'done' && !isDone(item)) return false;
+  if (filters.calibrated === 'done' && !isLabeled(item)) return false;
   if (filters.calibrated === 'todo' && isDone(item)) return false;
+  if (filters.calibrated === 'dropped' && !isDropped(item)) return false;
   if (filters.correction !== 'all') {
     const changed = hasLabelCorrection(item);
     const refined = effectiveHuman(item);
@@ -1600,9 +1620,14 @@ function renderList() {
     const done = isDone(item);
     const cal = getCal(item);
     const refined = effectiveHuman(item);
-    const cls = ['item-row', refined.consensus_status, done ? 'done' : '', hasLabelCorrection(item) ? 'corrected' : '', idx === currentIndex ? 'sel' : ''].join(' ');
+    const dropped = cal.dropped;
+    const cls = ['item-row', refined.consensus_status, done ? 'done' : '', dropped ? 'dropped' : '', hasLabelCorrection(item) ? 'corrected' : '', idx === currentIndex ? 'sel' : ''].join(' ');
     const refinedLabel = refined.consensus_label || '';
     const calLabel = cal.label || '';
+    let finalSlot;
+    if (dropped) finalSlot = '<span class="lchip dropped">DROP</span>';
+    else if (calLabel) finalSlot = labelChip(calLabel, 'final');
+    else finalSlot = '<span class="row-todo">—</span>';
     return `<button class="${cls}" onclick="jumpTo(${idx})">
       <span class="dot"></span>
       <span class="main">
@@ -1615,7 +1640,7 @@ function renderList() {
       <span class="row-labels">
         ${labelChip(refinedLabel)}
         <span class="row-arrow">→</span>
-        ${calLabel ? labelChip(calLabel, 'final') : '<span class="row-todo">—</span>'}
+        ${finalSlot}
       </span>
     </button>`;
   }).join('');
@@ -1650,7 +1675,10 @@ function renderDecisionBand(item) {
     `${item.category || '—'} / ${item.subcategory || '—'} · stratum ${item.stratum_state} ${item.stratum_key}${correctionPart}`;
 
   const finalEl = document.getElementById('db-final');
-  if (cal.label) {
+  if (cal.dropped) {
+    finalEl.className = 'final-badge dropped';
+    finalEl.innerHTML = `<span>Dropped</span>`;
+  } else if (cal.label) {
     finalEl.className = 'final-badge set';
     finalEl.innerHTML = `<span>Final</span><span class="badge-label">${esc(cal.label)}</span>`;
   } else {
@@ -1678,13 +1706,15 @@ function renderDecisionBand(item) {
     <span class="match-tag ${matchTag.tag}">${matchTag.text}</span>
   `;
 
-  const totalDone = DATA.items.filter(isDone).length;
+  const totalLabeled = DATA.items.filter(isLabeled).length;
+  const totalDropped = DATA.items.filter(isDropped).length;
   const totalCor = correctedAnnotationCount(DATA.items);
   const visibleIdx = filtered.indexOf(item);
   const visibleTotal = filtered.length;
   document.getElementById('db-progress').innerHTML = `
     <span><span class="pg-num">${visibleIdx + 1}</span> of ${visibleTotal} visible</span>
-    <span><span class="pg-num">${totalDone}</span>/${DATA.items.length} calibrated</span>
+    <span><span class="pg-num">${totalLabeled}</span>/${DATA.items.length} calibrated</span>
+    ${totalDropped ? `<span><span class="pg-num">${totalDropped}</span> dropped</span>` : ''}
     <span><span class="pg-num">${totalCor}</span> corrections</span>
   `;
 }
@@ -1781,7 +1811,10 @@ function renderTabBadges(item) {
   const cal = getCal(item);
   const cmp = item.comparison;
   const decideBadge = document.getElementById('tab-badge-decide');
-  if (cal.label) {
+  if (cal.dropped) {
+    decideBadge.textContent = 'drop';
+    decideBadge.className = 'tab-badge';
+  } else if (cal.label) {
     decideBadge.textContent = cal.label;
     decideBadge.className = 'tab-badge done';
   } else {
@@ -1817,6 +1850,8 @@ function renderCalibration(item) {
     const checked = (cal.issue_tags || []).includes(tag) ? 'checked' : '';
     return `<label class="check"><input type="checkbox" ${checked} onchange="toggleIssueTag('${esc(tag)}', this.checked)"> ${esc(tag)}</label>`;
   }).join('');
+  const dropBtn = document.getElementById('btn-drop');
+  if (dropBtn) dropBtn.textContent = cal.dropped ? 'Undo drop' : 'Drop this row';
   renderShortcuts(item);
 }
 function switchTab(name) {
@@ -1881,7 +1916,15 @@ function updateCal(item, patch) {
 function setCalibratedLabel(label) {
   const item = currentItem();
   if (!item) return;
-  updateCal(item, { label });
+  updateCal(item, { label, dropped: false });
+  render();
+}
+function toggleDropped() {
+  const item = currentItem();
+  if (!item) return;
+  const cal = getCal(item);
+  const nowDropped = !cal.dropped;
+  updateCal(item, { dropped: nowDropped, label: nowDropped ? '' : cal.label });
   render();
 }
 function saveRationale(rationale) {
@@ -1906,6 +1949,7 @@ function useHumanConsensus() {
   if (!item || !refined.consensus_label || refined.consensus_status === 'tie') return;
   updateCal(item, {
     label: refined.consensus_label,
+    dropped: false,
     rationale: getCal(item).rationale || `Accepted refined human ${refined.consensus_status}: ${countText(refined.label_counts)}.`,
   });
   render();
@@ -1915,6 +1959,7 @@ function useJudgePlurality() {
   if (!item || !item.comparison.judge_plurality_label || item.comparison.judge_vote_status === 'tie') return;
   updateCal(item, {
     label: item.comparison.judge_plurality_label,
+    dropped: false,
     rationale: getCal(item).rationale || `Accepted judge ${item.comparison.judge_vote_status}: ${countText(item.judge.target.vote_summary.counts)}.`,
   });
   render();
@@ -1922,7 +1967,7 @@ function useJudgePlurality() {
 function clearCalibration() {
   const item = currentItem();
   if (!item) return;
-  calibrated[itemId(item)] = { label: '', rationale: '', issue_tags: [], updated_at: new Date().toISOString() };
+  calibrated[itemId(item)] = { label: '', rationale: '', issue_tags: [], dropped: false, updated_at: new Date().toISOString() };
   saveCalibrated();
   render();
 }
@@ -1969,6 +2014,7 @@ function exportRows() {
       judge_plurality_label: item.comparison.judge_plurality_label,
       judge_label_counts: countText(item.judge.target.vote_summary.counts),
       calibrated_label: cal.label || '',
+      dropped: cal.dropped ? 'yes' : 'no',
       calibrated_rationale: cal.rationale || '',
       issue_tags: (cal.issue_tags || []).join(';'),
       updated_at: cal.updated_at || '',
@@ -2119,6 +2165,7 @@ document.addEventListener('keydown', e => {
   if (k === 'h') { useHumanConsensus(); e.preventDefault(); return; }
   if (k === 'j') { useJudgePlurality(); e.preventDefault(); return; }
   if (k === 'k') { clearCalibration(); e.preventDefault(); return; }
+  if (k === 'x') { toggleDropped(); e.preventDefault(); return; }
 });
 loadCalibrated();
 loadCorrections();
