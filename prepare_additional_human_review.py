@@ -231,16 +231,26 @@ def replace_once(text: str, pattern: str, replacement: str, label: str) -> str:
     return new_text
 
 
+def storage_prefix(task: str) -> str:
+    return "rb_" + re.sub(r"[^A-Za-z0-9_]+", "_", task).strip("_")
+
+
+def title_from_task(task: str) -> str:
+    return task.replace("_", " ").title().replace("Round2", "Round 2")
+
+
 def build_html(template: str, bundle: dict, task: str, ui_version: str) -> str:
     data_json = json.dumps(bundle, ensure_ascii=False, separators=(",", ":"))
+    title = title_from_task(task)
+    prefix = storage_prefix(task)
     html = template
     html = html.replace(
         "<title>RiskBench — Final Human Review</title>",
-        "<title>RiskBench — Additional Human Review</title>",
+        f"<title>RiskBench — {title}</title>",
     )
     html = html.replace(
         '<div class="login-title">Final Human Review</div>',
-        '<div class="login-title">Additional Human Review</div>',
+        f'<div class="login-title">{title}</div>',
     )
     html = replace_once(
         html,
@@ -251,7 +261,7 @@ def build_html(template: str, bundle: dict, task: str, ui_version: str) -> str:
     html = replace_once(
         html,
         r"const SYNC_SCHEMA_VERSION = '[^']+';",
-        "const SYNC_SCHEMA_VERSION = '2026-05-07-additional-review-v1';",
+        "const SYNC_SCHEMA_VERSION = '2026-05-07-final-human-review-round2-v1';",
         "SYNC_SCHEMA_VERSION",
     )
     html, count = re.subn(
@@ -266,21 +276,21 @@ def build_html(template: str, bundle: dict, task: str, ui_version: str) -> str:
     html = replace_once(
         html,
         r"function storageKey\(\) \{ return `rb_review_\$\{annotator\}`; \}",
-        "function storageKey() { return `rb_additional_review_${annotator}`; }",
+        f"function storageKey() {{ return `{prefix}_${{annotator}}`; }}",
         "storageKey",
     )
     html = html.replace(
         "const RUBRIC_HIDDEN_KEY  = 'rb_rubric_hidden';",
-        "const RUBRIC_HIDDEN_KEY  = 'rb_additional_rubric_hidden';",
+        f"const RUBRIC_HIDDEN_KEY  = '{prefix}_rubric_hidden';",
     )
     html = html.replace(
         "const RUBRIC_VERSION_KEY = 'rb_rubric_version';",
-        "const RUBRIC_VERSION_KEY = 'rb_additional_rubric_version';",
+        f"const RUBRIC_VERSION_KEY = '{prefix}_rubric_version';",
     )
     html = html.replace("task: 'final_human_review'", f"task: '{task}'")
     html = html.replace(
         "review_${annotator.replace(/\\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.json",
-        "additional_review_${annotator.replace(/\\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.json",
+        f"{task}_${{annotator.replace(/\\s+/g,'_')}}_${{new Date().toISOString().slice(0,10)}}.json",
     )
     return html
 
@@ -309,10 +319,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", default=DEFAULT_SOURCE)
     parser.add_argument("--template", default="annotation/final-human-review.html")
-    parser.add_argument("--out-data", default="annotation/data/additional_human_review_data.json")
-    parser.add_argument("--out-html", default="annotation/additional-human-review.html")
-    parser.add_argument("--task", default="additional_human_review")
-    parser.add_argument("--ui-version", default="additional_human_review_v1")
+    parser.add_argument("--out-data", default="annotation/data/final_human_review_round2_data.json")
+    parser.add_argument("--out-html", default="annotation/final-human-review-round2.html")
+    parser.add_argument("--task", default="final_human_review_round2")
+    parser.add_argument("--ui-version", default="final_human_review_round2_v1")
     parser.add_argument(
         "--additional-reviewers",
         nargs="+",
