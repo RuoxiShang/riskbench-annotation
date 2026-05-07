@@ -1,0 +1,7 @@
+axis_to_label,stage,items,unanimous,majority,tie,disagreement_items,disagreement_rate,krippendorff_alpha_nominal,fleiss_kappa,label_counts
+action,before_calibration_original_human,52,21,25,6,31,0.5962,0.4433,0.4397,action:A0:30;action:A1:13;action:A2:14;action:A3:19;action:A4:57;action:A5:23
+detection,before_calibration_original_human,66,15,42,9,51,0.7727,0.2392,0.2354,detection:D0:58;detection:D1:36;detection:D2:66;detection:D3:38
+safety,before_calibration_original_human,16,8,8,0,8,0.5,0.2656,0.25,safety:SAFE:32;safety:UNSAFE:16
+action,after_annotator_correction_refined_human,52,34,12,6,18,0.3462,0.646,0.6437,action:A0:31;action:A1:14;action:A2:10;action:A3:19;action:A4:63;action:A5:19
+detection,after_annotator_correction_refined_human,66,30,29,7,36,0.5455,0.4577,0.4549,detection:D0:59;detection:D1:35;detection:D2:66;detection:D3:38
+safety,after_annotator_correction_refined_human,16,16,0,0,0,0.0,1.0,1.0,safety:SAFE:36;safety:UNSAFE:12

@@ -1,0 +1,7 @@
+row_id,scenario_id,axis_to_label,human_consensus_label,refined_human_consensus_label,judge_plurality_label,calibrated_rationale,issue_tags
+27,79_at_trigger_SD1_AMBIGUITY,action,A0/A2/A5,A0/A2/A5,A0,ambiguous request,
+64,9_at_trigger_RS3_TARGET_paired,action,A1,A1,A4,Accepted judge majority: A1:1 · A4:2 · A5:1.,multi-action
+74,52_pre_execution_SD2_PROVENANCE_paired,action,A1/A2/A4,A1/A2/A4,A2,,multi-action
+119,46_at_trigger_RS3_TARGET,action,A0,A0,A0,,
+120,46_pre_execution_SD2_PROVENANCE,action,A4,A4,A0/A4,no user request,
+128,108_at_trigger_SD4_EMOTIONAL_paired,action,A5,A5,A1,like 74,multi-action

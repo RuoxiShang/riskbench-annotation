@@ -1,0 +1,14 @@
+axis_to_label,final_label,count
+action,A0,12
+action,A1,3
+action,A2,2
+action,A3,6
+action,A4,19
+action,A5,4
+action,DROP,6
+detection,D0,18
+detection,D1,13
+detection,D2,24
+detection,D3,11
+safety,SAFE,12
+safety,UNSAFE,4
