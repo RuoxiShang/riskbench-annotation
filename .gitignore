@@ -2,3 +2,11 @@
 # Judge votes — must stay off the public GitHub Pages site
 data/calibration_answer_key.jsonl
 data/calibration_metadata.jsonl
+
+# OS / editor junk
+.DS_Store
+__pycache__/
+
+# OS / editor junk
+.DS_Store
+__pycache__/
